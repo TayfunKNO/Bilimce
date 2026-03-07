@@ -1,14 +1,10 @@
 export async function POST(request) {
   try {
     const { title, abstract } = await request.json()
-
-    const prompt = `Aşağıdaki bilimsel makaleyi Türkçeye çevir. Sadece JSON formatında yanıt ver, başka hiçbir şey yazma.
-
-Başlık (İngilizce): ${title}
-Özet (İngilizce): ${abstract || 'Özet yok'}
-
-Şu JSON formatında yanıt ver:
-{"title_tr": "türkçe başlık", "abstract_tr": "türkçe özet"}`
+    const prompt = `Translate the following scientific article to Turkish. Respond only in JSON format.
+Title: ${title}
+Abstract: ${abstract || 'No abstract'}
+{"title_tr": "turkish title here", "abstract_tr": "turkish abstract here"}`
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -23,18 +19,12 @@ Başlık (İngilizce): ${title}
         messages: [{ role: 'user', content: prompt }],
       }),
     })
-
     const data = await response.json()
     const text = data.content?.[0]?.text || '{}'
     const clean = text.replace(/```json|```/g, '').trim()
     const result = JSON.parse(clean)
-
     return Response.json(result)
   } catch (error) {
-    console.error('Çeviri API hatası:', error)
-    return Response.json(
-      { title_tr: null, abstract_tr: 'Çeviri şu an kullanılamıyor.' },
-      { status: 500 }
-    )
+    return Response.json({ title_tr: null, abstract_tr: 'Ceviri su an kullanilamiyor.' }, { status: 500 })
   }
 }

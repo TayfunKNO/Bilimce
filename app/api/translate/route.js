@@ -11,7 +11,8 @@ export async function POST(request) {
     }
 
     const title_tr = await translateText(title)
-    const abstract_tr = await translateText(abstract || '')
+    const abstract_tr = await translateText((abstract || '').slice(0, 490))
+
 
     return Response.json({ title_tr, abstract_tr })
   } catch (error) {

@@ -50,7 +50,8 @@ export default function Home() {
         setLoading(false)
         return
       }
-      const results = await searchPubMed(q, 10)
+      const results = await searchPubMed(q, 100)
+
       setArticles(results)
       if (results.length > 0) {
         for (const article of results) {

@@ -3,19 +3,11 @@ export async function POST(request) {
     const { title, abstract } = await request.json()
 
     const translateText = async (text) => {
-      const res = await fetch('https://libretranslate.com/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          q: text,
-          source: 'en',
-          target: 'tr',
-          format: 'text',
-          api_key: ''
-        }),
-      })
+      if (!text) return null
+      const encoded = encodeURIComponent(text)
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|tr`)
       const data = await res.json()
-      return data.translatedText || null
+      return data.responseData?.translatedText || null
     }
 
     const title_tr = await translateText(title)

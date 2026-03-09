@@ -1,19 +1,28 @@
-import { Inter } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-
 export const metadata = {
-  title: 'BİLİMCE — Bilimsel Araştırmalar Türkçe',
-  description: 'Dünya genelindeki bilimsel araştırmaları Türkçe olarak keşfedin.',
+  title: 'Bilimce',
+  description: 'Bilimsel arastirmalar Turkce',
+  manifest: '/manifest.json',
+  themeColor: '#0a0a0f',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Bilimce',
+  },
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="tr">
-      <body className={`${inter.variable} font-sans bg-[#0a0a0f] text-white min-h-screen`}>
-        {children}
-      </body>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0a0a0f" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Bilimce" />
+      </head>
+      <body>{children}</body>
     </html>
   )
 }

@@ -36,14 +36,6 @@ const translateText = async (text, langpair = 'en|tr') => {
   }
 }
 
-const autoTranslateArticles = async (articles) => {
-  return Promise.all(articles.map(async (article) => {
-    if (article.title_tr) return article
-    const title_tr = await translateText(article.title_en)
-    return { ...article, title_tr }
-  }))
-}
-
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -66,7 +58,7 @@ export default function Home() {
         .select('*')
         .ilike('title_en', '%' + q + '%')
         .limit(50)
-      
+
       let results = []
       if (cached && cached.length > 0) {
         results = cached
@@ -87,15 +79,22 @@ export default function Home() {
 
       setArticles(results)
       setLoading(false)
-      
       setAutoTranslating(true)
-      const translated = await autoTranslateArticles(results)
-      setArticles(translated)
+
+      const updated = [...results]
+      for (let i = 0; i < updated.length; i++) {
+        if (updated[i].title_tr) continue
+        const title_tr = await translateText(updated[i].title_en)
+        if (title_tr) {
+          updated[i] = { ...updated[i], title_tr }
+          setArticles([...updated])
+        }
+        await new Promise(r => setTimeout(r, 300))
+      }
       setAutoTranslating(false)
 
     } catch (err) {
       console.error('Arama hatasi:', err)
-    } finally {
       setLoading(false)
       setAutoTranslating(false)
     }
@@ -214,7 +213,7 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <p className="text-white/30 text-sm">{articles.length} arastirma bulundu</p>
-              {autoTranslating && <p className="text-blue-400/60 text-xs">Basliklar cevrilior...</p>}
+              {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Basliklar cevrilior...</p>}
             </div>
             <div className="grid gap-4">
               {articles.map((article, i) => (

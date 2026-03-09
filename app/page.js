@@ -36,6 +36,14 @@ const translateText = async (text, langpair = 'en|tr') => {
   }
 }
 
+const sortByDate = (articles) => {
+  return [...articles].sort((a, b) => {
+    const yearA = parseInt(a.published_date) || 0
+    const yearB = parseInt(b.published_date) || 0
+    return yearB - yearA
+  })
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -61,9 +69,10 @@ export default function Home() {
 
       let results = []
       if (cached && cached.length > 0) {
-        results = cached
+        results = sortByDate(cached)
       } else {
         results = await searchPubMed(q, 50)
+        results = sortByDate(results)
         if (results.length > 0) {
           for (const article of results) {
             if (article.pubmed_id) {
@@ -89,7 +98,7 @@ export default function Home() {
           updated[i] = { ...updated[i], title_tr }
           setArticles([...updated])
         }
-        await new Promise(r => setTimeout(r, 300))
+        await new Promise(r => setTimeout(r, 500))
       }
       setAutoTranslating(false)
 

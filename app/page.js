@@ -24,6 +24,26 @@ const CATEGORY_QUERIES = {
   technology: 'artificial intelligence machine learning',
 }
 
+const translateText = async (text, langpair = 'en|tr') => {
+  if (!text) return null
+  try {
+    const encoded = encodeURIComponent(text.slice(0, 490))
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=${langpair}`)
+    const data = await res.json()
+    return data.responseData?.translatedText || null
+  } catch {
+    return null
+  }
+}
+
+const autoTranslateArticles = async (articles) => {
+  return Promise.all(articles.map(async (article) => {
+    if (article.title_tr) return article
+    const title_tr = await translateText(article.title_en)
+    return { ...article, title_tr }
+  }))
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -32,6 +52,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
   const [expandedId, setExpandedId] = useState(null)
+  const [autoTranslating, setAutoTranslating] = useState(false)
 
   const handleSearch = useCallback(async (searchQuery) => {
     const q = searchQuery || query
@@ -44,33 +65,39 @@ export default function Home() {
         .from('articles')
         .select('*')
         .ilike('title_en', '%' + q + '%')
-        .limit(10)
+        .limit(50)
+      
+      let results = []
       if (cached && cached.length > 0) {
-        setArticles(cached)
-        setLoading(false)
-        return
-      }
-      const results = await searchPubMed(q, 100)
-
-      setArticles(results)
-      if (results.length > 0) {
-        for (const article of results) {
-          if (article.pubmed_id) {
-            await supabase.from('articles').upsert(article, {
-              onConflict: 'pubmed_id',
-              ignoreDuplicates: true,
-            })
+        results = cached
+      } else {
+        results = await searchPubMed(q, 50)
+        if (results.length > 0) {
+          for (const article of results) {
+            if (article.pubmed_id) {
+              await supabase.from('articles').upsert(article, {
+                onConflict: 'pubmed_id',
+                ignoreDuplicates: true,
+              })
+            }
           }
         }
+        await supabase.from('search_logs').insert({ query: q, result_count: results.length })
       }
-      await supabase.from('search_logs').insert({
-        query: q,
-        result_count: results.length,
-      })
+
+      setArticles(results)
+      setLoading(false)
+      
+      setAutoTranslating(true)
+      const translated = await autoTranslateArticles(results)
+      setArticles(translated)
+      setAutoTranslating(false)
+
     } catch (err) {
       console.error('Arama hatasi:', err)
     } finally {
       setLoading(false)
+      setAutoTranslating(false)
     }
   }, [query])
 
@@ -88,7 +115,7 @@ export default function Home() {
   }
 
   const translateArticle = async (article, index) => {
-    if (article.title_tr) {
+    if (article.abstract_tr) {
       setExpandedId(expandedId === index ? null : index)
       return
     }
@@ -97,18 +124,11 @@ export default function Home() {
       const res = await fetch('/api/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: article.title_en,
-          abstract: article.abstract_en,
-        }),
+        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
       })
       const data = await res.json()
       const updated = [...articles]
-      updated[index] = {
-        ...updated[index],
-        title_tr: data.title_tr,
-        abstract_tr: data.abstract_tr,
-      }
+      updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
       setArticles(updated)
       setExpandedId(index)
       if (article.pubmed_id) {
@@ -192,19 +212,20 @@ export default function Home() {
         )}
         {!loading && articles.length > 0 && (
           <div>
-            <p className="text-white/30 text-sm mb-4">{articles.length} arastirma bulundu</p>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-white/30 text-sm">{articles.length} arastirma bulundu</p>
+              {autoTranslating && <p className="text-blue-400/60 text-xs">Basliklar cevrilior...</p>}
+            </div>
             <div className="grid gap-4">
               {articles.map((article, i) => (
                 <article key={article.pubmed_id || i} className="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      {article.title_tr ? (
-                        <>
-                          <h2 className="font-semibold text-white leading-snug mb-1">{article.title_tr}</h2>
-                          <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
-                        </>
-                      ) : (
-                        <h2 className="font-semibold text-white leading-snug">{article.title_en}</h2>
+                      <h2 className="font-semibold text-white leading-snug mb-1">
+                        {article.title_tr || article.title_en}
+                      </h2>
+                      {article.title_tr && (
+                        <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
                       )}
                     </div>
                     <span className="shrink-0 text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
@@ -226,7 +247,7 @@ export default function Home() {
                       disabled={translating[i]}
                       className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
                     >
-                      {translating[i] ? 'Cevriliyor...' : article.title_tr ? (expandedId === i ? 'Kapat' : 'Turkce Oku') : 'Turkceye Cevir'}
+                      {translating[i] ? 'Cevrilior...' : article.abstract_tr ? (expandedId === i ? 'Kapat' : 'Ozeti Oku') : 'Ozeti Cevir ve Oku'}
                     </button>
                     {article.pubmed_id && (
                       <a href={'https://pubmed.ncbi.nlm.nih.gov/' + article.pubmed_id + '/'} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">

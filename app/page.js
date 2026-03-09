@@ -39,7 +39,7 @@ export default function Home() {
     setSearched(true)
     setArticles([])
     try {
-      const results = await searchPubMed(q, 50)
+      const results = await searchPubMed(q, 100)
       setArticles(results)
     } catch (err) {
       console.error('Arama hatasi:', err)

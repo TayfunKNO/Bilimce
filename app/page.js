@@ -99,11 +99,10 @@ export default function Home() {
       <main className="max-w-5xl mx-auto px-4 py-12">
         {!searched && (
           <div className="text-center mb-16">
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight">
-              Bilimi{' '}
-              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Turkce</span>{' '}
-              kesfet
-            </h1>
+            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+  Bilimi Turkce kesfet
+</h1>
+
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
               Dunya genelindeki bilimsel arastirmalari arayin, yapay zeka ile Turkce ozetlerini okuyun.
             </p>

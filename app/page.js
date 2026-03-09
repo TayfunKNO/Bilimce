@@ -36,14 +36,6 @@ const translateText = async (text, langpair = 'en|tr') => {
   }
 }
 
-const sortByDate = (articles) => {
-  return [...articles].sort((a, b) => {
-    const yearA = parseInt(a.published_date) || 0
-    const yearB = parseInt(b.published_date) || 0
-    return yearB - yearA
-  })
-}
-
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -61,26 +53,15 @@ export default function Home() {
     setSearched(true)
     setArticles([])
     try {
-      const { data: cached } = await supabase
-        .from('articles')
-        .select('*')
-        .ilike('title_en', '%' + q + '%')
-        .limit(50)
+      const results = await searchPubMed(q, 50)
 
-      let results = []
-      if (cached && cached.length > 0) {
-        results = sortByDate(cached)
-      } else {
-        results = await searchPubMed(q, 50)
-        results = sortByDate(results)
-        if (results.length > 0) {
-          for (const article of results) {
-            if (article.pubmed_id) {
-              await supabase.from('articles').upsert(article, {
-                onConflict: 'pubmed_id',
-                ignoreDuplicates: true,
-              })
-            }
+      if (results.length > 0) {
+        for (const article of results) {
+          if (article.pubmed_id) {
+            await supabase.from('articles').upsert(article, {
+              onConflict: 'pubmed_id',
+              ignoreDuplicates: true,
+            })
           }
         }
         await supabase.from('search_logs').insert({ query: q, result_count: results.length })

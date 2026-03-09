@@ -1,6 +1,11 @@
 'use client'
-import { useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { useState, useEffect } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
 
 export default function AuthPage() {
   const [email, setEmail] = useState('')
@@ -16,11 +21,11 @@ export default function AuthPage() {
     setSuccess('')
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) throw error
         window.location.href = '/'
       } else {
-        const { error } = await supabase.auth.signUp({ email, password })
+        const { data, error } = await supabase.auth.signUp({ email, password })
         if (error) throw error
         setSuccess('Kayit basarili! Giris yapabilirsiniz.')
         setIsLogin(true)

@@ -93,7 +93,13 @@ export default function Home() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold">B</div>
             <span className="font-bold text-lg tracking-tight">BILIMCE</span>
           </div>
-          <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
+          <div className="flex items-center gap-3">
+  <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
+  <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
+    Giris Yap
+  </a>
+</div>
+
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-4 py-12">

@@ -1,6 +1,5 @@
 'use client'
 import { useState, useCallback } from 'react'
-import { supabase } from '../lib/supabase'
 import { searchPubMed } from '../lib/pubmed'
 
 const CATEGORIES = [
@@ -54,35 +53,23 @@ export default function Home() {
     setArticles([])
     try {
       const results = await searchPubMed(q, 50)
-
-      if (results.length > 0) {
-        for (const article of results) {
-          if (article.pubmed_id) {
-            await supabase.from('articles').upsert(article, {
-              onConflict: 'pubmed_id',
-              ignoreDuplicates: true,
-            })
-          }
-        }
-        await supabase.from('search_logs').insert({ query: q, result_count: results.length })
-      }
-
       setArticles(results)
       setLoading(false)
-      setAutoTranslating(true)
 
-      const updated = [...results]
-      for (let i = 0; i < updated.length; i++) {
-        if (updated[i].title_tr) continue
-        const title_tr = await translateText(updated[i].title_en)
-        if (title_tr) {
-          updated[i] = { ...updated[i], title_tr }
-          setArticles([...updated])
+      if (results.length > 0) {
+        setAutoTranslating(true)
+        const updated = [...results]
+        for (let i = 0; i < updated.length; i++) {
+          if (updated[i].title_tr) continue
+          const title_tr = await translateText(updated[i].title_en)
+          if (title_tr) {
+            updated[i] = { ...updated[i], title_tr }
+            setArticles([...updated])
+          }
+          await new Promise(r => setTimeout(r, 500))
         }
-        await new Promise(r => setTimeout(r, 500))
+        setAutoTranslating(false)
       }
-      setAutoTranslating(false)
-
     } catch (err) {
       console.error('Arama hatasi:', err)
       setLoading(false)
@@ -120,11 +107,6 @@ export default function Home() {
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
       setArticles(updated)
       setExpandedId(index)
-      if (article.pubmed_id) {
-        await supabase.from('articles')
-          .update({ title_tr: data.title_tr, abstract_tr: data.abstract_tr })
-          .eq('pubmed_id', article.pubmed_id)
-      }
     } catch (err) {
       console.error('Ceviri hatasi:', err)
     } finally {

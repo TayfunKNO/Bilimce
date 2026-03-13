@@ -32,12 +32,15 @@ const CATEGORY_QUERIES = {
 const translateTitle = async (text) => {
   if (!text) return null
   try {
-    const encoded = encodeURIComponent(text.slice(0, 490))
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|tr`)
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
+    const res = await fetch(url)
     const data = await res.json()
-    const t = data.responseData?.translatedText
-    if (t && !t.toUpperCase().includes('MYMEMORY')) return t
+    return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
+  } catch {
     return null
+  }
+}
+
   } catch {
     return null
   }

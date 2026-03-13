@@ -75,10 +75,7 @@ export default function Home() {
   }
 
   const toggleFavorite = async (article) => {
-    if (!user) {
-      window.location.href = '/auth'
-      return
-    }
+    if (!user) { window.location.href = '/auth'; return }
     const isFav = favorites[article.pubmed_id]
     setFavLoading(prev => ({ ...prev, [article.pubmed_id]: true }))
     try {
@@ -120,7 +117,7 @@ export default function Home() {
     autoTranslatingRef.current = false
     updateArticles([])
     try {
-      const results = await searchPubMed(q, 100)
+      const results = await searchPubMed(q, 50)
       updateArticles(results)
       setLoading(false)
 
@@ -128,20 +125,30 @@ export default function Home() {
         setAutoTranslating(true)
         autoTranslatingRef.current = true
         const updated = [...results]
-        for (let i = 0; i < updated.length; i++) {
+
+        // 5'er grupla çevir
+        for (let g = 0; g < updated.length; g += 5) {
           if (!autoTranslatingRef.current) break
-          const current = articlesRef.current[i]
-          if (current?.title_tr || current?.abstract_tr) continue
-          const title_tr = await translateTitle(updated[i].title_en)
-          if (title_tr) {
-            updated[i] = { ...updated[i], title_tr }
-            const merged = [...articlesRef.current]
-            if (!merged[i]?.abstract_tr) {
-              merged[i] = { ...merged[i], title_tr }
-              updateArticles(merged)
+          const group = updated.slice(g, g + 5)
+          const translated = await Promise.all(
+            group.map(async (article, idx) => {
+              const current = articlesRef.current[g + idx]
+              if (current?.title_tr || current?.abstract_tr) return null
+              return translateTitle(article.title_en)
+            })
+          )
+          translated.forEach((title_tr, idx) => {
+            if (title_tr) {
+              updated[g + idx] = { ...updated[g + idx], title_tr }
+              const merged = [...articlesRef.current]
+              if (!merged[g + idx]?.abstract_tr) {
+                merged[g + idx] = { ...merged[g + idx], title_tr }
+                articlesRef.current = merged
+              }
             }
-          }
-          await new Promise(r => setTimeout(r, 500))
+          })
+          updateArticles([...articlesRef.current.map((a, i) => updated[i]?.title_tr ? { ...a, title_tr: updated[i].title_tr } : a)])
+          await new Promise(r => setTimeout(r, 1000))
         }
         setAutoTranslating(false)
         autoTranslatingRef.current = false
@@ -203,17 +210,11 @@ export default function Home() {
             <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
             {user ? (
               <div className="flex items-center gap-2">
-                <a href="/favorites" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
-                  Favorilerim
-                </a>
-                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
-                  Cikis
-                </button>
+                <a href="/favorites" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Favorilerim</a>
+                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Cikis</button>
               </div>
             ) : (
-              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
-                Giris Yap
-              </a>
+              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">Giris Yap</a>
             )}
           </div>
         </div>
@@ -291,12 +292,7 @@ export default function Home() {
                       )}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        onClick={() => toggleFavorite(article)}
-                        disabled={favLoading[article.pubmed_id]}
-                        className="text-lg hover:scale-110 transition-transform"
-                        title={favorites[article.pubmed_id] ? 'Favorilerden cikar' : 'Favorilere ekle'}
-                      >
+                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">
                         {favorites[article.pubmed_id] ? '❤️' : '🤍'}
                       </button>
                       <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>

@@ -4,10 +4,14 @@ export async function POST(request) {
 
     const translateText = async (text) => {
       if (!text) return null
-      const encoded = encodeURIComponent(text.slice(0, 490))
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|tr`)
-      const data = await res.json()
-      return data.responseData?.translatedText || null
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
+        const res = await fetch(url)
+        const data = await res.json()
+        return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
+      } catch {
+        return null
+      }
     }
 
     const title_tr = await translateText(title)
@@ -15,14 +19,13 @@ export async function POST(request) {
     let abstract_tr = null
     if (abstract) {
       const chunks = []
-      for (let i = 0; i < abstract.length; i += 480) {
-        chunks.push(abstract.slice(i, i + 480))
+      for (let i = 0; i < abstract.length; i += 4000) {
+        chunks.push(abstract.slice(i, i + 4000))
       }
       const translated = []
       for (const chunk of chunks) {
         const t = await translateText(chunk)
         translated.push(t)
-        await new Promise(r => setTimeout(r, 500))
       }
       abstract_tr = translated.filter(Boolean).join(' ')
     }

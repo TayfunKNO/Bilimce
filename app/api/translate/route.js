@@ -1,6 +1,6 @@
 export async function POST(request) {
   try {
-    const { title, abstract } = await request.json()
+    const { title, abstract, titles } = await request.json()
 
     const translateText = async (text) => {
       if (!text) return null
@@ -9,11 +9,18 @@ export async function POST(request) {
         const res = await fetch(url)
         const data = await res.json()
         return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
-      } catch {
+      } catch (e) {
         return null
       }
     }
 
+    // Toplu başlık çevirisi
+    if (titles && Array.isArray(titles)) {
+      const translated = await Promise.all(titles.map(t => translateText(t)))
+      return Response.json({ titles_tr: translated })
+    }
+
+    // Tekli çeviri
     const title_tr = await translateText(title)
 
     let abstract_tr = null

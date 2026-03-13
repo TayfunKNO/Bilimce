@@ -41,6 +41,7 @@ export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
   const articlesRef = useRef([])
+  const autoTranslatingRef = useRef(false)
   const [loading, setLoading] = useState(false)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
@@ -59,6 +60,7 @@ export default function Home() {
     setLoading(true)
     setSearched(true)
     setExpandedId(null)
+    autoTranslatingRef.current = false
     updateArticles([])
     try {
       const results = await searchPubMed(q, 100)
@@ -67,22 +69,31 @@ export default function Home() {
 
       if (results.length > 0) {
         setAutoTranslating(true)
+        autoTranslatingRef.current = true
         const updated = [...results]
         for (let i = 0; i < updated.length; i++) {
-          if (updated[i].title_tr) continue
+          if (!autoTranslatingRef.current) break
+          const current = articlesRef.current[i]
+          if (current?.title_tr || current?.abstract_tr) continue
           const title_tr = await translateTitle(updated[i].title_en)
           if (title_tr) {
             updated[i] = { ...updated[i], title_tr }
-            updateArticles([...updated])
+            const merged = [...articlesRef.current]
+            if (!merged[i]?.abstract_tr) {
+              merged[i] = { ...merged[i], title_tr }
+              updateArticles(merged)
+            }
           }
           await new Promise(r => setTimeout(r, 500))
         }
         setAutoTranslating(false)
+        autoTranslatingRef.current = false
       }
     } catch (err) {
       console.error('Arama hatasi:', err)
       setLoading(false)
       setAutoTranslating(false)
+      autoTranslatingRef.current = false
     }
   }, [query])
 
@@ -104,6 +115,7 @@ export default function Home() {
       setExpandedId(expandedId === index ? null : index)
       return
     }
+    autoTranslatingRef.current = false
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', {

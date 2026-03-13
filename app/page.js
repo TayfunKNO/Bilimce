@@ -23,6 +23,20 @@ const CATEGORY_QUERIES = {
   technology: 'artificial intelligence machine learning',
 }
 
+const translateTitle = async (text) => {
+  if (!text) return null
+  try {
+    const encoded = encodeURIComponent(text.slice(0, 490))
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|tr`)
+    const data = await res.json()
+    const t = data.responseData?.translatedText
+    if (t && !t.toUpperCase().includes('MYMEMORY')) return t
+    return null
+  } catch {
+    return null
+  }
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -31,6 +45,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
   const [expandedId, setExpandedId] = useState(null)
+  const [autoTranslating, setAutoTranslating] = useState(false)
 
   const handleSearch = useCallback(async (searchQuery) => {
     const q = searchQuery || query
@@ -41,10 +56,26 @@ export default function Home() {
     try {
       const results = await searchPubMed(q, 100)
       setArticles(results)
+      setLoading(false)
+
+      if (results.length > 0) {
+        setAutoTranslating(true)
+        const updated = [...results]
+        for (let i = 0; i < updated.length; i++) {
+          if (updated[i].title_tr) continue
+          const title_tr = await translateTitle(updated[i].title_en)
+          if (title_tr) {
+            updated[i] = { ...updated[i], title_tr }
+            setArticles([...updated])
+          }
+          await new Promise(r => setTimeout(r, 500))
+        }
+        setAutoTranslating(false)
+      }
     } catch (err) {
       console.error('Arama hatasi:', err)
-    } finally {
       setLoading(false)
+      setAutoTranslating(false)
     }
   }, [query])
 
@@ -94,21 +125,19 @@ export default function Home() {
             <span className="font-bold text-lg tracking-tight">BILIMCE</span>
           </div>
           <div className="flex items-center gap-3">
-  <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
-  <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
-    Giris Yap
-  </a>
-</div>
-
+            <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
+            <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
+              Giris Yap
+            </a>
+          </div>
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-4 py-12">
         {!searched && (
           <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-  Bilimi Turkce kesfet
-</h1>
-
+              Bilimi Turkce kesfet
+            </h1>
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
               Dunya genelindeki bilimsel arastirmalari arayin, yapay zeka ile Turkce ozetlerini okuyun.
             </p>
@@ -159,7 +188,10 @@ export default function Home() {
         )}
         {!loading && articles.length > 0 && (
           <div>
-            <p className="text-white/30 text-sm mb-4">{articles.length} arastirma bulundu</p>
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-white/30 text-sm">{articles.length} arastirma bulundu</p>
+              {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Basliklar cevrilior...</p>}
+            </div>
             <div className="grid gap-4">
               {articles.map((article, i) => (
                 <article key={article.pubmed_id || i} className="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">

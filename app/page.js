@@ -1,4 +1,4 @@
- 'use client'
+'use client'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { searchPubMed } from '../lib/pubmed'
@@ -32,10 +32,13 @@ const CATEGORY_QUERIES = {
 const translateTitle = async (text) => {
   if (!text) return null
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
-    const res = await fetch(url)
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: text, abstract: null }),
+    })
     const data = await res.json()
-    return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
+    return data.title_tr || null
   } catch (e) {
     return null
   }
@@ -216,7 +219,7 @@ export default function Home() {
   const sortLabels = {
     newest: 'En Yeni',
     oldest: 'En Eski',
-    year: 'Yila Gore',
+    year: 'Yıla Göre',
   }
 
   return (
@@ -225,7 +228,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold">B</div>
-            <span className="font-bold text-lg tracking-tight">BILIMCE</span>
+            <span className="font-bold text-lg tracking-tight">BİLİMCE</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-white/30 hidden sm:block">Bilimsel araştırmalar Türkçe</span>

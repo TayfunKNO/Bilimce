@@ -1,4 +1,4 @@
-'use client'
+ 'use client'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { searchPubMed } from '../lib/pubmed'
@@ -43,6 +43,14 @@ const translateTitle = async (text) => {
   }
 }
 
+const sortArticles = (articles, sortBy) => {
+  const arr = [...articles]
+  if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
+  if (sortBy === 'oldest') return arr.sort((a, b) => (parseInt(a.published_date) || 0) - (parseInt(b.published_date) || 0))
+  if (sortBy === 'year') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
+  return arr
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -57,6 +65,8 @@ export default function Home() {
   const [user, setUser] = useState(null)
   const [favorites, setFavorites] = useState({})
   const [favLoading, setFavLoading] = useState({})
+  const [sortBy, setSortBy] = useState('newest')
+  const [showSort, setShowSort] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -118,15 +128,15 @@ export default function Home() {
     updateArticles([])
     try {
       const results = await searchPubMed(q, 50)
-      updateArticles(results)
+      const sorted = sortArticles(results, sortBy)
+      updateArticles(sorted)
       setLoading(false)
 
-      if (results.length > 0) {
+      if (sorted.length > 0) {
         setAutoTranslating(true)
         autoTranslatingRef.current = true
-        const updated = [...results]
+        const updated = [...sorted]
 
-        // 5'er grupla çevir
         for (let g = 0; g < updated.length; g += 5) {
           if (!autoTranslatingRef.current) break
           const group = updated.slice(g, g + 5)
@@ -159,7 +169,14 @@ export default function Home() {
       setAutoTranslating(false)
       autoTranslatingRef.current = false
     }
-  }, [query])
+  }, [query, sortBy])
+
+  const handleSortChange = (newSort) => {
+    setSortBy(newSort)
+    setShowSort(false)
+    const sorted = sortArticles(articlesRef.current, newSort)
+    updateArticles(sorted)
+  }
 
   const handleCategoryClick = async (cat) => {
     setActiveCategory(cat.id)
@@ -196,6 +213,12 @@ export default function Home() {
     } finally {
       setTranslating(prev => ({ ...prev, [index]: false }))
     }
+  }
+
+  const sortLabels = {
+    newest: 'En Yeni',
+    oldest: 'En Eski',
+    year: 'Yila Gore',
   }
 
   return (
@@ -277,7 +300,31 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <p className="text-white/30 text-sm">{articles.length} arastirma bulundu</p>
-              {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Basliklar cevrilior...</p>}
+              <div className="flex items-center gap-3">
+                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Basliklar cevrilior...</p>}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSort(!showSort)}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
+                  >
+                    <span>↕</span>
+                    <span>{sortLabels[sortBy]}</span>
+                  </button>
+                  {showSort && (
+                    <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
+                      {Object.entries(sortLabels).map(([key, label]) => (
+                        <button
+                          key={key}
+                          onClick={() => handleSortChange(key)}
+                          className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === key ? 'text-blue-400' : 'text-white/60'}`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="grid gap-4">
               {articles.map((article, i) => (

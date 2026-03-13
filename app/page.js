@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { searchPubMed } from '../lib/pubmed'
 
 const CATEGORIES = [
@@ -40,6 +40,7 @@ const translateTitle = async (text) => {
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
+  const articlesRef = useRef([])
   const [loading, setLoading] = useState(false)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
@@ -47,15 +48,21 @@ export default function Home() {
   const [expandedId, setExpandedId] = useState(null)
   const [autoTranslating, setAutoTranslating] = useState(false)
 
+  const updateArticles = (arr) => {
+    articlesRef.current = arr
+    setArticles([...arr])
+  }
+
   const handleSearch = useCallback(async (searchQuery) => {
     const q = searchQuery || query
     if (!q.trim()) return
     setLoading(true)
     setSearched(true)
-    setArticles([])
+    setExpandedId(null)
+    updateArticles([])
     try {
       const results = await searchPubMed(q, 100)
-      setArticles(results)
+      updateArticles(results)
       setLoading(false)
 
       if (results.length > 0) {
@@ -66,7 +73,7 @@ export default function Home() {
           const title_tr = await translateTitle(updated[i].title_en)
           if (title_tr) {
             updated[i] = { ...updated[i], title_tr }
-            setArticles([...updated])
+            updateArticles([...updated])
           }
           await new Promise(r => setTimeout(r, 500))
         }
@@ -83,7 +90,7 @@ export default function Home() {
     setActiveCategory(cat.id)
     if (cat.id === 'all') {
       setQuery('')
-      setArticles([])
+      updateArticles([])
       setSearched(false)
       return
     }
@@ -105,9 +112,9 @@ export default function Home() {
         body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
       })
       const data = await res.json()
-      const updated = [...articles]
+      const updated = [...articlesRef.current]
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
-      setArticles(updated)
+      updateArticles(updated)
       setExpandedId(index)
     } catch (err) {
       console.error('Ceviri hatasi:', err)

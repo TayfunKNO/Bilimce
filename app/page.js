@@ -29,26 +29,10 @@ const CATEGORY_QUERIES = {
   technology: 'artificial intelligence machine learning',
 }
 
-const translateTitle = async (text) => {
-  if (!text) return null
-  try {
-    const res = await fetch('/api/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: text, abstract: null }),
-    })
-    const data = await res.json()
-    return data.title_tr || null
-  } catch (e) {
-    return null
-  }
-}
-
 const sortArticles = (articles, sortBy) => {
   const arr = [...articles]
   if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
   if (sortBy === 'oldest') return arr.sort((a, b) => (parseInt(a.published_date) || 0) - (parseInt(b.published_date) || 0))
-  if (sortBy === 'year') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
   return arr
 }
 
@@ -56,7 +40,6 @@ export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
   const articlesRef = useRef([])
-  const autoTranslatingRef = useRef(false)
   const [loading, setLoading] = useState(false)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
@@ -125,7 +108,6 @@ export default function Home() {
     setLoading(true)
     setSearched(true)
     setExpandedId(null)
-    autoTranslatingRef.current = false
     updateArticles([])
     try {
       const results = await searchPubMed(q, 50)
@@ -135,40 +117,26 @@ export default function Home() {
 
       if (sorted.length > 0) {
         setAutoTranslating(true)
-        autoTranslatingRef.current = true
-        const updated = [...sorted]
-
-        for (let g = 0; g < updated.length; g += 5) {
-          if (!autoTranslatingRef.current) break
-          const group = updated.slice(g, g + 5)
-          const translated = await Promise.all(
-            group.map(async (article, idx) => {
-              const current = articlesRef.current[g + idx]
-              if (current?.title_tr || current?.abstract_tr) return null
-              return translateTitle(article.title_en)
-            })
-          )
-          translated.forEach((title_tr, idx) => {
-            if (title_tr) {
-              updated[g + idx] = { ...updated[g + idx], title_tr }
-              const merged = [...articlesRef.current]
-              if (!merged[g + idx]?.abstract_tr) {
-                merged[g + idx] = { ...merged[g + idx], title_tr }
-                articlesRef.current = merged
-              }
-            }
-          })
-          updateArticles([...articlesRef.current.map((a, i) => updated[i]?.title_tr ? { ...a, title_tr: updated[i].title_tr } : a)])
-          await new Promise(r => setTimeout(r, 300))
+        // Tüm başlıkları tek seferde çevir
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titles: sorted.map(a => a.title_en) }),
+        })
+        const data = await res.json()
+        if (data.titles_tr) {
+          const updated = sorted.map((article, i) => ({
+            ...article,
+            title_tr: data.titles_tr[i] || article.title_tr || null,
+          }))
+          updateArticles(updated)
         }
         setAutoTranslating(false)
-        autoTranslatingRef.current = false
       }
     } catch (err) {
       console.error('Arama hatasi:', err)
       setLoading(false)
       setAutoTranslating(false)
-      autoTranslatingRef.current = false
     }
   }, [query, sortBy])
 
@@ -216,11 +184,7 @@ export default function Home() {
     }
   }
 
-  const sortLabels = {
-    newest: 'En Yeni',
-    oldest: 'En Eski',
-    year: 'Yıla Göre',
-  }
+  const sortLabels = { newest: 'En Yeni', oldest: 'En Eski' }
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">

@@ -36,12 +36,7 @@ const translateTitle = async (text) => {
     const res = await fetch(url)
     const data = await res.json()
     return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
-  } catch {
-    return null
-  }
-}
-
-  } catch {
+  } catch (e) {
     return null
   }
 }
@@ -161,7 +156,7 @@ export default function Home() {
             }
           })
           updateArticles([...articlesRef.current.map((a, i) => updated[i]?.title_tr ? { ...a, title_tr: updated[i].title_tr } : a)])
-          await new Promise(r => setTimeout(r, 1000))
+          await new Promise(r => setTimeout(r, 300))
         }
         setAutoTranslating(false)
         autoTranslatingRef.current = false
@@ -233,14 +228,14 @@ export default function Home() {
             <span className="font-bold text-lg tracking-tight">BILIMCE</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
+            <span className="text-xs text-white/30 hidden sm:block">Bilimsel araştırmalar Türkçe</span>
             {user ? (
               <div className="flex items-center gap-2">
                 <a href="/favorites" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Favorilerim</a>
-                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Cikis</button>
+                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Çıkış</button>
               </div>
             ) : (
-              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">Giris Yap</a>
+              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">Giriş Yap</a>
             )}
           </div>
         </div>
@@ -250,11 +245,9 @@ export default function Home() {
           <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
               Bilimi Türkçe Keşfet
-
             </h1>
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
               Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile Türkçe özetlerini okuyun.
-
             </p>
           </div>
         )}
@@ -266,7 +259,7 @@ export default function Home() {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                placeholder="Konu, hastalik, molekul..."
+                placeholder="Konu, hastalık, molekül..."
                 className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm"
               />
               <button
@@ -274,7 +267,7 @@ export default function Home() {
                 disabled={loading}
                 className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap"
               >
-                {loading ? 'Araniyor...' : 'Ara'}
+                {loading ? 'Aranıyor...' : 'Ara'}
               </button>
             </div>
           </div>
@@ -304,9 +297,9 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <p className="text-white/30 text-sm">{articles.length} arastirma bulundu</p>
+              <p className="text-white/30 text-sm">{articles.length} araştırma bulundu</p>
               <div className="flex items-center gap-3">
-                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Basliklar cevrilior...</p>}
+                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Başlıklar çevriliyor...</p>}
                 <div className="relative">
                   <button
                     onClick={() => setShowSort(!showSort)}
@@ -357,7 +350,7 @@ export default function Home() {
                   {expandedId === i && (
                     <div className="mb-4 p-4 bg-white/3 rounded-xl border border-white/5">
                       <p className="text-sm text-white/80 leading-relaxed">
-                        {article.abstract_tr || article.abstract_en || 'Ozet mevcut degil.'}
+                        {article.abstract_tr || article.abstract_en || 'Özet mevcut değil.'}
                       </p>
                     </div>
                   )}
@@ -367,7 +360,7 @@ export default function Home() {
                       disabled={translating[i]}
                       className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
                     >
-                      {translating[i] ? 'Cevrilior...' : article.abstract_tr ? (expandedId === i ? 'Kapat' : 'Ozeti Oku') : 'Ozeti Cevir ve Oku'}
+                      {translating[i] ? 'Çevriliyor...' : article.abstract_tr ? (expandedId === i ? 'Kapat' : 'Özeti Oku') : 'Özeti Çevir ve Oku'}
                     </button>
                     {article.pubmed_id && (
                       <a href={'https://pubmed.ncbi.nlm.nih.gov/' + article.pubmed_id + '/'} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">
@@ -383,12 +376,12 @@ export default function Home() {
         {!loading && searched && articles.length === 0 && (
           <div className="text-center py-20 text-white/30">
             <div className="text-5xl mb-4">🔭</div>
-            <p>Sonuc bulunamadi</p>
+            <p>Sonuç bulunamadı</p>
           </div>
         )}
         {!searched && (
           <div className="mt-8 text-center">
-            <p className="text-white/25 text-sm mb-4">Populer aramalar</p>
+            <p className="text-white/25 text-sm mb-4">Popüler aramalar</p>
             <div className="flex flex-wrap justify-center gap-2">
               {['kanser tedavisi','yapay zeka','alzheimer','covid-19','depresyon'].map(s => (
                 <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-sm text-white/40 hover:text-white/70 transition">
@@ -401,7 +394,7 @@ export default function Home() {
       </main>
       <footer className="border-t border-white/5 py-8 mt-20">
         <div className="max-w-5xl mx-auto px-4 text-center text-white/20 text-xs">
-          BILIMCE - PubMed verileri - Turk arastirmacilar icin
+          BİLİMCE - PubMed verileri - Türk araştırmacılar için
         </div>
       </footer>
     </div>

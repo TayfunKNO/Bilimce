@@ -29,6 +29,18 @@ const CATEGORY_QUERIES = {
   technology: 'artificial intelligence machine learning',
 }
 
+const translateOne = async (text) => {
+  if (!text) return null
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
+    const res = await fetch(url)
+    const data = await res.json()
+    return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
+  } catch (e) {
+    return null
+  }
+}
+
 const sortArticles = (articles, sortBy) => {
   const arr = [...articles]
   if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
@@ -114,25 +126,20 @@ export default function Home() {
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted)
       setLoading(false)
+      setAutoTranslating(true)
 
-      if (sorted.length > 0) {
-        setAutoTranslating(true)
-        // Tüm başlıkları tek seferde çevir
-        const res = await fetch('/api/translate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ titles: sorted.map(a => a.title_en) }),
+      // 5'er grupla client-side çeviri
+      const updated = [...sorted]
+      for (let g = 0; g < updated.length; g += 5) {
+        const group = updated.slice(g, g + 5)
+        const translated = await Promise.all(group.map(a => translateOne(a.title_en)))
+        translated.forEach((title_tr, idx) => {
+          if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr }
         })
-        const data = await res.json()
-        if (data.titles_tr) {
-          const updated = sorted.map((article, i) => ({
-            ...article,
-            title_tr: data.titles_tr[i] || article.title_tr || null,
-          }))
-          updateArticles(updated)
-        }
-        setAutoTranslating(false)
+        updateArticles([...updated])
+        await new Promise(r => setTimeout(r, 200))
       }
+      setAutoTranslating(false)
     } catch (err) {
       console.error('Arama hatasi:', err)
       setLoading(false)

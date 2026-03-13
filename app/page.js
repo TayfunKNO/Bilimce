@@ -1,6 +1,12 @@
 'use client'
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
+import { createClient } from '@supabase/supabase-js'
 import { searchPubMed } from '../lib/pubmed'
+
+const supabase = createClient(
+  'https://xlnnopufkjaqxjsmhtot.supabase.co',
+  'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
+)
 
 const CATEGORIES = [
   { id: 'all', label: 'Tumu', icon: '🔬' },
@@ -48,6 +54,57 @@ export default function Home() {
   const [searched, setSearched] = useState(false)
   const [expandedId, setExpandedId] = useState(null)
   const [autoTranslating, setAutoTranslating] = useState(false)
+  const [user, setUser] = useState(null)
+  const [favorites, setFavorites] = useState({})
+  const [favLoading, setFavLoading] = useState({})
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user || null)
+      if (data?.user) loadFavorites(data.user.id)
+    })
+  }, [])
+
+  const loadFavorites = async (userId) => {
+    const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId)
+    if (data) {
+      const favMap = {}
+      data.forEach(f => { favMap[f.pubmed_id] = true })
+      setFavorites(favMap)
+    }
+  }
+
+  const toggleFavorite = async (article) => {
+    if (!user) {
+      window.location.href = '/auth'
+      return
+    }
+    const isFav = favorites[article.pubmed_id]
+    setFavLoading(prev => ({ ...prev, [article.pubmed_id]: true }))
+    try {
+      if (isFav) {
+        await supabase.from('favorites').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
+        setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
+      } else {
+        await supabase.from('favorites').insert({
+          user_id: user.id,
+          pubmed_id: article.pubmed_id,
+          title_en: article.title_en,
+          title_tr: article.title_tr,
+          abstract_en: article.abstract_en,
+          abstract_tr: article.abstract_tr,
+          journal: article.journal,
+          published_date: article.published_date,
+          authors: article.authors,
+        })
+        setFavorites(prev => ({ ...prev, [article.pubmed_id]: true }))
+      }
+    } catch (err) {
+      console.error('Favori hatasi:', err)
+    } finally {
+      setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false }))
+    }
+  }
 
   const updateArticles = (arr) => {
     articlesRef.current = arr
@@ -115,7 +172,6 @@ export default function Home() {
       setExpandedId(expandedId === index ? null : index)
       return
     }
-    autoTranslatingRef.current = false
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', {
@@ -145,9 +201,20 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-white/30 hidden sm:block">Bilimsel arastirmalar Turkce</span>
-            <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
-              Giris Yap
-            </a>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <a href="/favorites" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                  Favorilerim
+                </a>
+                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                  Cikis
+                </button>
+              </div>
+            ) : (
+              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">
+                Giris Yap
+              </a>
+            )}
           </div>
         </div>
       </header>
@@ -223,7 +290,17 @@ export default function Home() {
                         <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
                       )}
                     </div>
-                    <span className="shrink-0 text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => toggleFavorite(article)}
+                        disabled={favLoading[article.pubmed_id]}
+                        className="text-lg hover:scale-110 transition-transform"
+                        title={favorites[article.pubmed_id] ? 'Favorilerden cikar' : 'Favorilere ekle'}
+                      >
+                        {favorites[article.pubmed_id] ? '❤️' : '🤍'}
+                      </button>
+                      <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
+                    </div>
                   </div>
                   <div className="flex flex-wrap gap-3 text-xs text-white/30 mb-4">
                     {article.journal && <span>{article.journal}</span>}

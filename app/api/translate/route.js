@@ -14,13 +14,16 @@ export async function POST(request) {
       }
     }
 
-    // Toplu başlık çevirisi
     if (titles && Array.isArray(titles)) {
-      const translated = await Promise.all(titles.map(t => translateText(t)))
-      return Response.json({ titles_tr: translated })
+      const results = []
+      for (let i = 0; i < titles.length; i += 10) {
+        const chunk = titles.slice(i, i + 10)
+        const translated = await Promise.all(chunk.map(t => translateText(t)))
+        results.push(...translated)
+      }
+      return Response.json({ titles_tr: results })
     }
 
-    // Tekli çeviri
     const title_tr = await translateText(title)
 
     let abstract_tr = null

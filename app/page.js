@@ -246,10 +246,12 @@ export default function Home() {
         {!searched && (
           <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Bilimi Turkce kesfet
+              Bilimi Türkçe Keşfet
+
             </h1>
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
-              Dunya genelindeki bilimsel arastirmalari arayin, yapay zeka ile Turkce ozetlerini okuyun.
+              Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile Türkçe özetlerini okuyun.
+
             </p>
           </div>
         )}

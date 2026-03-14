@@ -406,11 +406,11 @@ export default function Home() {
               {trending.map((item, i) => (
                 <button
                   key={i}
-                  onClick={() => { setQuery(item.topic); handleSearch(item.topic) }}
-                  className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-white/15 hover:bg-white/5 transition-all"
+                  onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }}
+                  className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-blue-500/20 hover:bg-white/5 transition-all group"
                 >
-                  <p className="text-sm text-white/70 font-medium leading-snug mb-1">{item.topic}</p>
-                  <p className="text-xs text-blue-400/70">{item.count} makale</p>
+                  <p className="text-sm text-white font-semibold leading-snug mb-2 group-hover:text-blue-300 transition">{item.topic}</p>
+                  <p className="text-xs text-blue-400/60">{item.count}+ makale bu hafta</p>
                 </button>
               ))}
             </div>

@@ -338,10 +338,10 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              style={{ fontSize: '14px' }}
+              style={{ fontSize: '12px' }}
               className={`px-3 py-2 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-xl transition hover:scale-110`}
             >
-              {dark ? '☀️' : '🌙'}
+              {dark ? '🌤' : '🌑'}
             </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
               <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-2 px-3 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>

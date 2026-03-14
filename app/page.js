@@ -26,7 +26,7 @@ const UI_TEXT = {
     source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
-    noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend',
+    noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'Topic, disease, molecule...',
@@ -36,7 +36,7 @@ const UI_TEXT = {
     source: 'Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
-    noAbstract: 'No abstract available.', trending: 'Trending This Week',
+    noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Thema, Krankheit, Molekül...',
@@ -45,38 +45,38 @@ const UI_TEXT = {
     translateRead: 'Zusammenfassung übersetzen', read: 'Zusammenfassung lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
     source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
-    heroSub: 'Wissenschaftliche Studien weltweit suchen, KI-übersetzte Zusammenfassungen lesen.',
-    noAbstract: 'Keine Zusammenfassung verfügbar.', trending: 'Diese Woche Trending',
+    heroSub: 'Wissenschaftliche Studien weltweit suchen.',
+    noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Sujet, maladie, molécule...',
-    found: 'études trouvées', translating: 'Traduction des titres...', noResult: 'Aucun résultat',
+    found: 'études trouvées', translating: 'Traduction...', noResult: 'Aucun résultat',
     popular: 'Recherches populaires', newest: 'Plus récent', oldest: 'Plus ancien',
-    translateRead: 'Traduire et lire le résumé', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
+    translateRead: 'Traduire et lire', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
     source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
     subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
-    heroSub: 'Recherchez des études scientifiques mondiales, lisez des résumés traduits par IA.',
-    noAbstract: 'Aucun résumé disponible.', trending: 'Tendances cette semaine',
+    heroSub: 'Recherchez des études scientifiques mondiales.',
+    noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Tema, enfermedad, molécula...',
-    found: 'estudios encontrados', translating: 'Traduciendo títulos...', noResult: 'Sin resultados',
+    found: 'estudios encontrados', translating: 'Traduciendo...', noResult: 'Sin resultados',
     popular: 'Búsquedas populares', newest: 'Más reciente', oldest: 'Más antiguo',
-    translateRead: 'Traducir y leer resumen', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
+    translateRead: 'Traducir y leer', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
     source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Cerrar sesión', login: 'Iniciar sesión',
     subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
-    heroSub: 'Busca estudios científicos mundiales, lee resúmenes traducidos por IA.',
-    noAbstract: 'No hay resumen disponible.', trending: 'Tendencias esta semana',
+    heroSub: 'Busca estudios científicos mundiales.',
+    noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'موضوع، مرض، جزيء...',
-    found: 'دراسة وجدت', translating: 'جاري ترجمة العناوين...', noResult: 'لا توجد نتائج',
-    popular: 'عمليات البحث الشائعة', newest: 'الأحدث', oldest: 'الأقدم',
-    translateRead: 'ترجمة وقراءة الملخص', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
-    source: 'المصدر', favorites: 'المفضلة', profile: 'الملف الشخصي', logout: 'تسجيل الخروج', login: 'تسجيل الدخول',
+    found: 'دراسة وجدت', translating: 'جاري الترجمة...', noResult: 'لا توجد نتائج',
+    popular: 'البحث الشائع', newest: 'الأحدث', oldest: 'الأقدم',
+    translateRead: 'ترجمة وقراءة', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
+    source: 'المصدر', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول',
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
-    heroSub: 'ابحث في الدراسات العلمية العالمية، اقرأ ملخصات مترجمة بالذكاء الاصطناعي.',
-    noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً هذا الأسبوع',
+    heroSub: 'ابحث في الدراسات العلمية العالمية.',
+    noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
   },
 }
 
@@ -168,6 +168,8 @@ export default function Home() {
   const [username, setUsername] = useState('')
   const [favorites, setFavorites] = useState({})
   const [favLoading, setFavLoading] = useState({})
+  const [readingList, setReadingList] = useState({})
+  const [readLoading, setReadLoading] = useState({})
   const [sortBy, setSortBy] = useState('newest')
   const [showSort, setShowSort] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -184,7 +186,11 @@ export default function Home() {
     if (saved) setLang(saved)
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id) }
+      if (data?.user) {
+        loadFavorites(data.user.id)
+        loadUsername(data.user.id)
+        loadReadingList(data.user.id)
+      }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
@@ -224,6 +230,15 @@ export default function Home() {
     }
   }
 
+  const loadReadingList = async (userId) => {
+    const { data } = await supabase.from('reading_list').select('pubmed_id').eq('user_id', userId)
+    if (data) {
+      const map = {}
+      data.forEach(r => { map[r.pubmed_id] = true })
+      setReadingList(map)
+    }
+  }
+
   const saveSearchHistory = async (q) => {
     if (!user) return
     await supabase.from('search_history').insert({ user_id: user.id, query: q })
@@ -247,6 +262,26 @@ export default function Home() {
       }
     } catch (err) { console.error(err) }
     finally { setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
+  }
+
+  const toggleReadingList = async (article) => {
+    if (!user) { window.location.href = '/auth'; return }
+    const isIn = readingList[article.pubmed_id]
+    setReadLoading(prev => ({ ...prev, [article.pubmed_id]: true }))
+    try {
+      if (isIn) {
+        await supabase.from('reading_list').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
+        setReadingList(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
+      } else {
+        await supabase.from('reading_list').insert({
+          user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en,
+          title_tr: article.title_tr, journal: article.journal,
+          published_date: article.published_date, authors: article.authors,
+        })
+        setReadingList(prev => ({ ...prev, [article.pubmed_id]: true }))
+      }
+    } catch (err) { console.error(err) }
+    finally { setReadLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
 
   const shareArticle = (article) => setSharePopup(article)
@@ -345,7 +380,8 @@ export default function Home() {
                   <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-40">
                     <a href="/profile" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">👤 {t.profile}</a>
                     <a href="/favorites" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">❤️ {t.favorites}</a>
-                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
+                    <a href="/reading-list" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">🔖 {t.readingList}</a>
+                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>
@@ -404,11 +440,7 @@ export default function Home() {
             <p className="text-white/40 text-sm font-medium mb-4">🔥 {t.trending}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {trending.map((item, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }}
-                  className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-blue-500/20 hover:bg-white/5 transition-all group"
-                >
+                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-blue-500/20 hover:bg-white/5 transition-all group">
                   <p className="text-sm text-white font-semibold leading-snug mb-2 group-hover:text-blue-300 transition">{item.topic}</p>
                   <p className="text-xs text-blue-400/60">{item.count}+ makale bu hafta</p>
                 </button>
@@ -455,8 +487,11 @@ export default function Home() {
                       {article.title_tr && lang !== 'en' && <p className="text-white/35 text-sm leading-snug mt-1">{article.title_en}</p>}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">
+                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform" title="Favorilere ekle">
                         {favorites[article.pubmed_id] ? '❤️' : '🤍'}
+                      </button>
+                      <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform" title="Okuma listesine ekle">
+                        {readingList[article.pubmed_id] ? '🔖' : '📌'}
                       </button>
                       <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
                       <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>

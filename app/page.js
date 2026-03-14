@@ -488,7 +488,8 @@ export default function Home() {
                 <article key={article.pubmed_id || i} className="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      <h2 className="font-semibold text-white leading-snug mb-1">{article.title_tr || article.title_en}</h2>
+                      <a href={`/article/${article.pubmed_id}`} className="font-semibold text-white leading-snug mb-1 hover:text-blue-300 transition block">{article.title_tr || article.title_en}</a>
+
                       {article.title_tr && lang !== 'en' && (
                         <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
                       )}

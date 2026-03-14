@@ -9,8 +9,7 @@ const supabase = createClient(
 
 async function fetchArticle(pubmedId) {
   try {
-    const fetchUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pubmedId}&retmode=xml`
-    const res = await fetch(fetchUrl)
+    const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pubmedId}&retmode=xml`)
     const xml = await res.text()
     const title = xml.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || ''
     const abstractSection = xml.match(/<Abstract>([\s\S]*?)<\/Abstract>/)?.[1] || ''
@@ -25,15 +24,42 @@ async function fetchArticle(pubmedId) {
     const journal = xml.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
     const year = xml.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
     const lastNames = xml.match(/<LastName>([\s\S]*?)<\/LastName>/g)?.slice(0, 5).map(n => n.replace(/<[^>]+>/g, '')) || []
-    return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', ') }
+    const meshTerms = xml.match(/<DescriptorName[^>]*>([\s\S]*?)<\/DescriptorName>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
+    return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: meshTerms }
   } catch {
     return null
+  }
+}
+
+async function fetchRelated(keywords, currentId) {
+  try {
+    if (!keywords || keywords.length === 0) return []
+    const query = keywords.slice(0, 2).join(' ')
+    const searchRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=5&retmode=json`)
+    const searchData = await searchRes.json()
+    const ids = (searchData.esearchresult?.idlist || []).filter(id => id !== currentId).slice(0, 4)
+    if (ids.length === 0) return []
+    const fetchRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${ids.join(',')}&retmode=xml`)
+    const xml = await fetchRes.text()
+    const articles = []
+    const matches = xml.match(/<PubmedArticle>[\s\S]*?<\/PubmedArticle>/g) || []
+    for (const article of matches) {
+      const pubmedId = article.match(/<PMID[^>]*>(\d+)<\/PMID>/)?.[1]
+      const title = article.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || ''
+      const journal = article.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
+      const year = article.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
+      if (pubmedId && title) articles.push({ pubmed_id: pubmedId, title_en: title, journal, published_date: year })
+    }
+    return articles
+  } catch {
+    return []
   }
 }
 
 export default function ArticlePage({ params }) {
   const pubmedId = params.id
   const [article, setArticle] = useState(null)
+  const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
@@ -42,7 +68,13 @@ export default function ArticlePage({ params }) {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    fetchArticle(pubmedId).then(a => { setArticle(a); setLoading(false) })
+    fetchArticle(pubmedId).then(a => {
+      setArticle(a)
+      setLoading(false)
+      if (a?.keywords?.length > 0) {
+        fetchRelated(a.keywords, pubmedId).then(setRelated)
+      }
+    })
     loadComments()
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
@@ -56,11 +88,7 @@ export default function ArticlePage({ params }) {
   }
 
   const loadComments = async () => {
-    const { data } = await supabase
-      .from('comments')
-      .select('*')
-      .eq('pubmed_id', pubmedId)
-      .order('created_at', { ascending: false })
+    const { data } = await supabase.from('comments').select('*').eq('pubmed_id', pubmedId).order('created_at', { ascending: false })
     setComments(data || [])
   }
 
@@ -73,10 +101,7 @@ export default function ArticlePage({ params }) {
       username: username || user.email?.split('@')[0],
       content: newComment.trim(),
     })
-    if (!error) {
-      setNewComment('')
-      loadComments()
-    }
+    if (!error) { setNewComment(''); loadComments() }
     setSubmitting(false)
   }
 
@@ -117,12 +142,19 @@ export default function ArticlePage({ params }) {
             <article>
               <div className="mb-8">
                 <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-3">{article.title_en}</h1>
-                <div className="flex flex-wrap gap-3 text-xs text-white/40">
+                <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
                   {article.authors && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.authors}</span>}
                   <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">PubMed ID: {pubmedId}</span>
                 </div>
+                {article.keywords?.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {article.keywords.map((k, i) => (
+                      <span key={i} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg text-xs">{k}</span>
+                    ))}
+                  </div>
+                )}
               </div>
               {abstract ? (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
@@ -161,6 +193,23 @@ export default function ArticlePage({ params }) {
               </div>
             </article>
 
+            {related.length > 0 && (
+              <div className="border-t border-white/5 pt-8 mb-8">
+                <h2 className="text-lg font-semibold text-white mb-4">🔗 İlgili Makaleler</h2>
+                <div className="grid gap-3">
+                  {related.map(r => (
+                    <a key={r.pubmed_id} href={`/article/${r.pubmed_id}`} className="bg-white/3 border border-white/5 rounded-xl p-4 hover:border-white/15 transition-all block">
+                      <p className="text-sm text-white/80 leading-snug mb-2 hover:text-white transition">{r.title_en}</p>
+                      <div className="flex gap-3 text-xs text-white/30">
+                        {r.journal && <span>{r.journal}</span>}
+                        {r.published_date && <span>{r.published_date.slice(0,4)}</span>}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="border-t border-white/5 pt-8">
               <h2 className="text-lg font-semibold text-white mb-6">💬 Yorumlar ({comments.length})</h2>
               {user ? (
@@ -172,11 +221,7 @@ export default function ArticlePage({ params }) {
                     rows={3}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 resize-none mb-3"
                   />
-                  <button
-                    onClick={submitComment}
-                    disabled={submitting || !newComment.trim()}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50"
-                  >
+                  <button onClick={submitComment} disabled={submitting || !newComment.trim()} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50">
                     {submitting ? 'Gönderiliyor...' : 'Yorum Yap'}
                   </button>
                 </div>

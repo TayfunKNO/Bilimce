@@ -130,10 +130,10 @@ const sortArticles = (articles, sortBy) => {
   return arr
 }
 
-const AbstractDisplay = ({ text, noAbstract }) => {
-  if (!text) return <p className="text-sm text-white/40 italic">{noAbstract}</p>
+const AbstractDisplay = ({ text, noAbstract, dark }) => {
+  if (!text) return <p className={`text-sm italic ${dark ? 'text-white/40' : 'text-black/40'}`}>{noAbstract}</p>
   const sections = text.split('\n\n').filter(Boolean)
-  if (sections.length <= 1) return <p className="text-sm text-white/80 leading-relaxed">{text}</p>
+  if (sections.length <= 1) return <p className={`text-sm leading-relaxed ${dark ? 'text-white/80' : 'text-black/80'}`}>{text}</p>
   return (
     <div className="flex flex-col gap-3">
       {sections.map((section, i) => {
@@ -144,11 +144,11 @@ const AbstractDisplay = ({ text, noAbstract }) => {
           return (
             <div key={i}>
               <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
-              <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
+              <p className={`text-sm leading-relaxed mt-1 ${dark ? 'text-white/80' : 'text-black/80'}`}>{content}</p>
             </div>
           )
         }
-        return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
+        return <p key={i} className={`text-sm leading-relaxed ${dark ? 'text-white/80' : 'text-black/80'}`}>{section}</p>
       })}
     </div>
   )
@@ -178,27 +178,43 @@ export default function Home() {
   const [lang, setLang] = useState('tr')
   const [showLang, setShowLang] = useState(false)
   const [trending, setTrending] = useState([])
+  const [dark, setDark] = useState(true)
 
   const t = UI_TEXT[lang]
 
   useEffect(() => {
-    const saved = localStorage.getItem('bilimce_lang')
-    if (saved) setLang(saved)
+    const savedLang = localStorage.getItem('bilimce_lang')
+    if (savedLang) setLang(savedLang)
+    const savedTheme = localStorage.getItem('bilimce_theme')
+    if (savedTheme === 'light') { setDark(false); document.documentElement.classList.add('light') }
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) {
-        loadFavorites(data.user.id)
-        loadUsername(data.user.id)
-        loadReadingList(data.user.id)
-      }
+      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id) }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
 
+  const toggleTheme = () => {
+    const newDark = !dark
+    setDark(newDark)
+    if (newDark) {
+      document.documentElement.classList.remove('light')
+      localStorage.setItem('bilimce_theme', 'dark')
+    } else {
+      document.documentElement.classList.add('light')
+      localStorage.setItem('bilimce_theme', 'light')
+    }
+  }
+
+  const bg = dark ? 'bg-[#0a0a0f]' : 'bg-[#f8f9ff]'
+  const border = dark ? 'border-white/5' : 'border-black/10'
+  const text = dark ? 'text-white' : 'text-black'
+  const textMuted = dark ? 'text-white/60' : 'text-black/60'
+  const cardBg = dark ? 'bg-white/3' : 'bg-black/3'
+  const inputBg = dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
+
   const changeLang = (code) => {
-    setLang(code)
-    localStorage.setItem('bilimce_lang', code)
-    setShowLang(false)
+    setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
     if (articlesRef.current.length > 0) retranslateArticles(code)
   }
 
@@ -209,8 +225,7 @@ export default function Home() {
       const group = updated.slice(g, g + 5)
       const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
       translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
-      articlesRef.current = [...updated]
-      setArticles([...updated])
+      articlesRef.current = [...updated]; setArticles([...updated])
       await new Promise(r => setTimeout(r, 200))
     }
     setAutoTranslating(false)
@@ -223,20 +238,12 @@ export default function Home() {
 
   const loadFavorites = async (userId) => {
     const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId)
-    if (data) {
-      const favMap = {}
-      data.forEach(f => { favMap[f.pubmed_id] = true })
-      setFavorites(favMap)
-    }
+    if (data) { const m = {}; data.forEach(f => { m[f.pubmed_id] = true }); setFavorites(m) }
   }
 
   const loadReadingList = async (userId) => {
     const { data } = await supabase.from('reading_list').select('pubmed_id').eq('user_id', userId)
-    if (data) {
-      const map = {}
-      data.forEach(r => { map[r.pubmed_id] = true })
-      setReadingList(map)
-    }
+    if (data) { const m = {}; data.forEach(r => { m[r.pubmed_id] = true }); setReadingList(m) }
   }
 
   const saveSearchHistory = async (q) => {
@@ -253,11 +260,7 @@ export default function Home() {
         await supabase.from('favorites').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
         setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
       } else {
-        await supabase.from('favorites').insert({
-          user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en,
-          title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr,
-          journal: article.journal, published_date: article.published_date, authors: article.authors,
-        })
+        await supabase.from('favorites').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr, journal: article.journal, published_date: article.published_date, authors: article.authors })
         setFavorites(prev => ({ ...prev, [article.pubmed_id]: true }))
       }
     } catch (err) { console.error(err) }
@@ -273,11 +276,7 @@ export default function Home() {
         await supabase.from('reading_list').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
         setReadingList(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
       } else {
-        await supabase.from('reading_list').insert({
-          user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en,
-          title_tr: article.title_tr, journal: article.journal,
-          published_date: article.published_date, authors: article.authors,
-        })
+        await supabase.from('reading_list').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, journal: article.journal, published_date: article.published_date, authors: article.authors })
         setReadingList(prev => ({ ...prev, [article.pubmed_id]: true }))
       }
     } catch (err) { console.error(err) }
@@ -285,10 +284,7 @@ export default function Home() {
   }
 
   const shareArticle = (article) => setSharePopup(article)
-  const copyLink = (article) => {
-    navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`)
-    setCopied(true); setTimeout(() => setCopied(false), 2000)
-  }
+  const copyLink = (article) => { navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`); setCopied(true); setTimeout(() => setCopied(false), 2000) }
   const shareWhatsApp = (article) => {
     const title = article.title_tr || article.title_en
     window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank')
@@ -309,20 +305,13 @@ export default function Home() {
         const group = updated.slice(g, g + 5)
         const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
         translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
-        updateArticles([...updated])
-        await new Promise(r => setTimeout(r, 200))
+        updateArticles([...updated]); await new Promise(r => setTimeout(r, 200))
       }
       setAutoTranslating(false)
-    } catch (err) {
-      console.error(err); setLoading(false); setAutoTranslating(false)
-    }
+    } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
   }, [query, sortBy, lang])
 
-  const handleSortChange = (newSort) => {
-    setSortBy(newSort); setShowSort(false)
-    updateArticles(sortArticles(articlesRef.current, newSort))
-  }
-
+  const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
     setActiveCategory(cat.id)
     if (cat.id === 'all') { setQuery(''); updateArticles([]); setSearched(false); return }
@@ -334,10 +323,7 @@ export default function Home() {
     if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
-      const res = await fetch('/api/translate', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
-      })
+      const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
       const data = await res.json()
       const updated = [...articlesRef.current]
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
@@ -349,22 +335,25 @@ export default function Home() {
   const currentLang = LANGUAGES.find(l => l.code === lang)
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]" onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false) }}>
-      <header className="border-b border-white/5 px-6 py-4">
+    <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false) }}>
+      <header className={`border-b ${border} px-6 py-4`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold">B</div>
-            <span className="font-bold text-lg tracking-tight">BİLİMCE</span>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
+            <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button onClick={toggleTheme} className={`px-3 py-2 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-xl text-lg transition hover:scale-110`}>
+              {dark ? '☀️' : '🌙'}
+            </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowLang(!showLang)} className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+              <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-2 px-3 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                 <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
               </button>
               {showLang && (
-                <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
+                <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36`}>
                   {LANGUAGES.map(l => (
-                    <button key={l.code} onClick={() => changeLang(l.code)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : 'text-white/60'}`}>
+                    <button key={l.code} onClick={() => changeLang(l.code)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>
                       <span>{l.flag}</span><span>{l.label}</span>
                     </button>
                   ))}
@@ -373,20 +362,20 @@ export default function Home() {
             </div>
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
-                <button onClick={() => setShowMenu(!showMenu)} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                   <span>👤</span><span>{username || user.email?.split('@')[0]}</span><span>▾</span>
                 </button>
                 {showMenu && (
-                  <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-40">
-                    <a href="/profile" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">👤 {t.profile}</a>
-                    <a href="/favorites" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">❤️ {t.favorites}</a>
-                    <a href="/reading-list" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">🔖 {t.readingList}</a>
+                  <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-40`}>
+                    <a href="/profile" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>👤 {t.profile}</a>
+                    <a href="/favorites" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>❤️ {t.favorites}</a>
+                    <a href="/reading-list" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
                     <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>
             ) : (
-              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">{t.login}</a>
+              <a href="/auth" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>{t.login}</a>
             )}
           </div>
         </div>
@@ -394,17 +383,17 @@ export default function Home() {
 
       {sharePopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setSharePopup(null)}>
-          <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
-            <h3 className="text-white font-semibold mb-2 text-sm leading-snug">{sharePopup.title_tr || sharePopup.title_en}</h3>
-            <p className="text-white/30 text-xs mb-6">{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
+          <div className={`${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-6 max-w-sm w-full`} onClick={e => e.stopPropagation()}>
+            <h3 className={`${text} font-semibold mb-2 text-sm leading-snug`}>{sharePopup.title_tr || sharePopup.title_en}</h3>
+            <p className={`${textMuted} text-xs mb-6`}>{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
             <div className="flex flex-col gap-3">
-              <button onClick={() => copyLink(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:text-white transition">
+              <button onClick={() => copyLink(sharePopup)} className={`flex items-center gap-3 px-4 py-3 ${dark ? 'bg-white/5 border-white/10 text-white/70 hover:text-white' : 'bg-black/5 border-black/10 text-black/70 hover:text-black'} border rounded-xl text-sm transition`}>
                 <span>🔗</span><span>{copied ? '✓ Kopyalandı!' : 'Linki Kopyala'}</span>
               </button>
               <button onClick={() => shareWhatsApp(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition">
                 <span>💬</span><span>WhatsApp</span>
               </button>
-              <button onClick={() => setSharePopup(null)} className="px-4 py-3 text-xs text-white/30 hover:text-white transition">Kapat</button>
+              <button onClick={() => setSharePopup(null)} className={`px-4 py-3 text-xs ${textMuted} hover:${text} transition`}>Kapat</button>
             </div>
           </div>
         </div>
@@ -414,14 +403,14 @@ export default function Home() {
         {!searched && (
           <div className="text-center mb-12">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{t.hero}</h1>
-            <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">{t.heroSub}</p>
+            <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed`}>{t.heroSub}</p>
           </div>
         )}
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
-            <div className="relative flex gap-3 bg-white/5 border border-white/10 rounded-2xl p-2">
-              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm" />
-              <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
+            <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
+              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} placeholder-${dark ? 'white' : 'black'}/25 outline-none text-sm`} />
+              <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
             </div>
@@ -429,7 +418,7 @@ export default function Home() {
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {CATEGORIES.map(cat => (
-            <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : 'bg-white/5 border border-white/5 hover:bg-white/10'}`}>
+            <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : `${dark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-black/5 border-black/5 hover:bg-black/10'} border`}`}>
               {cat.icon}
             </button>
           ))}
@@ -437,11 +426,11 @@ export default function Home() {
 
         {!searched && trending.length > 0 && (
           <div className="mb-10">
-            <p className="text-white/40 text-sm font-medium mb-4">🔥 {t.trending}</p>
+            <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {trending.map((item, i) => (
-                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-blue-500/20 hover:bg-white/5 transition-all group">
-                  <p className="text-sm text-white font-semibold leading-snug mb-2 group-hover:text-blue-300 transition">{item.topic}</p>
+                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className={`${cardBg} border ${border} rounded-xl p-4 text-left hover:border-blue-500/20 transition-all group`}>
+                  <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
                   <p className="text-xs text-blue-400/60">{item.count}+ makale bu hafta</p>
                 </button>
               ))}
@@ -452,9 +441,9 @@ export default function Home() {
         {loading && (
           <div className="grid gap-4">
             {[1,2,3].map(i => (
-              <div key={i} className="bg-white/3 border border-white/5 rounded-2xl p-6 animate-pulse">
-                <div className="h-4 bg-white/10 rounded w-3/4 mb-3"></div>
-                <div className="h-3 bg-white/5 rounded w-full"></div>
+              <div key={i} className={`${cardBg} border ${border} rounded-2xl p-6 animate-pulse`}>
+                <div className={`h-4 ${dark ? 'bg-white/10' : 'bg-black/10'} rounded w-3/4 mb-3`}></div>
+                <div className={`h-3 ${dark ? 'bg-white/5' : 'bg-black/5'} rounded w-full`}></div>
               </div>
             ))}
           </div>
@@ -462,17 +451,17 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <p className="text-white/30 text-sm">{articles.length} {t.found}</p>
+              <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
                 {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
                 <div className="relative">
-                  <button onClick={() => setShowSort(!showSort)} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                  <button onClick={() => setShowSort(!showSort)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                     <span>↕</span><span>{sortBy === 'newest' ? t.newest : t.oldest}</span>
                   </button>
                   {showSort && (
-                    <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
-                      <button onClick={() => handleSortChange('newest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'newest' ? 'text-blue-400' : 'text-white/60'}`}>{t.newest}</button>
-                      <button onClick={() => handleSortChange('oldest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'oldest' ? 'text-blue-400' : 'text-white/60'}`}>{t.oldest}</button>
+                    <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36`}>
+                      <button onClick={() => handleSortChange('newest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'newest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.newest}</button>
+                      <button onClick={() => handleSortChange('oldest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'oldest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.oldest}</button>
                     </div>
                   )}
                 </div>
@@ -480,31 +469,27 @@ export default function Home() {
             </div>
             <div className="grid gap-4">
               {articles.map((article, i) => (
-                <article key={article.pubmed_id || i} className="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">
+                <article key={article.pubmed_id || i} className={`${cardBg} border ${border} rounded-2xl p-6 hover:border-blue-500/20 transition-all`}>
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      <a href={`/article/${article.pubmed_id}`} className="font-semibold text-white leading-snug mb-1 hover:text-blue-300 transition block">{article.title_tr || article.title_en}</a>
-                      {article.title_tr && lang !== 'en' && <p className="text-white/35 text-sm leading-snug mt-1">{article.title_en}</p>}
+                      <a href={`/article/${article.pubmed_id}`} className={`font-semibold ${text} leading-snug mb-1 hover:text-blue-400 transition block`}>{article.title_tr || article.title_en}</a>
+                      {article.title_tr && lang !== 'en' && <p className={`${textMuted} text-sm leading-snug mt-1`}>{article.title_en}</p>}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform" title="Favorilere ekle">
-                        {favorites[article.pubmed_id] ? '❤️' : '🤍'}
-                      </button>
-                      <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform" title="Okuma listesine ekle">
-                        {readingList[article.pubmed_id] ? '🔖' : '📌'}
-                      </button>
+                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{favorites[article.pubmed_id] ? '❤️' : '🤍'}</button>
+                      <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{readingList[article.pubmed_id] ? '🔖' : '📌'}</button>
                       <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
                       <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-3 text-xs text-white/30 mb-4">
+                  <div className={`flex flex-wrap gap-3 text-xs ${textMuted} mb-4`}>
                     {article.journal && <span>{article.journal}</span>}
                     {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
                     {article.authors && <span>{article.authors}</span>}
                   </div>
                   {expandedId === i && (
-                    <div className="mb-4 p-4 bg-white/3 rounded-xl border border-white/5">
-                      <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} />
+                    <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>
+                      <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} dark={dark} />
                     </div>
                   )}
                   <div className="flex gap-2">
@@ -512,7 +497,7 @@ export default function Home() {
                       {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                     </button>
                     {article.pubmed_id && (
-                      <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">
+                      <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>
                         {t.source}
                       </a>
                     )}
@@ -523,24 +508,24 @@ export default function Home() {
           </div>
         )}
         {!loading && searched && articles.length === 0 && (
-          <div className="text-center py-20 text-white/30">
+          <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>
             <p>{t.noResult}</p>
           </div>
         )}
         {!searched && (
           <div className="mt-8 text-center">
-            <p className="text-white/25 text-sm mb-4">{t.popular}</p>
+            <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
             <div className="flex flex-wrap justify-center gap-2">
               {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
-                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-sm text-white/40 hover:text-white/70 transition">{s}</button>
+                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-sm transition`}>{s}</button>
               ))}
             </div>
           </div>
         )}
       </main>
-      <footer className="border-t border-white/5 py-8 mt-20">
-        <div className="max-w-5xl mx-auto px-4 text-center text-white/20 text-xs">
+      <footer className={`border-t ${border} py-8 mt-20`}>
+        <div className={`max-w-5xl mx-auto px-4 text-center ${textMuted} text-xs`}>
           BİLİMCE - PubMed - {t.subtitle}
         </div>
       </footer>

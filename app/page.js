@@ -59,17 +59,27 @@ export default function Home() {
   const [expandedId, setExpandedId] = useState(null)
   const [autoTranslating, setAutoTranslating] = useState(false)
   const [user, setUser] = useState(null)
+  const [username, setUsername] = useState('')
   const [favorites, setFavorites] = useState({})
   const [favLoading, setFavLoading] = useState({})
   const [sortBy, setSortBy] = useState('newest')
   const [showSort, setShowSort] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) loadFavorites(data.user.id)
+      if (data?.user) {
+        loadFavorites(data.user.id)
+        loadUsername(data.user.id)
+      }
     })
   }, [])
+
+  const loadUsername = async (userId) => {
+    const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
+    if (data?.username) setUsername(data.username)
+  }
 
   const loadFavorites = async (userId) => {
     const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId)
@@ -78,6 +88,11 @@ export default function Home() {
       data.forEach(f => { favMap[f.pubmed_id] = true })
       setFavorites(favMap)
     }
+  }
+
+  const saveSearchHistory = async (q) => {
+    if (!user) return
+    await supabase.from('search_history').insert({ user_id: user.id, query: q })
   }
 
   const toggleFavorite = async (article) => {
@@ -126,9 +141,9 @@ export default function Home() {
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted)
       setLoading(false)
+      saveSearchHistory(q)
       setAutoTranslating(true)
 
-      // 5'er grupla client-side çeviri
       const updated = [...sorted]
       for (let g = 0; g < updated.length; g += 5) {
         const group = updated.slice(g, g + 5)
@@ -204,9 +219,22 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <span className="text-xs text-white/30 hidden sm:block">Bilimsel araştırmalar Türkçe</span>
             {user ? (
-              <div className="flex items-center gap-2">
-                <a href="/favorites" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Favorilerim</a>
-                <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}) }} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Çıkış</button>
+              <div className="relative">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
+                >
+                  <span>👤</span>
+                  <span>{username || user.email?.split('@')[0]}</span>
+                  <span>▾</span>
+                </button>
+                {showMenu && (
+                  <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-40">
+                    <a href="/profile" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">👤 Profilim</a>
+                    <a href="/favorites" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">❤️ Favorilerim</a>
+                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">Çıkış Yap</button>
+                  </div>
+                )}
               </div>
             ) : (
               <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">Giriş Yap</a>

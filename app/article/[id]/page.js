@@ -240,7 +240,8 @@ export default function ArticlePage({ params }) {
                         {selectedRating > 0 && selectedRating !== userRating && (
                           <button
                             onClick={handleRate}
-                            className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition"
+                            className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition cursor-pointer"
+
                           >
                             Onayla ✓
                           </button>

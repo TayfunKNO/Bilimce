@@ -18,41 +18,66 @@ export default async function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'sans-serif',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        <div
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 20,
+        {/* Arka plan degrade çemberler */}
+        <div style={{
+          position: 'absolute', top: -100, left: -100,
+          width: 400, height: 400, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(59,130,246,0.15), transparent)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: -100, right: -100,
+          width: 400, height: 400, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.15), transparent)',
+        }} />
+
+        {/* Bilim ikonları */}
+        <div style={{
+          display: 'flex', gap: 40, marginBottom: 32,
+          fontSize: 56,
+        }}>
+          <span>🧬</span>
+          <span>⚛️</span>
+          <span>🔬</span>
+          <span>🧪</span>
+          <span>🧠</span>
+        </div>
+
+        {/* Logo */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24,
+        }}>
+          <div style={{
+            width: 72, height: 72, borderRadius: 18,
             background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 40,
-            fontWeight: 'bold',
-            color: 'white',
-            marginBottom: 32,
-          }}
-        >
-          B
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 36, fontWeight: 'bold', color: 'white',
+          }}>B</div>
+          <div style={{
+            fontSize: 72, fontWeight: '900', color: 'white',
+            letterSpacing: -2,
+          }}>BİLİMCE</div>
         </div>
-        <div style={{ fontSize: 64, fontWeight: 'bold', color: 'white', marginBottom: 16 }}>
-          BİLİMCE
-        </div>
-        <div style={{ fontSize: 28, color: 'rgba(255,255,255,0.5)', textAlign: 'center', maxWidth: 700 }}>
+
+        {/* Alt yazı */}
+        <div style={{
+          fontSize: 32, color: 'rgba(255,255,255,0.5)',
+          textAlign: 'center', maxWidth: 800, marginBottom: 36,
+          lineHeight: 1.4,
+        }}>
           Bilimsel araştırmaları Türkçe keşfet
         </div>
-        <div
-          style={{
-            marginTop: 40,
-            padding: '12px 32px',
-            borderRadius: 50,
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-            color: 'white',
-            fontSize: 20,
-          }}
-        >
+
+        {/* URL */}
+        <div style={{
+          padding: '14px 40px', borderRadius: 50,
+          background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+          color: 'white', fontSize: 24, fontWeight: '600',
+          letterSpacing: 1,
+        }}>
           bilimce.vercel.app
         </div>
       </div>

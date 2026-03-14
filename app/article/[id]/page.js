@@ -59,33 +59,6 @@ async function fetchRelated(searchTerms, currentId) {
   }
 }
 
-const StarRating = ({ rating, onRate, userRating, avgRating, totalRatings }) => {
-  const [hovered, setHovered] = useState(0)
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex items-center gap-1">
-        {[1,2,3,4,5].map(star => (
-          <button
-            key={star}
-            onClick={() => onRate(star)}
-            onMouseEnter={() => setHovered(star)}
-            onMouseLeave={() => setHovered(0)}
-            className="text-2xl transition-transform hover:scale-110"
-          >
-            {star <= (hovered || userRating || 0) ? '⭐' : '☆'}
-          </button>
-        ))}
-      </div>
-      {totalRatings > 0 && (
-        <div className="text-xs text-white/40">
-          <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
-          <span className="ml-1">({totalRatings} oy)</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
 export default function ArticlePage({ params }) {
   const pubmedId = params.id
   const [article, setArticle] = useState(null)
@@ -97,6 +70,7 @@ export default function ArticlePage({ params }) {
   const [username, setUsername] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [userRating, setUserRating] = useState(0)
+  const [hovered, setHovered] = useState(0)
   const [avgRating, setAvgRating] = useState(0)
   const [totalRatings, setTotalRatings] = useState(0)
 
@@ -138,15 +112,8 @@ export default function ArticlePage({ params }) {
 
   const handleRate = async (star) => {
     if (!user) { window.location.href = '/auth'; return }
-    const { error } = await supabase.from('ratings').upsert({
-      user_id: user.id,
-      pubmed_id: pubmedId,
-      rating: star,
-    })
-    if (!error) {
-      setUserRating(star)
-      loadRatings()
-    }
+    const { error } = await supabase.from('ratings').upsert({ user_id: user.id, pubmed_id: pubmedId, rating: star })
+    if (!error) { setUserRating(star); loadRatings() }
   }
 
   const loadComments = async () => {
@@ -211,17 +178,14 @@ export default function ArticlePage({ params }) {
                   <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">PubMed ID: {pubmedId}</span>
                 </div>
                 {article.keywords?.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2">
                     {article.keywords.map((k, i) => (
                       <span key={i} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg text-xs">{k}</span>
                     ))}
                   </div>
                 )}
-                <div className="flex items-center gap-3">
-                  <StarRating rating={userRating} onRate={handleRate} userRating={userRating} avgRating={avgRating} totalRatings={totalRatings} />
-                  {!user && <span className="text-xs text-white/30">Puan vermek için giriş yapın</span>}
-                </div>
               </div>
+
               {abstract ? (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
                   <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide mb-4">Abstract</h2>
@@ -245,12 +209,40 @@ export default function ArticlePage({ params }) {
                   ) : (
                     <p className="text-sm text-white/80 leading-relaxed">{abstract}</p>
                   )}
+
+                  {/* Yıldız puanlama - özetin altında */}
+                  <div className="mt-6 pt-4 border-t border-white/5">
+                    <p className="text-xs text-white/40 mb-2">Bu araştırmayı puanlayın</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1">
+                        {[1,2,3,4,5].map(star => (
+                          <button
+                            key={star}
+                            onClick={() => handleRate(star)}
+                            onMouseEnter={() => setHovered(star)}
+                            onMouseLeave={() => setHovered(0)}
+                            className="text-3xl transition-transform hover:scale-110 leading-none"
+                          >
+                            <span style={{ color: star <= (hovered || userRating) ? '#facc15' : 'rgba(255,255,255,0.15)' }}>★</span>
+                          </button>
+                        ))}
+                      </div>
+                      {totalRatings > 0 && (
+                        <span className="text-xs text-white/40">
+                          <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
+                          {' '}({totalRatings} oy)
+                        </span>
+                      )}
+                      {!user && <span className="text-xs text-white/30">Puan için giriş yapın</span>}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
                   <p className="text-white/40 text-sm">Özet mevcut değil.</p>
                 </div>
               )}
+
               <div className="flex gap-3 mb-12">
                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
                   PubMed'de Görüntüle →

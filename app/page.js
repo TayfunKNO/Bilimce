@@ -8,15 +8,93 @@ const supabase = createClient(
   'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
 )
 
+const LANGUAGES = [
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+]
+
+const UI_TEXT = {
+  tr: {
+    search: 'Ara', searching: 'Aranıyor...', placeholder: 'Konu, hastalık, molekül...',
+    found: 'araştırma bulundu', translating: 'Başlıklar çevriliyor...', noResult: 'Sonuç bulunamadı',
+    popular: 'Popüler aramalar', newest: 'En Yeni', oldest: 'En Eski',
+    translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
+    source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
+    subtitle: 'Bilimsel araştırmalar',
+    hero: 'Bilimi Keşfet',
+    heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
+    noAbstract: 'Özet mevcut değil.',
+  },
+  en: {
+    search: 'Search', searching: 'Searching...', placeholder: 'Topic, disease, molecule...',
+    found: 'research found', translating: 'Translating titles...', noResult: 'No results found',
+    popular: 'Popular searches', newest: 'Newest', oldest: 'Oldest',
+    translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
+    source: 'Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
+    subtitle: 'Scientific research',
+    hero: 'Discover Science',
+    heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
+    noAbstract: 'No abstract available.',
+  },
+  de: {
+    search: 'Suchen', searching: 'Suche...', placeholder: 'Thema, Krankheit, Molekül...',
+    found: 'Studien gefunden', translating: 'Titel werden übersetzt...', noResult: 'Keine Ergebnisse',
+    popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
+    translateRead: 'Zusammenfassung übersetzen', read: 'Zusammenfassung lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
+    source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
+    subtitle: 'Wissenschaftliche Forschung',
+    hero: 'Wissenschaft entdecken',
+    heroSub: 'Wissenschaftliche Studien weltweit suchen, KI-übersetzte Zusammenfassungen lesen.',
+    noAbstract: 'Keine Zusammenfassung verfügbar.',
+  },
+  fr: {
+    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Sujet, maladie, molécule...',
+    found: 'études trouvées', translating: 'Traduction des titres...', noResult: 'Aucun résultat',
+    popular: 'Recherches populaires', newest: 'Plus récent', oldest: 'Plus ancien',
+    translateRead: 'Traduire et lire le résumé', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
+    source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
+    subtitle: 'Recherche scientifique',
+    hero: 'Découvrir la science',
+    heroSub: 'Recherchez des études scientifiques mondiales, lisez des résumés traduits par IA.',
+    noAbstract: 'Aucun résumé disponible.',
+  },
+  es: {
+    search: 'Buscar', searching: 'Buscando...', placeholder: 'Tema, enfermedad, molécula...',
+    found: 'estudios encontrados', translating: 'Traduciendo títulos...', noResult: 'Sin resultados',
+    popular: 'Búsquedas populares', newest: 'Más reciente', oldest: 'Más antiguo',
+    translateRead: 'Traducir y leer resumen', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
+    source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Cerrar sesión', login: 'Iniciar sesión',
+    subtitle: 'Investigación científica',
+    hero: 'Descubrir la ciencia',
+    heroSub: 'Busca estudios científicos mundiales, lee resúmenes traducidos por IA.',
+    noAbstract: 'No hay resumen disponible.',
+  },
+  ar: {
+    search: 'بحث', searching: 'جاري البحث...', placeholder: 'موضوع، مرض، جزيء...',
+    found: 'دراسة وجدت', translating: 'جاري ترجمة العناوين...', noResult: 'لا توجد نتائج',
+    popular: 'عمليات البحث الشائعة', newest: 'الأحدث', oldest: 'الأقدم',
+    translateRead: 'ترجمة وقراءة الملخص', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
+    source: 'المصدر', favorites: 'المفضلة', profile: 'الملف الشخصي', logout: 'تسجيل الخروج', login: 'تسجيل الدخول',
+    subtitle: 'البحث العلمي',
+    hero: 'اكتشف العلم',
+    heroSub: 'ابحث في الدراسات العلمية العالمية، اقرأ ملخصات مترجمة بالذكاء الاصطناعي.',
+    noAbstract: 'لا يوجد ملخص.',
+  },
+}
+
 const CATEGORIES = [
-  { id: 'all', label: 'Tumu', icon: '🔬' },
-  { id: 'medicine', label: 'Tip', icon: '🩺' },
-  { id: 'biology', label: 'Biyoloji', icon: '🧬' },
-  { id: 'physics', label: 'Fizik', icon: '⚛️' },
-  { id: 'chemistry', label: 'Kimya', icon: '🧪' },
-  { id: 'psychology', label: 'Psikoloji', icon: '🧠' },
-  { id: 'environment', label: 'Cevre', icon: '🌍' },
-  { id: 'technology', label: 'Teknoloji', icon: '💻' },
+  { id: 'all', label: '🔬', icon: '🔬' },
+  { id: 'medicine', label: '🩺', icon: '🩺' },
+  { id: 'biology', label: '🧬', icon: '🧬' },
+  { id: 'physics', label: '⚛️', icon: '⚛️' },
+  { id: 'chemistry', label: '🧪', icon: '🧪' },
+  { id: 'psychology', label: '🧠', icon: '🧠' },
+  { id: 'environment', label: '🌍', icon: '🌍' },
+  { id: 'technology', label: '💻', icon: '💻' },
 ]
 
 const CATEGORY_QUERIES = {
@@ -29,10 +107,20 @@ const CATEGORY_QUERIES = {
   technology: 'artificial intelligence machine learning',
 }
 
-const translateOne = async (text) => {
+const POPULAR_SEARCHES = {
+  tr: ['kanser tedavisi', 'yapay zeka', 'alzheimer', 'covid-19', 'depresyon'],
+  en: ['cancer treatment', 'artificial intelligence', 'alzheimer', 'covid-19', 'depression'],
+  de: ['Krebsbehandlung', 'künstliche Intelligenz', 'Alzheimer', 'covid-19', 'Depression'],
+  fr: ['traitement cancer', 'intelligence artificielle', 'alzheimer', 'covid-19', 'dépression'],
+  es: ['tratamiento cáncer', 'inteligencia artificial', 'alzheimer', 'covid-19', 'depresión'],
+  ar: ['علاج السرطان', 'الذكاء الاصطناعي', 'الزهايمر', 'كوفيد-19', 'الاكتئاب'],
+}
+
+const translateOne = async (text, targetLang = 'tr') => {
   if (!text) return null
+  if (targetLang === 'en') return text
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
     const res = await fetch(url)
     const data = await res.json()
     return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
@@ -67,8 +155,14 @@ export default function Home() {
   const [showMenu, setShowMenu] = useState(false)
   const [sharePopup, setSharePopup] = useState(null)
   const [copied, setCopied] = useState(false)
+  const [lang, setLang] = useState('tr')
+  const [showLang, setShowLang] = useState(false)
+
+  const t = UI_TEXT[lang]
 
   useEffect(() => {
+    const saved = localStorage.getItem('bilimce_lang')
+    if (saved) setLang(saved)
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
       if (data?.user) {
@@ -77,6 +171,31 @@ export default function Home() {
       }
     })
   }, [])
+
+  const changeLang = (code) => {
+    setLang(code)
+    localStorage.setItem('bilimce_lang', code)
+    setShowLang(false)
+    if (articles.length > 0) {
+      retranslateArticles(code)
+    }
+  }
+
+  const retranslateArticles = async (targetLang) => {
+    setAutoTranslating(true)
+    const updated = [...articlesRef.current]
+    for (let g = 0; g < updated.length; g += 5) {
+      const group = updated.slice(g, g + 5)
+      const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
+      translated.forEach((title_tr, idx) => {
+        if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr: title_tr }
+      })
+      articlesRef.current = [...updated]
+      setArticles([...updated])
+      await new Promise(r => setTimeout(r, 200))
+    }
+    setAutoTranslating(false)
+  }
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
@@ -126,9 +245,7 @@ export default function Home() {
     }
   }
 
-  const shareArticle = (article) => {
-    setSharePopup(article)
-  }
+  const shareArticle = (article) => setSharePopup(article)
 
   const copyLink = (article) => {
     const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
@@ -167,7 +284,7 @@ export default function Home() {
       const updated = [...sorted]
       for (let g = 0; g < updated.length; g += 5) {
         const group = updated.slice(g, g + 5)
-        const translated = await Promise.all(group.map(a => translateOne(a.title_en)))
+        const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
         translated.forEach((title_tr, idx) => {
           if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr }
         })
@@ -180,7 +297,7 @@ export default function Home() {
       setLoading(false)
       setAutoTranslating(false)
     }
-  }, [query, sortBy])
+  }, [query, sortBy, lang])
 
   const handleSortChange = (newSort) => {
     setSortBy(newSort)
@@ -226,10 +343,10 @@ export default function Home() {
     }
   }
 
-  const sortLabels = { newest: 'En Yeni', oldest: 'En Eski' }
+  const currentLang = LANGUAGES.find(l => l.code === lang)
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]" onClick={() => { setShowMenu(false); setShowSort(false) }}>
+    <div className="min-h-screen bg-[#0a0a0f]" onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false) }}>
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -237,7 +354,30 @@ export default function Home() {
             <span className="font-bold text-lg tracking-tight">BİLİMCE</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-white/30 hidden sm:block">Bilimsel araştırmalar Türkçe</span>
+            <div className="relative" onClick={e => e.stopPropagation()}>
+              <button
+                onClick={() => setShowLang(!showLang)}
+                className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
+              >
+                <span>{currentLang?.flag}</span>
+                <span className="hidden sm:block">{currentLang?.label}</span>
+                <span>▾</span>
+              </button>
+              {showLang && (
+                <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
+                  {LANGUAGES.map(l => (
+                    <button
+                      key={l.code}
+                      onClick={() => changeLang(l.code)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : 'text-white/60'}`}
+                    >
+                      <span>{l.flag}</span>
+                      <span>{l.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
                 <button
@@ -250,14 +390,14 @@ export default function Home() {
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-40">
-                    <a href="/profile" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">👤 Profilim</a>
-                    <a href="/favorites" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">❤️ Favorilerim</a>
-                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">Çıkış Yap</button>
+                    <a href="/profile" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">👤 {t.profile}</a>
+                    <a href="/favorites" className="block px-4 py-3 text-xs text-white/60 hover:text-white hover:bg-white/5 transition">❤️ {t.favorites}</a>
+                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>
             ) : (
-              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">Giriş Yap</a>
+              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white hover:border-white/20 transition">{t.login}</a>
             )}
           </div>
         </div>
@@ -269,40 +409,27 @@ export default function Home() {
             <h3 className="text-white font-semibold mb-2 text-sm leading-snug">{sharePopup.title_tr || sharePopup.title_en}</h3>
             <p className="text-white/30 text-xs mb-6">{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
             <div className="flex flex-col gap-3">
-              <button
-                onClick={() => copyLink(sharePopup)}
-                className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:text-white transition"
-              >
+              <button onClick={() => copyLink(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:text-white transition">
                 <span>🔗</span>
-                <span>{copied ? 'Kopyalandı!' : 'Linki Kopyala'}</span>
+                <span>{copied ? '✓ Kopyalandı!' : 'Linki Kopyala'}</span>
               </button>
-              <button
-                onClick={() => shareWhatsApp(sharePopup)}
-                className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition"
-              >
+              <button onClick={() => shareWhatsApp(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition">
                 <span>💬</span>
-                <span>WhatsApp ile Paylaş</span>
+                <span>WhatsApp</span>
               </button>
-              <button
-                onClick={() => setSharePopup(null)}
-                className="px-4 py-3 text-xs text-white/30 hover:text-white transition"
-              >
-                Kapat
-              </button>
+              <button onClick={() => setSharePopup(null)} className="px-4 py-3 text-xs text-white/30 hover:text-white transition">Kapat</button>
             </div>
           </div>
         </div>
       )}
 
-      <main className="max-w-5xl mx-auto px-4 py-12">
+      <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
           <div className="text-center mb-16">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Bilimi Türkçe Keşfet
+              {t.hero}
             </h1>
-            <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">
-              Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile Türkçe özetlerini okuyun.
-            </p>
+            <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">{t.heroSub}</p>
           </div>
         )}
         <div className="mb-8">
@@ -313,7 +440,7 @@ export default function Home() {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                placeholder="Konu, hastalık, molekül..."
+                placeholder={t.placeholder}
                 className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm"
               />
               <button
@@ -321,7 +448,7 @@ export default function Home() {
                 disabled={loading}
                 className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap"
               >
-                {loading ? 'Aranıyor...' : 'Ara'}
+                {loading ? t.searching : t.search}
               </button>
             </div>
           </div>
@@ -334,7 +461,6 @@ export default function Home() {
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40 text-blue-300' : 'bg-white/5 border border-white/5 text-white/50 hover:text-white/80'}`}
             >
               <span>{cat.icon}</span>
-              <span>{cat.label}</span>
             </button>
           ))}
         </div>
@@ -351,28 +477,21 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <p className="text-white/30 text-sm">{articles.length} araştırma bulundu</p>
+              <p className="text-white/30 text-sm">{articles.length} {t.found}</p>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
-                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Başlıklar çevriliyor...</p>}
+                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
                 <div className="relative">
                   <button
                     onClick={() => setShowSort(!showSort)}
                     className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
                   >
                     <span>↕</span>
-                    <span>{sortLabels[sortBy]}</span>
+                    <span>{sortBy === 'newest' ? t.newest : t.oldest}</span>
                   </button>
                   {showSort && (
                     <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
-                      {Object.entries(sortLabels).map(([key, label]) => (
-                        <button
-                          key={key}
-                          onClick={() => handleSortChange(key)}
-                          className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === key ? 'text-blue-400' : 'text-white/60'}`}
-                        >
-                          {label}
-                        </button>
-                      ))}
+                      <button onClick={() => handleSortChange('newest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'newest' ? 'text-blue-400' : 'text-white/60'}`}>{t.newest}</button>
+                      <button onClick={() => handleSortChange('oldest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'oldest' ? 'text-blue-400' : 'text-white/60'}`}>{t.oldest}</button>
                     </div>
                   )}
                 </div>
@@ -386,7 +505,7 @@ export default function Home() {
                       <h2 className="font-semibold text-white leading-snug mb-1">
                         {article.title_tr || article.title_en}
                       </h2>
-                      {article.title_tr && (
+                      {article.title_tr && lang !== 'en' && (
                         <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
                       )}
                     </div>
@@ -394,9 +513,7 @@ export default function Home() {
                       <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">
                         {favorites[article.pubmed_id] ? '❤️' : '🤍'}
                       </button>
-                      <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform" title="Paylaş">
-                        📤
-                      </button>
+                      <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
                       <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                     </div>
                   </div>
@@ -407,7 +524,7 @@ export default function Home() {
                   {expandedId === i && (
                     <div className="mb-4 p-4 bg-white/3 rounded-xl border border-white/5">
                       <p className="text-sm text-white/80 leading-relaxed">
-                        {article.abstract_tr || article.abstract_en || 'Özet mevcut değil.'}
+                        {article.abstract_tr || article.abstract_en || t.noAbstract}
                       </p>
                     </div>
                   )}
@@ -417,11 +534,11 @@ export default function Home() {
                       disabled={translating[i]}
                       className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
                     >
-                      {translating[i] ? 'Çevriliyor...' : article.abstract_tr ? (expandedId === i ? 'Kapat' : 'Özeti Oku') : 'Özeti Çevir ve Oku'}
+                      {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                     </button>
                     {article.pubmed_id && (
                       <a href={'https://pubmed.ncbi.nlm.nih.gov/' + article.pubmed_id + '/'} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">
-                        Kaynak
+                        {t.source}
                       </a>
                     )}
                   </div>
@@ -433,14 +550,14 @@ export default function Home() {
         {!loading && searched && articles.length === 0 && (
           <div className="text-center py-20 text-white/30">
             <div className="text-5xl mb-4">🔭</div>
-            <p>Sonuç bulunamadı</p>
+            <p>{t.noResult}</p>
           </div>
         )}
         {!searched && (
           <div className="mt-8 text-center">
-            <p className="text-white/25 text-sm mb-4">Popüler aramalar</p>
+            <p className="text-white/25 text-sm mb-4">{t.popular}</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {['kanser tedavisi','yapay zeka','alzheimer','covid-19','depresyon'].map(s => (
+              {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
                 <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-sm text-white/40 hover:text-white/70 transition">
                   {s}
                 </button>
@@ -451,7 +568,7 @@ export default function Home() {
       </main>
       <footer className="border-t border-white/5 py-8 mt-20">
         <div className="max-w-5xl mx-auto px-4 text-center text-white/20 text-xs">
-          BİLİMCE - PubMed verileri - Türk araştırmacılar için
+          BİLİMCE - PubMed verileri - {t.subtitle}
         </div>
       </footer>
     </div>

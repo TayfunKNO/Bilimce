@@ -28,19 +28,26 @@ export async function POST(request) {
 
     let abstract_tr = null
     if (abstract) {
-      // Bölümleri ayır ve her birini ayrı çevir
       const sections = abstract.split('\n\n').filter(Boolean)
       if (sections.length > 1) {
         const translated = []
         for (const section of sections) {
-          const t = await translateText(section.slice(0, 4000))
-          translated.push(t || section)
+          const parts = []
+          for (let i = 0; i < section.length; i += 8000) {
+            parts.push(section.slice(i, i + 8000))
+          }
+          const partResults = []
+          for (const part of parts) {
+            const t = await translateText(part)
+            partResults.push(t || part)
+          }
+          translated.push(partResults.join(' '))
         }
         abstract_tr = translated.join('\n\n')
       } else {
         const chunks = []
-        for (let i = 0; i < abstract.length; i += 4000) {
-          chunks.push(abstract.slice(i, i + 4000))
+        for (let i = 0; i < abstract.length; i += 8000) {
+          chunks.push(abstract.slice(i, i + 8000))
         }
         const translated = []
         for (const chunk of chunks) {

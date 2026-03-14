@@ -24,18 +24,26 @@ async function fetchArticle(pubmedId) {
     const journal = xml.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
     const year = xml.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
     const lastNames = xml.match(/<LastName>([\s\S]*?)<\/LastName>/g)?.slice(0, 5).map(n => n.replace(/<[^>]+>/g, '')) || []
+    
+    // MeSH veya keyword'leri çek
     const meshTerms = xml.match(/<DescriptorName[^>]*>([\s\S]*?)<\/DescriptorName>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
-    return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: meshTerms }
+    const keywords = xml.match(/<Keyword[^>]*>([\s\S]*?)<\/Keyword>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
+    const allKeywords = [...new Set([...meshTerms, ...keywords])].slice(0, 3)
+    
+    // Keyword yoksa başlıktan ilk 2 kelimeyi al
+    const searchTerms = allKeywords.length > 0 ? allKeywords : title.split(' ').slice(0, 3).join(' ')
+    
+    return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: allKeywords, searchTerms }
   } catch {
     return null
   }
 }
 
-async function fetchRelated(keywords, currentId) {
+async function fetchRelated(searchTerms, currentId) {
   try {
-    if (!keywords || keywords.length === 0) return []
-    const query = keywords.slice(0, 2).join(' ')
-    const searchRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=5&retmode=json`)
+    const query = Array.isArray(searchTerms) ? searchTerms.slice(0, 2).join(' ') : searchTerms
+    if (!query) return []
+    const searchRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmax=6&retmode=json`)
     const searchData = await searchRes.json()
     const ids = (searchData.esearchresult?.idlist || []).filter(id => id !== currentId).slice(0, 4)
     if (ids.length === 0) return []
@@ -71,8 +79,8 @@ export default function ArticlePage({ params }) {
     fetchArticle(pubmedId).then(a => {
       setArticle(a)
       setLoading(false)
-      if (a?.keywords?.length > 0) {
-        fetchRelated(a.keywords, pubmedId).then(setRelated)
+      if (a?.searchTerms) {
+        fetchRelated(a.searchTerms, pubmedId).then(setRelated)
       }
     })
     loadComments()

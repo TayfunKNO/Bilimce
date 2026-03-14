@@ -25,8 +25,9 @@ const UI_TEXT = {
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
     source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar',
-    hero: 'Bilimi Keşfet',
-    heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
+    hero: 'Bilimi Türkçe Keşfet',
+
+heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.',
   },
   en: {

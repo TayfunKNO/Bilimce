@@ -11,6 +11,13 @@
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
+  color: white;
+  background: #0a0a0f;
+}
+
+html.light, html.light body {
+  color: #0a0a0f;
+  background: #f8f9ff;
 }
 
 ::-webkit-scrollbar {
@@ -22,6 +29,13 @@ html, body {
 ::-webkit-scrollbar-thumb {
   background: #2a2a3f;
   border-radius: 3px;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f0f0f8;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #c0c0d0;
 }
 
 @keyframes fadeInUp {

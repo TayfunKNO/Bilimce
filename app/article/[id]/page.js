@@ -70,9 +70,11 @@ export default function ArticlePage({ params }) {
   const [username, setUsername] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [userRating, setUserRating] = useState(0)
+  const [selectedRating, setSelectedRating] = useState(0)
   const [hovered, setHovered] = useState(0)
   const [avgRating, setAvgRating] = useState(0)
   const [totalRatings, setTotalRatings] = useState(0)
+  const [ratingSuccess, setRatingSuccess] = useState(false)
 
   useEffect(() => {
     fetchArticle(pubmedId).then(a => {
@@ -107,13 +109,21 @@ export default function ArticlePage({ params }) {
 
   const loadUserRating = async (userId) => {
     const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId).eq('user_id', userId).single()
-    if (data) setUserRating(data.rating)
+    if (data) {
+      setUserRating(data.rating)
+      setSelectedRating(data.rating)
+    }
   }
 
-  const handleRate = async (star) => {
-    if (!user) { window.location.href = '/auth'; return }
-    const { error } = await supabase.from('ratings').upsert({ user_id: user.id, pubmed_id: pubmedId, rating: star })
-    if (!error) { setUserRating(star); loadRatings() }
+  const handleRate = async () => {
+    if (!user || !selectedRating) return
+    const { error } = await supabase.from('ratings').upsert({ user_id: user.id, pubmed_id: pubmedId, rating: selectedRating })
+    if (!error) {
+      setUserRating(selectedRating)
+      setRatingSuccess(true)
+      setTimeout(() => setRatingSuccess(false), 2000)
+      loadRatings()
+    }
   }
 
   const loadComments = async () => {
@@ -210,31 +220,42 @@ export default function ArticlePage({ params }) {
                     <p className="text-sm text-white/80 leading-relaxed">{abstract}</p>
                   )}
 
-                  {/* Yıldız puanlama - özetin altında */}
                   <div className="mt-6 pt-4 border-t border-white/5">
-                    <p className="text-xs text-white/40 mb-2">Bu araştırmayı puanlayın</p>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1">
-                        {[1,2,3,4,5].map(star => (
+                    <p className="text-xs text-white/40 mb-3">Bu araştırmayı puanlayın</p>
+                    {user ? (
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <div className="flex items-center gap-1">
+                          {[1,2,3,4,5].map(star => (
+                            <button
+                              key={star}
+                              onClick={() => setSelectedRating(star)}
+                              onMouseEnter={() => setHovered(star)}
+                              onMouseLeave={() => setHovered(0)}
+                              className="text-3xl transition-transform hover:scale-110 leading-none"
+                            >
+                              <span style={{ color: star <= (hovered || selectedRating) ? '#facc15' : 'rgba(255,255,255,0.15)' }}>★</span>
+                            </button>
+                          ))}
+                        </div>
+                        {selectedRating > 0 && selectedRating !== userRating && (
                           <button
-                            key={star}
-                            onClick={() => handleRate(star)}
-                            onMouseEnter={() => setHovered(star)}
-                            onMouseLeave={() => setHovered(0)}
-                            className="text-3xl transition-transform hover:scale-110 leading-none"
+                            onClick={handleRate}
+                            className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition"
                           >
-                            <span style={{ color: star <= (hovered || userRating) ? '#facc15' : 'rgba(255,255,255,0.15)' }}>★</span>
+                            Onayla ✓
                           </button>
-                        ))}
+                        )}
+                        {ratingSuccess && <span className="text-green-400 text-xs">Puanlandı!</span>}
+                        {totalRatings > 0 && (
+                          <span className="text-xs text-white/40">
+                            Ortalama: <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
+                            {' '}({totalRatings} oy)
+                          </span>
+                        )}
                       </div>
-                      {totalRatings > 0 && (
-                        <span className="text-xs text-white/40">
-                          <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
-                          {' '}({totalRatings} oy)
-                        </span>
-                      )}
-                      {!user && <span className="text-xs text-white/30">Puan için giriş yapın</span>}
-                    </div>
+                    ) : (
+                      <a href="/auth" className="text-xs text-blue-400 hover:text-blue-300 transition">Puan vermek için giriş yapın →</a>
+                    )}
                   </div>
                 </div>
               ) : (

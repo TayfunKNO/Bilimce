@@ -338,8 +338,8 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              style={{ fontSize: '12px' }}
-              className={`px-3 py-2 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-xl transition hover:scale-110`}
+              style={{ fontSize: '11px', lineHeight: '1' }}
+              className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}
             >
               {dark ? '🌤' : '🌑'}
             </button>

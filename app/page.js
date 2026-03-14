@@ -118,9 +118,7 @@ const translateOne = async (text, targetLang = 'tr') => {
     const res = await fetch(url)
     const data = await res.json()
     return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
-  } catch (e) {
-    return null
-  }
+  } catch (e) { return null }
 }
 
 const sortArticles = (articles, sortBy) => {
@@ -197,13 +195,8 @@ export default function Home() {
   const toggleTheme = () => {
     const newDark = !dark
     setDark(newDark)
-    if (newDark) {
-      document.documentElement.classList.remove('light')
-      localStorage.setItem('bilimce_theme', 'dark')
-    } else {
-      document.documentElement.classList.add('light')
-      localStorage.setItem('bilimce_theme', 'light')
-    }
+    if (newDark) { document.documentElement.classList.remove('light'); localStorage.setItem('bilimce_theme', 'dark') }
+    else { document.documentElement.classList.add('light'); localStorage.setItem('bilimce_theme', 'light') }
   }
 
   const bg = dark ? 'bg-[#0a0a0f]' : 'bg-[#f8f9ff]'
@@ -343,7 +336,11 @@ export default function Home() {
             <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={toggleTheme} className={`px-3 py-2 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-xl text-lg transition hover:scale-110`}>
+            <button
+              onClick={toggleTheme}
+              style={{ fontSize: '14px' }}
+              className={`px-3 py-2 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-xl transition hover:scale-110`}
+            >
               {dark ? '☀️' : '🌙'}
             </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
@@ -393,7 +390,7 @@ export default function Home() {
               <button onClick={() => shareWhatsApp(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition">
                 <span>💬</span><span>WhatsApp</span>
               </button>
-              <button onClick={() => setSharePopup(null)} className={`px-4 py-3 text-xs ${textMuted} hover:${text} transition`}>Kapat</button>
+              <button onClick={() => setSharePopup(null)} className={`px-4 py-3 text-xs ${textMuted} transition`}>Kapat</button>
             </div>
           </div>
         </div>
@@ -409,7 +406,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
-              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} placeholder-${dark ? 'white' : 'black'}/25 outline-none text-sm`} />
+              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>

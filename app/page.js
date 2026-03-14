@@ -87,14 +87,14 @@ const UI_TEXT = {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: '🔬', icon: '🔬' },
-  { id: 'medicine', label: '🩺', icon: '🩺' },
-  { id: 'biology', label: '🧬', icon: '🧬' },
-  { id: 'physics', label: '⚛️', icon: '⚛️' },
-  { id: 'chemistry', label: '🧪', icon: '🧪' },
-  { id: 'psychology', label: '🧠', icon: '🧠' },
-  { id: 'environment', label: '🌍', icon: '🌍' },
-  { id: 'technology', label: '💻', icon: '💻' },
+  { id: 'all', icon: '🔬' },
+  { id: 'medicine', icon: '🩺' },
+  { id: 'biology', icon: '🧬' },
+  { id: 'physics', icon: '⚛️' },
+  { id: 'chemistry', icon: '🧪' },
+  { id: 'psychology', icon: '🧠' },
+  { id: 'environment', icon: '🌍' },
+  { id: 'technology', icon: '💻' },
 ]
 
 const CATEGORY_QUERIES = {
@@ -134,6 +134,32 @@ const sortArticles = (articles, sortBy) => {
   if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
   if (sortBy === 'oldest') return arr.sort((a, b) => (parseInt(a.published_date) || 0) - (parseInt(b.published_date) || 0))
   return arr
+}
+
+const AbstractDisplay = ({ text, noAbstract }) => {
+  if (!text) return <p className="text-sm text-white/40 italic">{noAbstract}</p>
+  const sections = text.split('\n\n').filter(Boolean)
+  if (sections.length <= 1) {
+    return <p className="text-sm text-white/80 leading-relaxed">{text}</p>
+  }
+  return (
+    <div className="flex flex-col gap-3">
+      {sections.map((section, i) => {
+        const colonIdx = section.indexOf(':')
+        if (colonIdx > 0 && colonIdx < 30) {
+          const label = section.slice(0, colonIdx)
+          const content = section.slice(colonIdx + 1).trim()
+          return (
+            <div key={i}>
+              <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
+              <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
+            </div>
+          )
+        }
+        return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
+      })}
+    </div>
+  )
 }
 
 export default function Home() {
@@ -176,9 +202,7 @@ export default function Home() {
     setLang(code)
     localStorage.setItem('bilimce_lang', code)
     setShowLang(false)
-    if (articles.length > 0) {
-      retranslateArticles(code)
-    }
+    if (articlesRef.current.length > 0) retranslateArticles(code)
   }
 
   const retranslateArticles = async (targetLang) => {
@@ -188,7 +212,7 @@ export default function Home() {
       const group = updated.slice(g, g + 5)
       const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
       translated.forEach((title_tr, idx) => {
-        if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr: title_tr }
+        if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr }
       })
       articlesRef.current = [...updated]
       setArticles([...updated])
@@ -248,8 +272,7 @@ export default function Home() {
   const shareArticle = (article) => setSharePopup(article)
 
   const copyLink = (article) => {
-    const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
-    navigator.clipboard.writeText(url)
+    navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -257,8 +280,7 @@ export default function Home() {
   const shareWhatsApp = (article) => {
     const title = article.title_tr || article.title_en
     const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
-    const text = `*${title}*\n\n${url}\n\n_BİLİMCE ile paylaşıldı_`
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
+    window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\n${url}\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank')
   }
 
   const updateArticles = (arr) => {
@@ -280,7 +302,6 @@ export default function Home() {
       setLoading(false)
       saveSearchHistory(q)
       setAutoTranslating(true)
-
       const updated = [...sorted]
       for (let g = 0; g < updated.length; g += 5) {
         const group = updated.slice(g, g + 5)
@@ -302,19 +323,13 @@ export default function Home() {
   const handleSortChange = (newSort) => {
     setSortBy(newSort)
     setShowSort(false)
-    const sorted = sortArticles(articlesRef.current, newSort)
-    updateArticles(sorted)
+    updateArticles(sortArticles(articlesRef.current, newSort))
   }
 
   const handleCategoryClick = async (cat) => {
     setActiveCategory(cat.id)
-    if (cat.id === 'all') {
-      setQuery('')
-      updateArticles([])
-      setSearched(false)
-      return
-    }
-    const q = CATEGORY_QUERIES[cat.id] || cat.label
+    if (cat.id === 'all') { setQuery(''); updateArticles([]); setSearched(false); return }
+    const q = CATEGORY_QUERIES[cat.id] || cat.id
     setQuery(q)
     await handleSearch(q)
   }
@@ -355,10 +370,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-3">
             <div className="relative" onClick={e => e.stopPropagation()}>
-              <button
-                onClick={() => setShowLang(!showLang)}
-                className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
-              >
+              <button onClick={() => setShowLang(!showLang)} className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
                 <span>{currentLang?.flag}</span>
                 <span className="hidden sm:block">{currentLang?.label}</span>
                 <span>▾</span>
@@ -366,13 +378,8 @@ export default function Home() {
               {showLang && (
                 <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
                   {LANGUAGES.map(l => (
-                    <button
-                      key={l.code}
-                      onClick={() => changeLang(l.code)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : 'text-white/60'}`}
-                    >
-                      <span>{l.flag}</span>
-                      <span>{l.label}</span>
+                    <button key={l.code} onClick={() => changeLang(l.code)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : 'text-white/60'}`}>
+                      <span>{l.flag}</span><span>{l.label}</span>
                     </button>
                   ))}
                 </div>
@@ -380,13 +387,8 @@ export default function Home() {
             </div>
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
-                <button
-                  onClick={() => setShowMenu(!showMenu)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
-                >
-                  <span>👤</span>
-                  <span>{username || user.email?.split('@')[0]}</span>
-                  <span>▾</span>
+                <button onClick={() => setShowMenu(!showMenu)} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                  <span>👤</span><span>{username || user.email?.split('@')[0]}</span><span>▾</span>
                 </button>
                 {showMenu && (
                   <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-40">
@@ -410,12 +412,10 @@ export default function Home() {
             <p className="text-white/30 text-xs mb-6">{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
             <div className="flex flex-col gap-3">
               <button onClick={() => copyLink(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:text-white transition">
-                <span>🔗</span>
-                <span>{copied ? '✓ Kopyalandı!' : 'Linki Kopyala'}</span>
+                <span>🔗</span><span>{copied ? '✓ Kopyalandı!' : 'Linki Kopyala'}</span>
               </button>
               <button onClick={() => shareWhatsApp(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition">
-                <span>💬</span>
-                <span>WhatsApp</span>
+                <span>💬</span><span>WhatsApp</span>
               </button>
               <button onClick={() => setSharePopup(null)} className="px-4 py-3 text-xs text-white/30 hover:text-white transition">Kapat</button>
             </div>
@@ -426,9 +426,7 @@ export default function Home() {
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
           <div className="text-center mb-16">
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              {t.hero}
-            </h1>
+            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{t.hero}</h1>
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">{t.heroSub}</p>
           </div>
         )}
@@ -443,11 +441,7 @@ export default function Home() {
                 placeholder={t.placeholder}
                 className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm"
               />
-              <button
-                onClick={() => handleSearch()}
-                disabled={loading}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap"
-              >
+              <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
             </div>
@@ -455,12 +449,8 @@ export default function Home() {
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => handleCategoryClick(cat)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40 text-blue-300' : 'bg-white/5 border border-white/5 text-white/50 hover:text-white/80'}`}
-            >
-              <span>{cat.icon}</span>
+            <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : 'bg-white/5 border border-white/5 hover:bg-white/10'}`}>
+              {cat.icon}
             </button>
           ))}
         </div>
@@ -481,12 +471,8 @@ export default function Home() {
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
                 {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
                 <div className="relative">
-                  <button
-                    onClick={() => setShowSort(!showSort)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
-                  >
-                    <span>↕</span>
-                    <span>{sortBy === 'newest' ? t.newest : t.oldest}</span>
+                  <button onClick={() => setShowSort(!showSort)} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+                    <span>↕</span><span>{sortBy === 'newest' ? t.newest : t.oldest}</span>
                   </button>
                   {showSort && (
                     <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
@@ -502,9 +488,7 @@ export default function Home() {
                 <article key={article.pubmed_id || i} className="bg-white/3 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      <h2 className="font-semibold text-white leading-snug mb-1">
-                        {article.title_tr || article.title_en}
-                      </h2>
+                      <h2 className="font-semibold text-white leading-snug mb-1">{article.title_tr || article.title_en}</h2>
                       {article.title_tr && lang !== 'en' && (
                         <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
                       )}
@@ -520,12 +504,11 @@ export default function Home() {
                   <div className="flex flex-wrap gap-3 text-xs text-white/30 mb-4">
                     {article.journal && <span>{article.journal}</span>}
                     {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
+                    {article.authors && <span>{article.authors}</span>}
                   </div>
                   {expandedId === i && (
                     <div className="mb-4 p-4 bg-white/3 rounded-xl border border-white/5">
-                      <p className="text-sm text-white/80 leading-relaxed">
-                        {article.abstract_tr || article.abstract_en || t.noAbstract}
-                      </p>
+                      <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} />
                     </div>
                   )}
                   <div className="flex gap-2">
@@ -537,7 +520,7 @@ export default function Home() {
                       {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                     </button>
                     {article.pubmed_id && (
-                      <a href={'https://pubmed.ncbi.nlm.nih.gov/' + article.pubmed_id + '/'} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">
+                      <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/5 border border-white/5 text-white/40 rounded-xl text-xs hover:text-white/70 transition">
                         {t.source}
                       </a>
                     )}
@@ -568,7 +551,7 @@ export default function Home() {
       </main>
       <footer className="border-t border-white/5 py-8 mt-20">
         <div className="max-w-5xl mx-auto px-4 text-center text-white/20 text-xs">
-          BİLİMCE - PubMed verileri - {t.subtitle}
+          BİLİMCE - PubMed - {t.subtitle}
         </div>
       </footer>
     </div>

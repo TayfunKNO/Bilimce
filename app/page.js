@@ -24,11 +24,9 @@ const UI_TEXT = {
     popular: 'Popüler aramalar', newest: 'En Yeni', oldest: 'En Eski',
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
     source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
-    subtitle: 'Bilimsel araştırmalar',
-    hero: 'Bilimi Türkçe Keşfet',
-
-heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
-    noAbstract: 'Özet mevcut değil.',
+    subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
+    heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
+    noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'Topic, disease, molecule...',
@@ -36,10 +34,9 @@ heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile �
     popular: 'Popular searches', newest: 'Newest', oldest: 'Oldest',
     translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
     source: 'Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
-    subtitle: 'Scientific research',
-    hero: 'Discover Science',
+    subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
-    noAbstract: 'No abstract available.',
+    noAbstract: 'No abstract available.', trending: 'Trending This Week',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Thema, Krankheit, Molekül...',
@@ -47,10 +44,9 @@ heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile �
     popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
     translateRead: 'Zusammenfassung übersetzen', read: 'Zusammenfassung lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
     source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
-    subtitle: 'Wissenschaftliche Forschung',
-    hero: 'Wissenschaft entdecken',
+    subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen, KI-übersetzte Zusammenfassungen lesen.',
-    noAbstract: 'Keine Zusammenfassung verfügbar.',
+    noAbstract: 'Keine Zusammenfassung verfügbar.', trending: 'Diese Woche Trending',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Sujet, maladie, molécule...',
@@ -58,10 +54,9 @@ heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile �
     popular: 'Recherches populaires', newest: 'Plus récent', oldest: 'Plus ancien',
     translateRead: 'Traduire et lire le résumé', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
     source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
-    subtitle: 'Recherche scientifique',
-    hero: 'Découvrir la science',
+    subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
     heroSub: 'Recherchez des études scientifiques mondiales, lisez des résumés traduits par IA.',
-    noAbstract: 'Aucun résumé disponible.',
+    noAbstract: 'Aucun résumé disponible.', trending: 'Tendances cette semaine',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Tema, enfermedad, molécula...',
@@ -69,10 +64,9 @@ heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile �
     popular: 'Búsquedas populares', newest: 'Más reciente', oldest: 'Más antiguo',
     translateRead: 'Traducir y leer resumen', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
     source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Cerrar sesión', login: 'Iniciar sesión',
-    subtitle: 'Investigación científica',
-    hero: 'Descubrir la ciencia',
+    subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
     heroSub: 'Busca estudios científicos mundiales, lee resúmenes traducidos por IA.',
-    noAbstract: 'No hay resumen disponible.',
+    noAbstract: 'No hay resumen disponible.', trending: 'Tendencias esta semana',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'موضوع، مرض، جزيء...',
@@ -80,10 +74,9 @@ heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile �
     popular: 'عمليات البحث الشائعة', newest: 'الأحدث', oldest: 'الأقدم',
     translateRead: 'ترجمة وقراءة الملخص', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
     source: 'المصدر', favorites: 'المفضلة', profile: 'الملف الشخصي', logout: 'تسجيل الخروج', login: 'تسجيل الدخول',
-    subtitle: 'البحث العلمي',
-    hero: 'اكتشف العلم',
+    subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية، اقرأ ملخصات مترجمة بالذكاء الاصطناعي.',
-    noAbstract: 'لا يوجد ملخص.',
+    noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً هذا الأسبوع',
   },
 }
 
@@ -140,9 +133,7 @@ const sortArticles = (articles, sortBy) => {
 const AbstractDisplay = ({ text, noAbstract }) => {
   if (!text) return <p className="text-sm text-white/40 italic">{noAbstract}</p>
   const sections = text.split('\n\n').filter(Boolean)
-  if (sections.length <= 1) {
-    return <p className="text-sm text-white/80 leading-relaxed">{text}</p>
-  }
+  if (sections.length <= 1) return <p className="text-sm text-white/80 leading-relaxed">{text}</p>
   return (
     <div className="flex flex-col gap-3">
       {sections.map((section, i) => {
@@ -184,6 +175,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false)
   const [lang, setLang] = useState('tr')
   const [showLang, setShowLang] = useState(false)
+  const [trending, setTrending] = useState([])
 
   const t = UI_TEXT[lang]
 
@@ -192,11 +184,9 @@ export default function Home() {
     if (saved) setLang(saved)
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) {
-        loadFavorites(data.user.id)
-        loadUsername(data.user.id)
-      }
+      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id) }
     })
+    fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
 
   const changeLang = (code) => {
@@ -212,9 +202,7 @@ export default function Home() {
     for (let g = 0; g < updated.length; g += 5) {
       const group = updated.slice(g, g + 5)
       const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
-      translated.forEach((title_tr, idx) => {
-        if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr }
-      })
+      translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
       articlesRef.current = [...updated]
       setArticles([...updated])
       await new Promise(r => setTimeout(r, 200))
@@ -251,79 +239,52 @@ export default function Home() {
         setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
       } else {
         await supabase.from('favorites').insert({
-          user_id: user.id,
-          pubmed_id: article.pubmed_id,
-          title_en: article.title_en,
-          title_tr: article.title_tr,
-          abstract_en: article.abstract_en,
-          abstract_tr: article.abstract_tr,
-          journal: article.journal,
-          published_date: article.published_date,
-          authors: article.authors,
+          user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en,
+          title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr,
+          journal: article.journal, published_date: article.published_date, authors: article.authors,
         })
         setFavorites(prev => ({ ...prev, [article.pubmed_id]: true }))
       }
-    } catch (err) {
-      console.error('Favori hatasi:', err)
-    } finally {
-      setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false }))
-    }
+    } catch (err) { console.error(err) }
+    finally { setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
 
   const shareArticle = (article) => setSharePopup(article)
-
   const copyLink = (article) => {
     navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setCopied(true); setTimeout(() => setCopied(false), 2000)
   }
-
   const shareWhatsApp = (article) => {
     const title = article.title_tr || article.title_en
-    const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
-    window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\n${url}\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank')
+    window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank')
   }
 
-  const updateArticles = (arr) => {
-    articlesRef.current = arr
-    setArticles([...arr])
-  }
+  const updateArticles = (arr) => { articlesRef.current = arr; setArticles([...arr]) }
 
   const handleSearch = useCallback(async (searchQuery) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    setLoading(true)
-    setSearched(true)
-    setExpandedId(null)
-    updateArticles([])
+    setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     try {
       const results = await searchPubMed(q, 50)
       const sorted = sortArticles(results, sortBy)
-      updateArticles(sorted)
-      setLoading(false)
-      saveSearchHistory(q)
-      setAutoTranslating(true)
+      updateArticles(sorted); setLoading(false); saveSearchHistory(q); setAutoTranslating(true)
       const updated = [...sorted]
       for (let g = 0; g < updated.length; g += 5) {
         const group = updated.slice(g, g + 5)
         const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
-        translated.forEach((title_tr, idx) => {
-          if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr }
-        })
+        translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
         updateArticles([...updated])
         await new Promise(r => setTimeout(r, 200))
       }
       setAutoTranslating(false)
     } catch (err) {
-      console.error('Arama hatasi:', err)
-      setLoading(false)
-      setAutoTranslating(false)
+      console.error(err); setLoading(false); setAutoTranslating(false)
     }
   }, [query, sortBy, lang])
 
   const handleSortChange = (newSort) => {
-    setSortBy(newSort)
-    setShowSort(false)
+    setSortBy(newSort); setShowSort(false)
     updateArticles(sortArticles(articlesRef.current, newSort))
   }
 
@@ -331,32 +292,23 @@ export default function Home() {
     setActiveCategory(cat.id)
     if (cat.id === 'all') { setQuery(''); updateArticles([]); setSearched(false); return }
     const q = CATEGORY_QUERIES[cat.id] || cat.id
-    setQuery(q)
-    await handleSearch(q)
+    setQuery(q); await handleSearch(q)
   }
 
   const translateArticle = async (article, index) => {
-    if (article.abstract_tr) {
-      setExpandedId(expandedId === index ? null : index)
-      return
-    }
+    if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
       })
       const data = await res.json()
       const updated = [...articlesRef.current]
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
-      updateArticles(updated)
-      setExpandedId(index)
-    } catch (err) {
-      console.error('Ceviri hatasi:', err)
-    } finally {
-      setTranslating(prev => ({ ...prev, [index]: false }))
-    }
+      updateArticles(updated); setExpandedId(index)
+    } catch (err) { console.error(err) }
+    finally { setTranslating(prev => ({ ...prev, [index]: false })) }
   }
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
@@ -372,9 +324,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <div className="relative" onClick={e => e.stopPropagation()}>
               <button onClick={() => setShowLang(!showLang)} className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
-                <span>{currentLang?.flag}</span>
-                <span className="hidden sm:block">{currentLang?.label}</span>
-                <span>▾</span>
+                <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
               </button>
               {showLang && (
                 <div className="absolute right-0 top-10 bg-[#1a1a2e] border border-white/10 rounded-xl overflow-hidden z-10 min-w-36">
@@ -426,7 +376,7 @@ export default function Home() {
 
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{t.hero}</h1>
             <p className="text-white/40 text-lg max-w-xl mx-auto leading-relaxed">{t.heroSub}</p>
           </div>
@@ -434,14 +384,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
             <div className="relative flex gap-3 bg-white/5 border border-white/10 rounded-2xl p-2">
-              <input
-                type="text"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                placeholder={t.placeholder}
-                className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm"
-              />
+              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className="flex-1 bg-transparent px-4 py-3 text-white placeholder-white/25 outline-none text-sm" />
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
@@ -455,6 +398,25 @@ export default function Home() {
             </button>
           ))}
         </div>
+
+        {!searched && trending.length > 0 && (
+          <div className="mb-10">
+            <p className="text-white/40 text-sm font-medium mb-4">🔥 {t.trending}</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {trending.map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setQuery(item.topic); handleSearch(item.topic) }}
+                  className="bg-white/3 border border-white/5 rounded-xl p-4 text-left hover:border-white/15 hover:bg-white/5 transition-all"
+                >
+                  <p className="text-sm text-white/70 font-medium leading-snug mb-1">{item.topic}</p>
+                  <p className="text-xs text-blue-400/70">{item.count} makale</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {loading && (
           <div className="grid gap-4">
             {[1,2,3].map(i => (
@@ -490,10 +452,7 @@ export default function Home() {
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
                       <a href={`/article/${article.pubmed_id}`} className="font-semibold text-white leading-snug mb-1 hover:text-blue-300 transition block">{article.title_tr || article.title_en}</a>
-
-                      {article.title_tr && lang !== 'en' && (
-                        <p className="text-white/35 text-sm leading-snug">{article.title_en}</p>
-                      )}
+                      {article.title_tr && lang !== 'en' && <p className="text-white/35 text-sm leading-snug mt-1">{article.title_en}</p>}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">
@@ -514,11 +473,7 @@ export default function Home() {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <button
-                      onClick={() => translateArticle(article, i)}
-                      disabled={translating[i]}
-                      className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
-                    >
+                    <button onClick={() => translateArticle(article, i)} disabled={translating[i]} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
                       {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                     </button>
                     {article.pubmed_id && (
@@ -543,9 +498,7 @@ export default function Home() {
             <p className="text-white/25 text-sm mb-4">{t.popular}</p>
             <div className="flex flex-wrap justify-center gap-2">
               {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
-                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-sm text-white/40 hover:text-white/70 transition">
-                  {s}
-                </button>
+                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl text-sm text-white/40 hover:text-white/70 transition">{s}</button>
               ))}
             </div>
           </div>

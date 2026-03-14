@@ -24,15 +24,10 @@ async function fetchArticle(pubmedId) {
     const journal = xml.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
     const year = xml.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
     const lastNames = xml.match(/<LastName>([\s\S]*?)<\/LastName>/g)?.slice(0, 5).map(n => n.replace(/<[^>]+>/g, '')) || []
-    
-    // MeSH veya keyword'leri çek
     const meshTerms = xml.match(/<DescriptorName[^>]*>([\s\S]*?)<\/DescriptorName>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
     const keywords = xml.match(/<Keyword[^>]*>([\s\S]*?)<\/Keyword>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
     const allKeywords = [...new Set([...meshTerms, ...keywords])].slice(0, 3)
-    
-    // Keyword yoksa başlıktan ilk 2 kelimeyi al
     const searchTerms = allKeywords.length > 0 ? allKeywords : title.split(' ').slice(0, 3).join(' ')
-    
     return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: allKeywords, searchTerms }
   } catch {
     return null
@@ -64,6 +59,33 @@ async function fetchRelated(searchTerms, currentId) {
   }
 }
 
+const StarRating = ({ rating, onRate, userRating, avgRating, totalRatings }) => {
+  const [hovered, setHovered] = useState(0)
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1">
+        {[1,2,3,4,5].map(star => (
+          <button
+            key={star}
+            onClick={() => onRate(star)}
+            onMouseEnter={() => setHovered(star)}
+            onMouseLeave={() => setHovered(0)}
+            className="text-2xl transition-transform hover:scale-110"
+          >
+            {star <= (hovered || userRating || 0) ? '⭐' : '☆'}
+          </button>
+        ))}
+      </div>
+      {totalRatings > 0 && (
+        <div className="text-xs text-white/40">
+          <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
+          <span className="ml-1">({totalRatings} oy)</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ArticlePage({ params }) {
   const pubmedId = params.id
   const [article, setArticle] = useState(null)
@@ -74,25 +96,57 @@ export default function ArticlePage({ params }) {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [userRating, setUserRating] = useState(0)
+  const [avgRating, setAvgRating] = useState(0)
+  const [totalRatings, setTotalRatings] = useState(0)
 
   useEffect(() => {
     fetchArticle(pubmedId).then(a => {
       setArticle(a)
       setLoading(false)
-      if (a?.searchTerms) {
-        fetchRelated(a.searchTerms, pubmedId).then(setRelated)
-      }
+      if (a?.searchTerms) fetchRelated(a.searchTerms, pubmedId).then(setRelated)
     })
     loadComments()
+    loadRatings()
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) loadUsername(data.user.id)
+      if (data?.user) {
+        loadUsername(data.user.id)
+        loadUserRating(data.user.id)
+      }
     })
   }, [pubmedId])
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
     if (data?.username) setUsername(data.username)
+  }
+
+  const loadRatings = async () => {
+    const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId)
+    if (data && data.length > 0) {
+      const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length
+      setAvgRating(avg)
+      setTotalRatings(data.length)
+    }
+  }
+
+  const loadUserRating = async (userId) => {
+    const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId).eq('user_id', userId).single()
+    if (data) setUserRating(data.rating)
+  }
+
+  const handleRate = async (star) => {
+    if (!user) { window.location.href = '/auth'; return }
+    const { error } = await supabase.from('ratings').upsert({
+      user_id: user.id,
+      pubmed_id: pubmedId,
+      rating: star,
+    })
+    if (!error) {
+      setUserRating(star)
+      loadRatings()
+    }
   }
 
   const loadComments = async () => {
@@ -157,12 +211,16 @@ export default function ArticlePage({ params }) {
                   <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">PubMed ID: {pubmedId}</span>
                 </div>
                 {article.keywords?.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {article.keywords.map((k, i) => (
                       <span key={i} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg text-xs">{k}</span>
                     ))}
                   </div>
                 )}
+                <div className="flex items-center gap-3">
+                  <StarRating rating={userRating} onRate={handleRate} userRating={userRating} avgRating={avgRating} totalRatings={totalRatings} />
+                  {!user && <span className="text-xs text-white/30">Puan vermek için giriş yapın</span>}
+                </div>
               </div>
               {abstract ? (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
@@ -207,7 +265,7 @@ export default function ArticlePage({ params }) {
                 <div className="grid gap-3">
                   {related.map(r => (
                     <a key={r.pubmed_id} href={`/article/${r.pubmed_id}`} className="bg-white/3 border border-white/5 rounded-xl p-4 hover:border-white/15 transition-all block">
-                      <p className="text-sm text-white/80 leading-snug mb-2 hover:text-white transition">{r.title_en}</p>
+                      <p className="text-sm text-white/80 leading-snug mb-2">{r.title_en}</p>
                       <div className="flex gap-3 text-xs text-white/30">
                         {r.journal && <span>{r.journal}</span>}
                         {r.published_date && <span>{r.published_date.slice(0,4)}</span>}

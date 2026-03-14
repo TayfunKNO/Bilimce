@@ -65,6 +65,8 @@ export default function Home() {
   const [sortBy, setSortBy] = useState('newest')
   const [showSort, setShowSort] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [sharePopup, setSharePopup] = useState(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -122,6 +124,24 @@ export default function Home() {
     } finally {
       setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false }))
     }
+  }
+
+  const shareArticle = (article) => {
+    setSharePopup(article)
+  }
+
+  const copyLink = (article) => {
+    const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
+    navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const shareWhatsApp = (article) => {
+    const title = article.title_tr || article.title_en
+    const url = `https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`
+    const text = `*${title}*\n\n${url}\n\n_BİLİMCE ile paylaşıldı_`
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
   }
 
   const updateArticles = (arr) => {
@@ -209,7 +229,7 @@ export default function Home() {
   const sortLabels = { newest: 'En Yeni', oldest: 'En Eski' }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[#0a0a0f]" onClick={() => { setShowMenu(false); setShowSort(false) }}>
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -219,7 +239,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <span className="text-xs text-white/30 hidden sm:block">Bilimsel araştırmalar Türkçe</span>
             {user ? (
-              <div className="relative">
+              <div className="relative" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={() => setShowMenu(!showMenu)}
                   className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition"
@@ -242,6 +262,38 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {sharePopup && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setSharePopup(null)}>
+          <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
+            <h3 className="text-white font-semibold mb-2 text-sm leading-snug">{sharePopup.title_tr || sharePopup.title_en}</h3>
+            <p className="text-white/30 text-xs mb-6">{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => copyLink(sharePopup)}
+                className="flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:text-white transition"
+              >
+                <span>🔗</span>
+                <span>{copied ? 'Kopyalandı!' : 'Linki Kopyala'}</span>
+              </button>
+              <button
+                onClick={() => shareWhatsApp(sharePopup)}
+                className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition"
+              >
+                <span>💬</span>
+                <span>WhatsApp ile Paylaş</span>
+              </button>
+              <button
+                onClick={() => setSharePopup(null)}
+                className="px-4 py-3 text-xs text-white/30 hover:text-white transition"
+              >
+                Kapat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="max-w-5xl mx-auto px-4 py-12">
         {!searched && (
           <div className="text-center mb-16">
@@ -300,7 +352,7 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <p className="text-white/30 text-sm">{articles.length} araştırma bulundu</p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
                 {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">Başlıklar çevriliyor...</p>}
                 <div className="relative">
                   <button
@@ -341,6 +393,9 @@ export default function Home() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">
                         {favorites[article.pubmed_id] ? '❤️' : '🤍'}
+                      </button>
+                      <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform" title="Paylaş">
+                        📤
                       </button>
                       <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                     </div>

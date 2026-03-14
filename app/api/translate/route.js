@@ -28,16 +28,27 @@ export async function POST(request) {
 
     let abstract_tr = null
     if (abstract) {
-      const chunks = []
-      for (let i = 0; i < abstract.length; i += 4000) {
-        chunks.push(abstract.slice(i, i + 4000))
+      // Bölümleri ayır ve her birini ayrı çevir
+      const sections = abstract.split('\n\n').filter(Boolean)
+      if (sections.length > 1) {
+        const translated = []
+        for (const section of sections) {
+          const t = await translateText(section.slice(0, 4000))
+          translated.push(t || section)
+        }
+        abstract_tr = translated.join('\n\n')
+      } else {
+        const chunks = []
+        for (let i = 0; i < abstract.length; i += 4000) {
+          chunks.push(abstract.slice(i, i + 4000))
+        }
+        const translated = []
+        for (const chunk of chunks) {
+          const t = await translateText(chunk)
+          translated.push(t)
+        }
+        abstract_tr = translated.filter(Boolean).join(' ')
       }
-      const translated = []
-      for (const chunk of chunks) {
-        const t = await translateText(chunk)
-        translated.push(t)
-      }
-      abstract_tr = translated.filter(Boolean).join(' ')
     }
 
     return Response.json({ title_tr, abstract_tr })

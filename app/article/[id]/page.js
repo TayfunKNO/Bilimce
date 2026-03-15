@@ -75,6 +75,10 @@ export default function ArticlePage({ params }) {
   const [avgRating, setAvgRating] = useState(0)
   const [totalRatings, setTotalRatings] = useState(0)
   const [ratingSuccess, setRatingSuccess] = useState(false)
+  const [abstractTr, setAbstractTr] = useState(null)
+  const [titleTr, setTitleTr] = useState(null)
+  const [translating, setTranslating] = useState(false)
+  const [showTr, setShowTr] = useState(false)
 
   useEffect(() => {
     fetchArticle(pubmedId).then(a => {
@@ -114,6 +118,23 @@ export default function ArticlePage({ params }) {
     if (!error) { setUserRating(selectedRating); setRatingSuccess(true); setTimeout(() => setRatingSuccess(false), 2000); loadRatings() }
   }
 
+  const translateAbstract = async () => {
+    if (abstractTr) { setShowTr(!showTr); return }
+    setTranslating(true)
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
+      })
+      const data = await res.json()
+      setTitleTr(data.title_tr)
+      setAbstractTr(data.abstract_tr)
+      setShowTr(true)
+    } catch (err) { console.error(err) }
+    finally { setTranslating(false) }
+  }
+
   const loadComments = async () => {
     const { data } = await supabase.from('comments').select('*').eq('pubmed_id', pubmedId).order('created_at', { ascending: false })
     setComments(data || [])
@@ -139,7 +160,7 @@ export default function ArticlePage({ params }) {
   )
 
   const abstract = article?.abstract_en || ''
-  const sections = abstract.split('\n\n').filter(Boolean)
+  const sections = (showTr && abstractTr ? abstractTr : abstract).split('\n\n').filter(Boolean)
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -165,7 +186,12 @@ export default function ArticlePage({ params }) {
           <>
             <article>
               <div className="mb-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-3">{article.title_en}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-2">
+                  {showTr && titleTr ? titleTr : article.title_en}
+                </h1>
+                {showTr && titleTr && (
+                  <p className="text-white/40 text-sm mb-3">{article.title_en}</p>
+                )}
                 <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
@@ -183,7 +209,19 @@ export default function ArticlePage({ params }) {
 
               {abstract ? (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
-                  <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide mb-4">Abstract</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">
+                      {showTr ? 'Özet (Türkçe)' : 'Abstract'}
+                    </h2>
+                    <button
+                      onClick={translateAbstract}
+                      disabled={translating}
+                      className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
+                    >
+                      {translating ? 'Çevriliyor...' : showTr ? 'İngilizce Göster' : 'Türkçeye Çevir'}
+                    </button>
+                  </div>
+
                   {sections.length > 1 ? (
                     <div className="flex flex-col gap-4">
                       {sections.map((section, i) => {
@@ -202,7 +240,7 @@ export default function ArticlePage({ params }) {
                       })}
                     </div>
                   ) : (
-                    <p className="text-sm text-white/80 leading-relaxed">{abstract}</p>
+                    <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
                   )}
 
                   <div className="mt-6 pt-4 border-t border-white/5">

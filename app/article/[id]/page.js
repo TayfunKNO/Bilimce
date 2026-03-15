@@ -273,9 +273,7 @@ export default function ArticlePage({ params }) {
                       <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
                         {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
                       </button>
-                      <button onClick={loadAISummary} disabled={loadingAI} className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition disabled:opacity-50 ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}>
-                        {loadingAI ? '⏳ Yükleniyor...' : '🤖 AI Özet'}
-                      </button>
+                      
                     </div>
                   </div>
 

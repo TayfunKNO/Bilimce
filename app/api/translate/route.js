@@ -3,15 +3,14 @@ export async function POST(request) {
     const { title, abstract } = await request.json()
     if (!abstract && !title) return Response.json({ title_tr: title, abstract_tr: null })
 
-    // Google Translate ile çevir
-    const translateText = async (text, targetLang = 'tr') => {
+    const translateText = async (text) => {
       if (!text) return null
       try {
         const chunks = []
         const maxLen = 4500
         for (let i = 0; i < text.length; i += maxLen) chunks.push(text.slice(i, i + maxLen))
         const results = await Promise.all(chunks.map(async chunk => {
-          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`
+          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(chunk)}`
           const res = await fetch(url)
           const data = await res.json()
           return data[0]?.map(t => t[0]).filter(Boolean).join('') || chunk
@@ -25,35 +24,40 @@ export async function POST(request) {
       translateText(abstract),
     ])
 
-    // AI ile özet oluştur
+    // Gemini AI ile özet
     let ai_summary = null
-    if (abstract && abstract.length > 200) {
+    if (abstract && abstract.length > 200 && process.env.GEMINI_API_KEY) {
       try {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            messages: [{
-              role: 'user',
-              content: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 kısa bölümde özetle. Her bölüm 1-2 cümle olsun.
+        const geminiRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{
+                parts: [{
+                  text: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun, detaylı ve anlaşılır yaz.
 
-Format:
-🎯 ANA AMAÇ: [Araştırmanın amacı]
-🔬 BULGULAR: [Önemli bulgular]  
-✅ SONUÇ: [Klinik önemi/sonuç]
+Format (tam olarak bu şekilde):
+🎯 ANA AMAÇ: [Araştırmanın amacı ve kapsamı]
+
+🔬 BULGULAR: [Önemli bulgular ve sonuçlar]
+
+✅ SONUÇ: [Klinik önemi ve çıkarımlar]
 
 Makale özeti:
-${abstract.slice(0, 3000)}
+${abstract.slice(0, 4000)}
 
-Sadece 3 bölümü yaz, başka açıklama ekleme.`
-            }]
-          })
-        })
-        const data = await response.json()
-        ai_summary = data.content?.[0]?.text || null
-      } catch { ai_summary = null }
+Sadece 3 bölümü yaz.`
+                }]
+              }],
+              generationConfig: { maxOutputTokens: 800, temperature: 0.3 }
+            })
+          }
+        )
+        const geminiData = await geminiRes.json()
+        ai_summary = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || null
+      } catch (e) { console.error('Gemini error:', e); ai_summary = null }
     }
 
     return Response.json({ title_tr, abstract_tr, ai_summary })

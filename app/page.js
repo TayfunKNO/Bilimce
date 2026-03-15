@@ -29,6 +29,7 @@ const UI_TEXT = {
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', addToCollection: 'Koleksiyona Ekle', selectCollection: 'Koleksiyon Seç',
+    community: 'Topluluk',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -41,6 +42,7 @@ const UI_TEXT = {
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'My Collections', addToCollection: 'Add to Collection', selectCollection: 'Select Collection',
+    community: 'Community',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -53,6 +55,7 @@ const UI_TEXT = {
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
     recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel auswählen',
     collections: 'Meine Sammlungen', addToCollection: 'Zur Sammlung', selectCollection: 'Sammlung wählen',
+    community: 'Gemeinschaft',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -65,6 +68,7 @@ const UI_TEXT = {
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
     recentSearches: 'Recherches récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
     collections: 'Mes Collections', addToCollection: 'Ajouter', selectCollection: 'Choisir',
+    community: 'Communauté',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -77,6 +81,7 @@ const UI_TEXT = {
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
     recentSearches: 'Búsquedas recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
     collections: 'Mis Colecciones', addToCollection: 'Agregar', selectCollection: 'Seleccionar',
+    community: 'Comunidad',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -89,6 +94,7 @@ const UI_TEXT = {
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
     recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين',
     collections: 'مجموعاتي', addToCollection: 'أضف للمجموعة', selectCollection: 'اختر مجموعة',
+    community: 'المجتمع',
   },
 }
 
@@ -234,14 +240,9 @@ export default function Home() {
   const addToCollection = async (collectionId, article) => {
     setAddingToCollection(true)
     await supabase.from('collection_articles').upsert({
-      collection_id: collectionId,
-      user_id: user.id,
-      pubmed_id: article.pubmed_id,
-      title_en: article.title_en,
-      title_tr: article.title_tr,
-      journal: article.journal,
-      published_date: article.published_date,
-      authors: article.authors,
+      collection_id: collectionId, user_id: user.id, pubmed_id: article.pubmed_id,
+      title_en: article.title_en, title_tr: article.title_tr, journal: article.journal,
+      published_date: article.published_date, authors: article.authors,
     })
     setAddingToCollection(false)
     setCollectionPopup(null)
@@ -404,15 +405,23 @@ export default function Home() {
     try {
       const results = await searchPubMed(q, 100)
       const sorted = sortArticles(results, sortBy)
-      updateArticles(sorted); setLoading(false); saveSearchHistory(q); setAutoTranslating(true)
-      const updated = [...sorted]
-      for (let g = 0; g < updated.length; g += 5) {
-        const group = updated.slice(g, g + 5)
-        const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
-        translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
-        updateArticles([...updated]); await new Promise(r => setTimeout(r, 200))
+      // Önce İngilizce başlıklarla göster — hızlı!
+      updateArticles(sorted)
+      setLoading(false)
+      saveSearchHistory(q)
+      // Sonra arka planda çevir
+      if (lang !== 'en') {
+        setAutoTranslating(true)
+        const updated = [...sorted]
+        for (let g = 0; g < updated.length; g += 5) {
+          const group = updated.slice(g, g + 5)
+          const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
+          translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
+          updateArticles([...updated])
+          await new Promise(r => setTimeout(r, 150))
+        }
+        setAutoTranslating(false)
       }
-      setAutoTranslating(false)
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
   }, [query, sortBy, lang, recentSearches])
 
@@ -483,6 +492,7 @@ export default function Home() {
                     <a href="/favorites" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>❤️ {t.favorites}</a>
                     <a href="/reading-list" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
                     <a href="/collections" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>📚 {t.collections}</a>
+                    <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
                     <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
@@ -494,7 +504,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Koleksiyon popup */}
       {collectionPopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setCollectionPopup(null)}>
           <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
@@ -519,7 +528,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Karşılaştırma çubuğu */}
       {compareList.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 z-40 px-3 pb-3">
           <div className="max-w-2xl mx-auto bg-[#1a1a2e] border border-blue-500/30 rounded-2xl p-3 shadow-xl">
@@ -687,7 +695,7 @@ export default function Home() {
                         </a>
                       )}
                       {user && (
-                        <button onClick={() => setCollectionPopup(article)} className={`px-4 py-2 bg-white/5 border-white/10 text-white/40 hover:text-white/70 border rounded-xl text-xs transition`}>
+                        <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">
                           📚
                         </button>
                       )}

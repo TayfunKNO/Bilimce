@@ -27,7 +27,7 @@ const UI_TEXT = {
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
-    recentSearches: 'Son Aramalar',
+    recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -38,7 +38,7 @@ const UI_TEXT = {
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
-    recentSearches: 'Recent Searches',
+    recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -49,7 +49,7 @@ const UI_TEXT = {
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
-    recentSearches: 'Letzte Suchen',
+    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel zum Vergleichen auswählen',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -60,7 +60,7 @@ const UI_TEXT = {
     subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
     heroSub: 'Recherchez des études scientifiques mondiales.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
-    recentSearches: 'Recherches récentes',
+    recentSearches: 'Recherches récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -71,7 +71,7 @@ const UI_TEXT = {
     subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
     heroSub: 'Busca estudios científicos mundiales.',
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
-    recentSearches: 'Búsquedas recientes',
+    recentSearches: 'Búsquedas recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -82,7 +82,7 @@ const UI_TEXT = {
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
-    recentSearches: 'عمليات البحث الأخيرة',
+    recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين للمقارنة',
   },
 }
 
@@ -192,6 +192,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [recentSearches, setRecentSearches] = useState([])
+  const [compareList, setCompareList] = useState([])
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
@@ -214,6 +215,22 @@ export default function Home() {
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
+
+  const toggleCompare = (article) => {
+    setCompareList(prev => {
+      if (prev.find(a => a.pubmed_id === article.pubmed_id)) {
+        return prev.filter(a => a.pubmed_id !== article.pubmed_id)
+      }
+      if (prev.length >= 2) return prev
+      return [...prev, article]
+    })
+  }
+
+  const goCompare = () => {
+    if (compareList.length === 2) {
+      window.location.href = `/compare?id1=${compareList[0].pubmed_id}&id2=${compareList[1].pubmed_id}`
+    }
+  }
 
   const updateSuggestions = (value) => {
     if (!value.trim()) { setSuggestions([]); return }
@@ -454,6 +471,37 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Karşılaştırma çubuğu */}
+      {compareList.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4">
+          <div className="max-w-2xl mx-auto bg-[#1a1a2e] border border-blue-500/30 rounded-2xl p-4 shadow-xl">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex-1">
+                <p className="text-xs text-white/50 mb-1">{t.compareSelect}</p>
+                <div className="flex gap-2">
+                  {compareList.map((a, i) => (
+                    <div key={a.pubmed_id} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                      <span className="text-blue-300 text-xs truncate max-w-[120px]">{a.title_tr || a.title_en}</span>
+                      <button onClick={() => toggleCompare(a)} className="text-white/30 hover:text-red-400 transition text-xs">✕</button>
+                    </div>
+                  ))}
+                  {compareList.length === 1 && (
+                    <div className="flex items-center px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl border-dashed">
+                      <span className="text-white/30 text-xs">+ 1 makale daha</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {compareList.length === 2 && (
+                <button onClick={goCompare} className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition whitespace-nowrap">
+                  {t.compareBtn}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {sharePopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setSharePopup(null)}>
           <div className={`${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-6 max-w-sm w-full`} onClick={e => e.stopPropagation()}>
@@ -482,16 +530,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={handleQueryChange}
-                onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }}
-                onFocus={() => { if (query) setShowSuggestions(true) }}
-                placeholder={t.placeholder}
-                className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`}
-              />
+              <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
@@ -545,7 +584,7 @@ export default function Home() {
           </div>
         )}
         {!loading && articles.length > 0 && (
-          <div>
+          <div className={compareList.length > 0 ? 'pb-32' : ''}>
             <div className="flex items-center justify-between mb-4">
               <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
@@ -564,42 +603,52 @@ export default function Home() {
               </div>
             </div>
             <div className="grid gap-4">
-              {articles.map((article, i) => (
-                <article key={article.pubmed_id || i} className={`${cardBg} border ${border} rounded-2xl p-6 hover:border-blue-500/20 transition-all`}>
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div className="flex-1">
-                      <a href={`/article/${article.pubmed_id}`} className={`font-semibold ${text} leading-snug mb-1 hover:text-blue-400 transition block`}>{article.title_tr || article.title_en}</a>
-                      {article.title_tr && lang !== 'en' && <p className={`${textMuted} text-sm leading-snug mt-1`}>{article.title_en}</p>}
+              {articles.map((article, i) => {
+                const isInCompare = compareList.find(a => a.pubmed_id === article.pubmed_id)
+                return (
+                  <article key={article.pubmed_id || i} className={`${cardBg} border ${isInCompare ? 'border-blue-500/40' : border} rounded-2xl p-6 hover:border-blue-500/20 transition-all`}>
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <div className="flex-1">
+                        <a href={`/article/${article.pubmed_id}`} className={`font-semibold ${text} leading-snug mb-1 hover:text-blue-400 transition block`}>{article.title_tr || article.title_en}</a>
+                        {article.title_tr && lang !== 'en' && <p className={`${textMuted} text-sm leading-snug mt-1`}>{article.title_en}</p>}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{favorites[article.pubmed_id] ? '❤️' : '🤍'}</button>
+                        <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{readingList[article.pubmed_id] ? '🔖' : '📌'}</button>
+                        <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
+                        <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{favorites[article.pubmed_id] ? '❤️' : '🤍'}</button>
-                      <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{readingList[article.pubmed_id] ? '🔖' : '📌'}</button>
-                      <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
-                      <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
+                    <div className={`flex flex-wrap gap-3 text-xs ${textMuted} mb-4`}>
+                      {article.journal && <span>{article.journal}</span>}
+                      {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
+                      {article.authors && <span>{article.authors}</span>}
                     </div>
-                  </div>
-                  <div className={`flex flex-wrap gap-3 text-xs ${textMuted} mb-4`}>
-                    {article.journal && <span>{article.journal}</span>}
-                    {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
-                    {article.authors && <span>{article.authors}</span>}
-                  </div>
-                  {expandedId === i && (
-                    <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>
-                      <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} dark={dark} />
-                    </div>
-                  )}
-                  <div className="flex gap-2">
-                    <button onClick={() => translateArticle(article, i)} disabled={translating[i]} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
-                      {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
-                    </button>
-                    {article.pubmed_id && (
-                      <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>
-                        {t.source}
-                      </a>
+                    {expandedId === i && (
+                      <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>
+                        <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} dark={dark} />
+                      </div>
                     )}
-                  </div>
-                </article>
-              ))}
+                    <div className="flex gap-2 flex-wrap">
+                      <button onClick={() => translateArticle(article, i)} disabled={translating[i]} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
+                        {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
+                      </button>
+                      {article.pubmed_id && (
+                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>
+                          {t.source}
+                        </a>
+                      )}
+                      <button
+                        onClick={() => toggleCompare(article)}
+                        disabled={!isInCompare && compareList.length >= 2}
+                        className={`px-4 py-2 border rounded-xl text-xs transition disabled:opacity-30 ${isInCompare ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/40 hover:text-white/70'}`}
+                      >
+                        {isInCompare ? '✓ Seçildi' : `⚖️ ${t.compare}`}
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
             </div>
           </div>
         )}

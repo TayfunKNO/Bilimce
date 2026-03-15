@@ -19,7 +19,7 @@ const LANGUAGES = [
 
 const UI_TEXT = {
   tr: {
-    search: 'Ara', searching: 'Aranıyor...', placeholder: 'Konu, hastalık, molekül...',
+    search: 'Ara', searching: 'Aranıyor...', placeholder: 'Örn: kreatin, alzheimer, kanser tedavisi...',
     found: 'araştırma bulundu', translating: 'Başlıklar çevriliyor...', noResult: 'Sonuç bulunamadı',
     popular: 'Popüler aramalar', newest: 'En Yeni', oldest: 'En Eski',
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
@@ -27,9 +27,10 @@ const UI_TEXT = {
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
+    backToSearch: '← Aramaya Dön',
   },
   en: {
-    search: 'Search', searching: 'Searching...', placeholder: 'Topic, disease, molecule...',
+    search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
     found: 'research found', translating: 'Translating titles...', noResult: 'No results found',
     popular: 'Popular searches', newest: 'Newest', oldest: 'Oldest',
     translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
@@ -37,9 +38,10 @@ const UI_TEXT = {
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
+    backToSearch: '← Back to Search',
   },
   de: {
-    search: 'Suchen', searching: 'Suche...', placeholder: 'Thema, Krankheit, Molekül...',
+    search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
     found: 'Studien gefunden', translating: 'Titel werden übersetzt...', noResult: 'Keine Ergebnisse',
     popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
     translateRead: 'Zusammenfassung übersetzen', read: 'Zusammenfassung lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
@@ -47,9 +49,10 @@ const UI_TEXT = {
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
+    backToSearch: '← Zurück zur Suche',
   },
   fr: {
-    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Sujet, maladie, molécule...',
+    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
     found: 'études trouvées', translating: 'Traduction...', noResult: 'Aucun résultat',
     popular: 'Recherches populaires', newest: 'Plus récent', oldest: 'Plus ancien',
     translateRead: 'Traduire et lire', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
@@ -57,9 +60,10 @@ const UI_TEXT = {
     subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
     heroSub: 'Recherchez des études scientifiques mondiales.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
+    backToSearch: '← Retour à la recherche',
   },
   es: {
-    search: 'Buscar', searching: 'Buscando...', placeholder: 'Tema, enfermedad, molécula...',
+    search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
     found: 'estudios encontrados', translating: 'Traduciendo...', noResult: 'Sin resultados',
     popular: 'Búsquedas populares', newest: 'Más reciente', oldest: 'Más antiguo',
     translateRead: 'Traducir y leer', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
@@ -67,9 +71,10 @@ const UI_TEXT = {
     subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
     heroSub: 'Busca estudios científicos mundiales.',
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
+    backToSearch: '← Volver a la búsqueda',
   },
   ar: {
-    search: 'بحث', searching: 'جاري البحث...', placeholder: 'موضوع، مرض، جزيء...',
+    search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
     found: 'دراسة وجدت', translating: 'جاري الترجمة...', noResult: 'لا توجد نتائج',
     popular: 'البحث الشائع', newest: 'الأحدث', oldest: 'الأقدم',
     translateRead: 'ترجمة وقراءة', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
@@ -77,6 +82,7 @@ const UI_TEXT = {
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
+    backToSearch: '← العودة للبحث',
   },
 }
 
@@ -102,12 +108,12 @@ const CATEGORY_QUERIES = {
 }
 
 const POPULAR_SEARCHES = {
-  tr: ['kanser tedavisi', 'yapay zeka', 'alzheimer', 'covid-19', 'depresyon'],
-  en: ['cancer treatment', 'artificial intelligence', 'alzheimer', 'covid-19', 'depression'],
-  de: ['Krebsbehandlung', 'künstliche Intelligenz', 'Alzheimer', 'covid-19', 'Depression'],
-  fr: ['traitement cancer', 'intelligence artificielle', 'alzheimer', 'covid-19', 'dépression'],
-  es: ['tratamiento cáncer', 'inteligencia artificial', 'alzheimer', 'covid-19', 'depresión'],
-  ar: ['علاج السرطان', 'الذكاء الاصطناعي', 'الزهايمر', 'كوفيد-19', 'الاكتئاب'],
+  tr: ['kreatin', 'alzheimer', 'kanser tedavisi', 'covid-19', 'depresyon'],
+  en: ['creatine', 'alzheimer', 'cancer treatment', 'covid-19', 'depression'],
+  de: ['Kreatin', 'Alzheimer', 'Krebsbehandlung', 'covid-19', 'Depression'],
+  fr: ['créatine', 'alzheimer', 'traitement cancer', 'covid-19', 'dépression'],
+  es: ['creatina', 'alzheimer', 'tratamiento cáncer', 'covid-19', 'depresión'],
+  ar: ['كرياتين', 'الزهايمر', 'علاج السرطان', 'كوفيد-19', 'الاكتئاب'],
 }
 
 const translateOne = async (text, targetLang = 'tr') => {
@@ -332,8 +338,17 @@ export default function Home() {
       <header className={`border-b ${border} px-6 py-4`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
-            <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
+            {searched ? (
+              <button onClick={() => { setSearched(false); setQuery(''); updateArticles([]) }} className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
+                <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
+              </button>
+            ) : (
+              <>
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
+                <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <button

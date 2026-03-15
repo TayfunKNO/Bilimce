@@ -7,29 +7,26 @@ export async function POST(request) {
 
     const GEMINI_KEY = 'AIzaSyCcGlFkV4ixx3xnWCRp3MaWJ4mo1s9ICU8'
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun, detaylı ve anlaşılır yaz.
+              text: `Bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun.
 
-Format:
-🎯 ANA AMAÇ: [Araştırmanın amacı ve kapsamı]
+🎯 ANA AMAÇ: [amaç]
 
-🔬 BULGULAR: [Önemli bulgular ve sonuçlar]
+🔬 BULGULAR: [bulgular]
 
-✅ SONUÇ: [Klinik önemi ve çıkarımlar]
+✅ SONUÇ: [sonuç]
 
-Makale özeti:
-${abstract.slice(0, 4000)}
-
-Sadece 3 bölümü yaz.`
+Özet:
+${abstract.slice(0, 2000)}`
             }]
           }],
-          generationConfig: { maxOutputTokens: 800, temperature: 0.3 }
+          generationConfig: { maxOutputTokens: 400, temperature: 0.1 }
         })
       }
     )

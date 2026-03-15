@@ -24,12 +24,11 @@ export async function POST(request) {
       translateText(abstract),
     ])
 
-    // Gemini AI ile özet
     let ai_summary = null
     if (abstract && abstract.length > 200 && process.env.GEMINI_API_KEY) {
       try {
         const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,8 +55,12 @@ Sadece 3 bölümü yaz.`
           }
         )
         const geminiData = await geminiRes.json()
+        console.log('Gemini response:', JSON.stringify(geminiData).slice(0, 500))
         ai_summary = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || null
-      } catch (e) { console.error('Gemini error:', e); ai_summary = null }
+      } catch (e) {
+        console.error('Gemini error:', e)
+        ai_summary = null
+      }
     }
 
     return Response.json({ title_tr, abstract_tr, ai_summary })

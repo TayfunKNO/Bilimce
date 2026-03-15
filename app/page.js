@@ -27,6 +27,7 @@ const UI_TEXT = {
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
+    recentSearches: 'Son Aramalar',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -37,6 +38,7 @@ const UI_TEXT = {
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
+    recentSearches: 'Recent Searches',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -47,6 +49,7 @@ const UI_TEXT = {
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
+    recentSearches: 'Letzte Suchen',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -57,6 +60,7 @@ const UI_TEXT = {
     subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
     heroSub: 'Recherchez des études scientifiques mondiales.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
+    recentSearches: 'Recherches récentes',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -67,6 +71,7 @@ const UI_TEXT = {
     subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
     heroSub: 'Busca estudios científicos mundiales.',
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
+    recentSearches: 'Búsquedas recientes',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -77,6 +82,7 @@ const UI_TEXT = {
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
+    recentSearches: 'عمليات البحث الأخيرة',
   },
 }
 
@@ -108,6 +114,11 @@ const POPULAR_SEARCHES = {
   fr: ['créatine', 'alzheimer', 'traitement cancer', 'covid-19', 'dépression'],
   es: ['creatina', 'alzheimer', 'tratamiento cáncer', 'covid-19', 'depresión'],
   ar: ['كرياتين', 'الزهايمر', 'علاج السرطان', 'كوفيد-19', 'الاكتئاب'],
+}
+
+const SUGGESTIONS_BASE = {
+  tr: ['kanser', 'alzheimer', 'depresyon', 'diyabet', 'hipertansiyon', 'kalp hastalığı', 'obezite', 'covid', 'grip', 'antibiyotik', 'vitamin d', 'omega 3', 'probiyotik', 'kreatin', 'magnezyum', 'demir eksikliği', 'tiroid', 'gut hastalığı', 'migren', 'astım'],
+  en: ['cancer', 'alzheimer', 'depression', 'diabetes', 'hypertension', 'heart disease', 'obesity', 'covid', 'influenza', 'antibiotic', 'vitamin d', 'omega 3', 'probiotic', 'creatine', 'magnesium', 'iron deficiency', 'thyroid', 'gout', 'migraine', 'asthma'],
 }
 
 const translateOne = async (text, targetLang = 'tr') => {
@@ -178,6 +189,10 @@ export default function Home() {
   const [trending, setTrending] = useState([])
   const [dark, setDark] = useState(true)
   const [notifCount, setNotifCount] = useState(0)
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [recentSearches, setRecentSearches] = useState([])
+  const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
 
@@ -186,6 +201,8 @@ export default function Home() {
     if (savedLang) setLang(savedLang)
     const savedTheme = localStorage.getItem('bilimce_theme')
     if (savedTheme === 'light') { setDark(false); document.documentElement.classList.add('light') }
+    const savedRecent = localStorage.getItem('bilimce_recent')
+    if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
       if (data?.user) {
@@ -198,15 +215,42 @@ export default function Home() {
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
 
+  const updateSuggestions = (value) => {
+    if (!value.trim()) { setSuggestions([]); return }
+    const base = SUGGESTIONS_BASE[lang] || SUGGESTIONS_BASE.tr
+    const filtered = base.filter(s => s.toLowerCase().includes(value.toLowerCase()) && s.toLowerCase() !== value.toLowerCase()).slice(0, 5)
+    const recentFiltered = recentSearches.filter(s => s.toLowerCase().includes(value.toLowerCase()) && s.toLowerCase() !== value.toLowerCase()).slice(0, 3)
+    const combined = [...new Set([...recentFiltered, ...filtered])].slice(0, 6)
+    setSuggestions(combined)
+  }
+
+  const handleQueryChange = (e) => {
+    const value = e.target.value
+    setQuery(value)
+    updateSuggestions(value)
+    setShowSuggestions(true)
+  }
+
+  const selectSuggestion = (s) => {
+    setQuery(s)
+    setShowSuggestions(false)
+    setSuggestions([])
+    handleSearch(s)
+  }
+
+  const saveRecentSearch = (q) => {
+    const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10)
+    setRecentSearches(updated)
+    localStorage.setItem('bilimce_recent', JSON.stringify(updated))
+  }
+
   const checkNotifications = async (userId) => {
     try {
       const { data: subs } = await supabase.from('topic_subscriptions').select('topic').eq('user_id', userId)
       if (!subs || subs.length === 0) return
-
       const lastWeek = new Date()
       lastWeek.setDate(lastWeek.getDate() - 7)
       const dateStr = lastWeek.toISOString().split('T')[0].replace(/-/g, '/')
-
       let total = 0
       for (const sub of subs) {
         try {
@@ -315,7 +359,9 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery) => {
     const q = searchQuery || query
     if (!q.trim()) return
+    setShowSuggestions(false)
     setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
+    saveRecentSearch(q)
     try {
       const results = await searchPubMed(q, 100)
       const sorted = sortArticles(results, sortBy)
@@ -329,7 +375,7 @@ export default function Home() {
       }
       setAutoTranslating(false)
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
-  }, [query, sortBy, lang])
+  }, [query, sortBy, lang, recentSearches])
 
   const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
@@ -355,7 +401,7 @@ export default function Home() {
   const currentLang = LANGUAGES.find(l => l.code === lang)
 
   return (
-    <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false) }}>
+    <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <header className={`border-b ${border} px-6 py-4`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -385,11 +431,7 @@ export default function Home() {
                 <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                   <span>👤</span>
                   <span>{username || user.email?.split('@')[0]}</span>
-                  {notifCount > 0 && (
-                    <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none">
-                      {notifCount > 99 ? '99+' : notifCount}
-                    </span>
-                  )}
+                  {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none">{notifCount > 99 ? '99+' : notifCount}</span>}
                   <span>▾</span>
                 </button>
                 {showMenu && (
@@ -437,13 +479,38 @@ export default function Home() {
           </div>
         )}
         <div className="mb-8">
-          <div className="relative max-w-2xl mx-auto">
+          <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
-              <input type="text" value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearch()} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={handleQueryChange}
+                onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }}
+                onFocus={() => { if (query) setShowSuggestions(true) }}
+                placeholder={t.placeholder}
+                className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`}
+              />
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
             </div>
+            {showSuggestions && suggestions.length > 0 && (
+              <div className={`absolute top-full left-0 right-0 mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl overflow-hidden z-20 shadow-xl`}>
+                {recentSearches.filter(s => s.toLowerCase().includes(query.toLowerCase()) && s !== query).slice(0, 3).map((s, i) => (
+                  <button key={`r-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
+                    <span className="text-white/30">🕐</span>
+                    <span>{s}</span>
+                  </button>
+                ))}
+                {suggestions.filter(s => !recentSearches.includes(s)).map((s, i) => (
+                  <button key={`s-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
+                    <span className="text-white/30">🔍</span>
+                    <span>{s}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">

@@ -85,6 +85,24 @@ export default function ArticlePage({ params }) {
       setArticle(a)
       setLoading(false)
       if (a?.searchTerms) fetchRelated(a.searchTerms, pubmedId).then(setRelated)
+      // Structured data ekle
+      if (a) {
+        const schema = {
+          '@context': 'https://schema.org',
+          '@type': 'ScholarlyArticle',
+          headline: a.title_en,
+          description: a.abstract_en?.slice(0, 200),
+          author: a.authors ? a.authors.split(', ').map(name => ({ '@type': 'Person', name })) : [],
+          datePublished: a.published_date,
+          isPartOf: { '@type': 'Periodical', name: a.journal },
+          url: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`,
+          sameAs: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`,
+        }
+        const script = document.createElement('script')
+        script.type = 'application/ld+json'
+        script.text = JSON.stringify(schema)
+        document.head.appendChild(script)
+      }
     })
     loadComments()
     loadRatings()
@@ -189,9 +207,7 @@ export default function ArticlePage({ params }) {
                 <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-2">
                   {showTr && titleTr ? titleTr : article.title_en}
                 </h1>
-                {showTr && titleTr && (
-                  <p className="text-white/40 text-sm mb-3">{article.title_en}</p>
-                )}
+                {showTr && titleTr && <p className="text-white/40 text-sm mb-3">{article.title_en}</p>}
                 <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
@@ -213,15 +229,10 @@ export default function ArticlePage({ params }) {
                     <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">
                       {showTr ? 'Özet (Türkçe)' : 'Abstract'}
                     </h2>
-                    <button
-                      onClick={translateAbstract}
-                      disabled={translating}
-                      className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50"
-                    >
+                    <button onClick={translateAbstract} disabled={translating} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
                       {translating ? 'Çevriliyor...' : showTr ? 'İngilizce Göster' : 'Türkçeye Çevir'}
                     </button>
                   </div>
-
                   {sections.length > 1 ? (
                     <div className="flex flex-col gap-4">
                       {sections.map((section, i) => {

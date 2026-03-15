@@ -29,6 +29,10 @@ const UI_TEXT = {
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
+    filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
+    allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
+    randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
+    clearFilters: 'Filtreleri Temizle',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -41,6 +45,10 @@ const UI_TEXT = {
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
+    filters: 'Filters', allTime: 'All Time', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
+    allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
+    randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
+    clearFilters: 'Clear Filters',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -53,6 +61,10 @@ const UI_TEXT = {
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
     recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel auswählen',
     collections: 'Meine Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
+    filters: 'Filter', allTime: 'Alle Zeit', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
+    allTypes: 'Alle Typen', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
+    randomized: 'Randomisierte Studie', systematicReview: 'Systematische Übersicht', caseReport: 'Fallbericht',
+    clearFilters: 'Filter löschen',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -65,6 +77,10 @@ const UI_TEXT = {
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
     recentSearches: 'Recherches récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
     collections: 'Mes Collections', community: 'Communauté', dailyArticle: "Article du Jour", readMore: 'Lire la suite →',
+    filters: 'Filtres', allTime: 'Tout le temps', last1year: 'Dernière année', last5years: '5 dernières années', last10years: '10 dernières années',
+    allTypes: 'Tous les types', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
+    randomized: 'Essai randomisé', systematicReview: 'Revue systématique', caseReport: 'Rapport de cas',
+    clearFilters: 'Effacer les filtres',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -77,6 +93,10 @@ const UI_TEXT = {
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
     recentSearches: 'Búsquedas recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
     collections: 'Mis Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer más →',
+    filters: 'Filtros', allTime: 'Todo el tiempo', last1year: 'Último año', last5years: 'Últimos 5 años', last10years: 'Últimos 10 años',
+    allTypes: 'Todos los tipos', clinicalTrial: 'Ensayo clínico', review: 'Revisión', metaAnalysis: 'Metaanálisis',
+    randomized: 'Ensayo aleatorio', systematicReview: 'Revisión sistemática', caseReport: 'Informe de caso',
+    clearFilters: 'Limpiar filtros',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -89,6 +109,10 @@ const UI_TEXT = {
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
     recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين',
     collections: 'مجموعاتي', community: 'المجتمع', dailyArticle: 'بحث اليوم', readMore: 'اقرأ المزيد →',
+    filters: 'فلاتر', allTime: 'كل الأوقات', last1year: 'آخر سنة', last5years: 'آخر 5 سنوات', last10years: 'آخر 10 سنوات',
+    allTypes: 'جميع الأنواع', clinicalTrial: 'تجربة سريرية', review: 'مراجعة', metaAnalysis: 'تحليل تلوي',
+    randomized: 'تجربة عشوائية', systematicReview: 'مراجعة منهجية', caseReport: 'تقرير حالة',
+    clearFilters: 'مسح الفلاتر',
   },
 }
 
@@ -125,6 +149,14 @@ const POPULAR_SEARCHES = {
 const SUGGESTIONS_BASE = {
   tr: ['kanser', 'alzheimer', 'depresyon', 'diyabet', 'hipertansiyon', 'kalp hastalığı', 'obezite', 'covid', 'grip', 'antibiyotik', 'vitamin d', 'omega 3', 'probiyotik', 'kreatin', 'magnezyum', 'demir eksikliği', 'tiroid', 'gut hastalığı', 'migren', 'astım'],
   en: ['cancer', 'alzheimer', 'depression', 'diabetes', 'hypertension', 'heart disease', 'obesity', 'covid', 'influenza', 'antibiotic', 'vitamin d', 'omega 3', 'probiotic', 'creatine', 'magnesium', 'iron deficiency', 'thyroid', 'gout', 'migraine', 'asthma'],
+}
+
+const getDateFilter = (period) => {
+  const now = new Date()
+  if (period === 'last1year') return { minDate: `${now.getFullYear() - 1}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  if (period === 'last5years') return { minDate: `${now.getFullYear() - 5}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  if (period === 'last10years') return { minDate: `${now.getFullYear() - 10}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  return {}
 }
 
 const translateOne = async (text, targetLang = 'tr') => {
@@ -204,9 +236,14 @@ export default function Home() {
   const [addingToCollection, setAddingToCollection] = useState(false)
   const [dailyArticle, setDailyArticle] = useState(null)
   const [dailyTitleTr, setDailyTitleTr] = useState(null)
+  const [showFilters, setShowFilters] = useState(false)
+  const [filterPeriod, setFilterPeriod] = useState('allTime')
+  const [filterType, setFilterType] = useState('')
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
+
+  const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang')
@@ -226,7 +263,6 @@ export default function Home() {
       }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
-    // Günün araştırması
     fetch('/api/daily').then(r => r.json()).then(async d => {
       if (d.article) {
         setDailyArticle(d.article)
@@ -400,14 +436,20 @@ export default function Home() {
 
   const updateArticles = (arr) => { articlesRef.current = arr; setArticles([...arr]) }
 
-  const handleSearch = useCallback(async (searchQuery) => {
+  const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
     setShowSuggestions(false)
     setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
+
+    const activeFilters = customFilters || {
+      ...getDateFilter(filterPeriod),
+      articleType: filterType || undefined,
+    }
+
     try {
-      const results = await searchPubMed(q, 100)
+      const results = await searchPubMed(q, 100, activeFilters)
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted)
       setLoading(false)
@@ -425,7 +467,7 @@ export default function Home() {
         setAutoTranslating(false)
       }
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
-  }, [query, sortBy, lang, recentSearches])
+  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
 
   const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
@@ -450,6 +492,23 @@ export default function Home() {
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
   const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
+
+  const PERIOD_OPTIONS = [
+    { id: 'allTime', label: t.allTime },
+    { id: 'last1year', label: t.last1year },
+    { id: 'last5years', label: t.last5years },
+    { id: 'last10years', label: t.last10years },
+  ]
+
+  const TYPE_OPTIONS = [
+    { id: '', label: t.allTypes },
+    { id: 'clinical-trial', label: t.clinicalTrial },
+    { id: 'review', label: t.review },
+    { id: 'meta-analysis', label: t.metaAnalysis },
+    { id: 'randomized', label: t.randomized },
+    { id: 'systematic-review', label: t.systematicReview },
+    { id: 'case-report', label: t.caseReport },
+  ]
 
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
@@ -585,10 +644,17 @@ export default function Home() {
             <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed`}>{t.heroSub}</p>
           </div>
         )}
-        <div className="mb-8">
+
+        <div className="mb-4">
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
               <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}
+              >
+                ⚙️ {hasActiveFilters ? '●' : t.filters}
+              </button>
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
               </button>
@@ -608,7 +674,39 @@ export default function Home() {
               </div>
             )}
           </div>
+
+          {/* Filtre paneli */}
+          {showFilters && (
+            <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
+              <div className="mb-4">
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 Yayın Tarihi</p>
+                <div className="flex flex-wrap gap-2">
+                  {PERIOD_OPTIONS.map(opt => (
+                    <button key={opt.id} onClick={() => setFilterPeriod(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterPeriod === opt.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 Makale Türü</p>
+                <div className="flex flex-wrap gap-2">
+                  {TYPE_OPTIONS.map(opt => (
+                    <button key={opt.id} onClick={() => setFilterType(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterType === opt.id ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {hasActiveFilters && (
+                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">
+                  ✕ {t.clearFilters}
+                </button>
+              )}
+            </div>
+          )}
         </div>
+
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {CATEGORIES.map(cat => (
             <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : `${dark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-black/5 border-black/5 hover:bg-black/10'} border`}`}>
@@ -694,10 +792,13 @@ export default function Home() {
                         <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                       </div>
                     </div>
-                    <div className={`flex flex-wrap gap-3 text-xs ${textMuted} mb-4`}>
+                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-4`}>
                       {article.journal && <span>{article.journal}</span>}
                       {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
                       {article.authors && <span>{article.authors}</span>}
+                      {article.pub_types?.slice(0,1).map((pt, j) => (
+                        <span key={j} className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg">{pt}</span>
+                      ))}
                     </div>
                     {expandedId === i && (
                       <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>

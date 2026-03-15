@@ -34,6 +34,17 @@ async function fetchArticle(pubmedId) {
   }
 }
 
+async function fetchCitationCount(pubmedId) {
+  try {
+    const res = await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:${pubmedId}%20AND%20SRC:MED&format=json&resulttype=core`)
+    const data = await res.json()
+    const article = data.resultList?.result?.[0]
+    return article?.citedByCount || 0
+  } catch {
+    return null
+  }
+}
+
 async function fetchRelated(searchTerms, currentId) {
   try {
     const query = Array.isArray(searchTerms) ? searchTerms.slice(0, 2).join(' ') : searchTerms
@@ -59,14 +70,14 @@ async function fetchRelated(searchTerms, currentId) {
   }
 }
 
-const downloadPDF = (article, titleTr, abstractTr) => {
+const printArticle = (article, titleTr, abstractTr) => {
   const title = titleTr || article.title_en
   const abstract = abstractTr || article.abstract_en || 'Özet mevcut değil.'
-  
   const html = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<title>${title}</title>
 <style>
   body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #1a1a1a; line-height: 1.6; }
   .header { border-bottom: 2px solid #3b82f6; padding-bottom: 16px; margin-bottom: 24px; }
@@ -76,13 +87,12 @@ const downloadPDF = (article, titleTr, abstractTr) => {
   .meta span { background: #f3f4f6; padding: 3px 10px; border-radius: 12px; }
   .section { margin: 24px 0; }
   .section-title { font-size: 11px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .abstract { font-size: 14px; color: #374151; }
-  .abstract-part { margin-bottom: 12px; }
+  .abstract-part { margin-bottom: 12px; font-size: 14px; color: #374151; }
   .abstract-label { font-size: 11px; font-weight: bold; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .keywords { display: flex; flex-wrap: wrap; gap: 6px; }
   .keyword { background: #f5f3ff; color: #7c3aed; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
   .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; text-align: center; }
-  .pubmed-link { color: #3b82f6; }
+  @media print { body { margin: 20px; } }
 </style>
 </head>
 <body>
@@ -96,46 +106,31 @@ const downloadPDF = (article, titleTr, abstractTr) => {
     <span>🔬 PubMed ID: ${article.pubmed_id}</span>
   </div>
 </div>
-
-${article.keywords?.length > 0 ? `
-<div class="section">
-  <div class="section-title">Anahtar Kelimeler</div>
-  <div class="keywords">
-    ${article.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
-  </div>
-</div>` : ''}
-
+${article.keywords?.length > 0 ? `<div class="section"><div class="section-title">Anahtar Kelimeler</div><div class="keywords">${article.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}</div></div>` : ''}
 <div class="section">
   <div class="section-title">${titleTr ? 'Özet (Türkçe)' : 'Abstract'}</div>
-  <div class="abstract">
-    ${abstract.split('\n\n').map(section => {
-      const colonIdx = section.indexOf(':')
-      if (colonIdx > 0 && colonIdx < 30) {
-        const label = section.slice(0, colonIdx)
-        const content = section.slice(colonIdx + 1).trim()
-        return `<div class="abstract-part"><span class="abstract-label">${label}</span>${content}</div>`
-      }
-      return `<div class="abstract-part">${section}</div>`
-    }).join('')}
-  </div>
+  ${abstract.split('\n\n').map(section => {
+    const colonIdx = section.indexOf(':')
+    if (colonIdx > 0 && colonIdx < 30) {
+      const label = section.slice(0, colonIdx)
+      const content = section.slice(colonIdx + 1).trim()
+      return `<div class="abstract-part"><span class="abstract-label">${label}</span>${content}</div>`
+    }
+    return `<div class="abstract-part">${section}</div>`
+  }).join('')}
 </div>
-
 <div class="footer">
-  <p>Kaynak: <a class="pubmed-link" href="https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/">https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</a></p>
+  <p>Kaynak: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p>
   <p>BİLİMCE - bilimce.vercel.app | ${new Date().toLocaleDateString('tr-TR')}</p>
 </div>
 </body>
 </html>`
-
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `bilimce-${article.pubmed_id}.html`
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+  const printWindow = window.open('', '_blank')
+  if (!printWindow) { alert('Lütfen pop-up engelleyiciyi kapatın'); return }
+  printWindow.document.write(html)
+  printWindow.document.close()
+  printWindow.focus()
+  setTimeout(() => { printWindow.print() }, 600)
 }
 
 export default function ArticlePage({ params }) {
@@ -143,6 +138,7 @@ export default function ArticlePage({ params }) {
   const [article, setArticle] = useState(null)
   const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
+  const [citationCount, setCitationCount] = useState(null)
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [user, setUser] = useState(null)
@@ -181,6 +177,7 @@ export default function ArticlePage({ params }) {
         document.head.appendChild(script)
       }
     })
+    fetchCitationCount(pubmedId).then(count => setCitationCount(count))
     loadComments()
     loadRatings()
     supabase.auth.getUser().then(({ data }) => {
@@ -285,11 +282,16 @@ export default function ArticlePage({ params }) {
                   {showTr && titleTr ? titleTr : article.title_en}
                 </h1>
                 {showTr && titleTr && <p className="text-white/40 text-sm mb-3">{article.title_en}</p>}
-                <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-4">
+                <div className="flex flex-wrap gap-2 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
                   {article.authors && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.authors}</span>}
                   <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">PubMed ID: {pubmedId}</span>
+                  {citationCount !== null && (
+                    <span className={`px-3 py-1 rounded-lg border font-semibold ${citationCount > 100 ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400' : citationCount > 20 ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/5 border-white/10 text-white/50'}`}>
+                      📊 {citationCount} atıf
+                    </span>
+                  )}
                 </div>
                 {article.keywords?.length > 0 && (
                   <div className="flex flex-wrap gap-2">
@@ -369,11 +371,8 @@ export default function ArticlePage({ params }) {
                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
                   PubMed'de Görüntüle →
                 </a>
-                <button
-                  onClick={() => downloadPDF(article, titleTr, abstractTr)}
-                  className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition"
-                >
-                  📄 İndir
+                <button onClick={() => printArticle(article, titleTr, abstractTr)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">
+                  📄 PDF Kaydet
                 </button>
                 <button onClick={() => window.history.back()} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
                   ← Geri Dön

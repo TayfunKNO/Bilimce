@@ -111,6 +111,7 @@ export default function ArticlePage({ params }) {
   const [titleTr, setTitleTr] = useState(null)
   const [aiSummary, setAiSummary] = useState(null)
   const [translating, setTranslating] = useState(false)
+  const [loadingAI, setLoadingAI] = useState(false)
   const [showTr, setShowTr] = useState(false)
   const [showAI, setShowAI] = useState(false)
 
@@ -164,11 +165,30 @@ export default function ArticlePage({ params }) {
       const data = await res.json()
       setTitleTr(data.title_tr)
       setAbstractTr(data.abstract_tr)
-      setAiSummary(data.ai_summary || null)
       setShowTr(true)
       setShowAI(false)
     } catch (err) { console.error(err) }
     finally { setTranslating(false) }
+  }
+
+  const loadAISummary = async () => {
+    if (aiSummary) { setShowAI(!showAI); if (!showAI) setShowTr(false); else setShowTr(true); return }
+    setLoadingAI(true)
+    setShowAI(true)
+    setShowTr(false)
+    try {
+      const res = await fetch('/api/ai-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ abstract: article.abstract_en }),
+      })
+      const data = await res.json()
+      setAiSummary(data.summary || 'Özet oluşturulamadı.')
+    } catch (err) {
+      console.error(err)
+      setAiSummary('Özet oluşturulamadı.')
+    }
+    finally { setLoadingAI(false) }
   }
 
   const loadComments = async () => {
@@ -253,25 +273,29 @@ export default function ArticlePage({ params }) {
                       <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
                         {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
                       </button>
-                      {abstractTr && (
-                        <button
-                          onClick={() => { setShowAI(!showAI); if (!showAI) setShowTr(false); else setShowTr(true) }}
-                          className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}
-                        >
-                          🤖 AI Özet
-                        </button>
-                      )}
+                      <button onClick={loadAISummary} disabled={loadingAI} className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition disabled:opacity-50 ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}>
+                        {loadingAI ? '⏳ Yükleniyor...' : '🤖 AI Özet'}
+                      </button>
                     </div>
                   </div>
 
-                  {showAI && aiSummary ? (
+                  {showAI ? (
                     <div className="flex flex-col gap-3">
-                      {aiSummary.split('\n').filter(Boolean).map((line, i) => (
-                        <p key={i} className="text-sm text-white/80 leading-relaxed">{line}</p>
-                      ))}
+                      {loadingAI ? (
+                        <div className="flex items-center gap-3 py-4">
+                          <div className="animate-pulse flex gap-1">
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.1s'}}></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.2s'}}></div>
+                          </div>
+                          <span className="text-white/40 text-sm">AI özeti hazırlanıyor...</span>
+                        </div>
+                      ) : (
+                        aiSummary?.split('\n').filter(Boolean).map((line, i) => (
+                          <p key={i} className="text-sm text-white/80 leading-relaxed">{line}</p>
+                        ))
+                      )}
                     </div>
-                  ) : showAI && !aiSummary ? (
-                    <p className="text-sm text-white/40 italic">AI özeti mevcut değil. Önce Türkçe çeviriyi yapın.</p>
                   ) : (
                     sections.length > 1 ? (
                       <div className="flex flex-col gap-4">

@@ -78,9 +78,9 @@ const printArticle = (article, titleTr, abstractTr) => {
 <style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;color:#1a1a1a;line-height:1.6}.header{border-bottom:2px solid #3b82f6;padding-bottom:16px;margin-bottom:24px}.badge{background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:12px}h1{font-size:20px;font-weight:bold;color:#111827;margin:0 0 12px;line-height:1.4}.meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#6b7280}.meta span{background:#f3f4f6;padding:3px 10px;border-radius:12px}.section{margin:24px 0}.section-title{font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.abstract-part{margin-bottom:12px;font-size:14px;color:#374151}.abstract-label{font-size:11px;font-weight:bold;color:#3b82f6;text-transform:uppercase;display:block;margin-bottom:4px}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center}@media print{body{margin:20px}}</style>
 </head><body>
 <div class="header"><div class="badge">BİLİMCE</div><h1>${title}</h1>
-<div class="meta">${article.journal?`<span>📖 ${article.journal}</span>`:''} ${article.published_date?`<span>📅 ${article.published_date.slice(0,4)}</span>`:''} ${article.authors?`<span>👤 ${article.authors}</span>`:''}<span>🔬 PubMed ID: ${article.pubmed_id}</span></div></div>
-<div class="section"><div class="section-title">${titleTr?'Özet (Türkçe)':'Abstract'}</div>
-${abstract.split('\n\n').map(s=>{const c=s.indexOf(':');if(c>0&&c<30){const l=s.slice(0,c);const t=s.slice(c+1).trim();return`<div class="abstract-part"><span class="abstract-label">${l}</span>${t}</div>`}return`<div class="abstract-part">${s}</div>`}).join('')}
+<div class="meta">${article.journal ? `<span>📖 ${article.journal}</span>` : ''} ${article.published_date ? `<span>📅 ${article.published_date.slice(0,4)}</span>` : ''} ${article.authors ? `<span>👤 ${article.authors}</span>` : ''}<span>🔬 PubMed ID: ${article.pubmed_id}</span></div></div>
+<div class="section"><div class="section-title">${titleTr ? 'Özet (Türkçe)' : 'Abstract'}</div>
+${abstract.split('\n\n').map(s => { const c = s.indexOf(':'); if (c > 0 && c < 30) { return `<div class="abstract-part"><span class="abstract-label">${s.slice(0,c)}</span>${s.slice(c+1).trim()}</div>` } return `<div class="abstract-part">${s}</div>` }).join('')}
 </div>
 <div class="footer"><p>Kaynak: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p><p>BİLİMCE - bilimce.vercel.app | ${new Date().toLocaleDateString('tr-TR')}</p></div>
 </body></html>`
@@ -156,10 +156,17 @@ export default function ArticlePage({ params }) {
     if (abstractTr) { setShowTr(!showTr); setShowAI(false); return }
     setTranslating(true)
     try {
-      const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
+      })
       const data = await res.json()
-      setTitleTr(data.title_tr); setAbstractTr(data.abstract_tr); setAiSummary(data.ai_summary)
-      setShowTr(true); setShowAI(false)
+      setTitleTr(data.title_tr)
+      setAbstractTr(data.abstract_tr)
+      setAiSummary(data.ai_summary || null)
+      setShowTr(true)
+      setShowAI(false)
     } catch (err) { console.error(err) }
     finally { setTranslating(false) }
   }
@@ -246,8 +253,11 @@ export default function ArticlePage({ params }) {
                       <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
                         {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
                       </button>
-                      {(aiSummary || !translating) && abstractTr && (
-                        <button onClick={() => { setShowAI(!showAI); setShowTr(showAI) }} className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}>
+                      {abstractTr && (
+                        <button
+                          onClick={() => { setShowAI(!showAI); if (!showAI) setShowTr(false); else setShowTr(true) }}
+                          className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}
+                        >
                           🤖 AI Özet
                         </button>
                       )}
@@ -260,6 +270,8 @@ export default function ArticlePage({ params }) {
                         <p key={i} className="text-sm text-white/80 leading-relaxed">{line}</p>
                       ))}
                     </div>
+                  ) : showAI && !aiSummary ? (
+                    <p className="text-sm text-white/40 italic">AI özeti mevcut değil. Önce Türkçe çeviriyi yapın.</p>
                   ) : (
                     sections.length > 1 ? (
                       <div className="flex flex-col gap-4">

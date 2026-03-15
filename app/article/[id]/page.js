@@ -285,7 +285,15 @@ export default function ArticlePage({ params }) {
                 <div className="flex flex-wrap gap-2 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
-                  {article.authors && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.authors}</span>}
+                  {article.authors && (
+                    <div className="flex flex-wrap gap-2">
+                      {article.authors.split(', ').map((author, i) => (
+                        <a key={i} href={`/author/${encodeURIComponent(author)}`} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg hover:border-blue-500/30 hover:text-blue-300 transition">
+                          👤 {author}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                   <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg">PubMed ID: {pubmedId}</span>
                   {citationCount !== null && (
                     <span className={`px-3 py-1 rounded-lg border font-semibold ${citationCount > 100 ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400' : citationCount > 20 ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/5 border-white/10 text-white/50'}`}>

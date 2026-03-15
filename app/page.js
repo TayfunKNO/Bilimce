@@ -399,21 +399,22 @@ export default function Home() {
   }
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
+  const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
 
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
-      <header className={`border-b ${border} px-6 py-4`}>
+      <header className={`border-b ${border} px-3 py-3`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
-            <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
-          </div>
           <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</div>
+            <span className={`font-bold text-base tracking-tight ${text}`}>BİLİMCE</span>
+          </div>
+          <div className="flex items-center gap-1.5">
             <button onClick={toggleTheme} style={{ fontSize: '11px', lineHeight: '1' }} className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}>
               {dark ? '🌤' : '🌑'}
             </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-2 px-3 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
+              <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-1 px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                 <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
               </button>
               {showLang && (
@@ -428,11 +429,11 @@ export default function Home() {
             </div>
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
-                <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
+                <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition max-w-[140px]`}>
                   <span>👤</span>
-                  <span>{username || user.email?.split('@')[0]}</span>
-                  {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none">{notifCount > 99 ? '99+' : notifCount}</span>}
-                  <span>▾</span>
+                  <span className="truncate">{displayName}</span>
+                  {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1 py-0.5 min-w-[16px] text-center leading-none shrink-0">{notifCount > 99 ? '99+' : notifCount}</span>}
+                  <span className="shrink-0">▾</span>
                 </button>
                 {showMenu && (
                   <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-40`}>
@@ -447,7 +448,7 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <a href="/auth" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>{t.login}</a>
+              <a href="/auth" className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>{t.login}</a>
             )}
           </div>
         </div>
@@ -499,14 +500,12 @@ export default function Home() {
               <div className={`absolute top-full left-0 right-0 mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl overflow-hidden z-20 shadow-xl`}>
                 {recentSearches.filter(s => s.toLowerCase().includes(query.toLowerCase()) && s !== query).slice(0, 3).map((s, i) => (
                   <button key={`r-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
-                    <span className="text-white/30">🕐</span>
-                    <span>{s}</span>
+                    <span className="text-white/30">🕐</span><span>{s}</span>
                   </button>
                 ))}
                 {suggestions.filter(s => !recentSearches.includes(s)).map((s, i) => (
                   <button key={`s-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
-                    <span className="text-white/30">🔍</span>
-                    <span>{s}</span>
+                    <span className="text-white/30">🔍</span><span>{s}</span>
                   </button>
                 ))}
               </div>

@@ -25,7 +25,7 @@ const UI_TEXT = {
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
     source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
-    heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
+    heroSub: 'Dünya genelindeki milyonlarca bilimsel araştırmaya anında erişin.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
@@ -33,6 +33,10 @@ const UI_TEXT = {
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
     clearFilters: 'Filtreleri Temizle',
+    features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
+    startSearch: 'Aramaya Başla →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['PubMed Makalesi', 'Dil Desteği', 'Ücretsiz'],
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -41,7 +45,7 @@ const UI_TEXT = {
     translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
     source: 'Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
-    heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
+    heroSub: 'Access millions of scientific research instantly.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
@@ -49,72 +53,94 @@ const UI_TEXT = {
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
     clearFilters: 'Clear Filters',
+    features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
+    startSearch: 'Start Searching →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['PubMed Articles', 'Languages', 'Free'],
   },
   de: {
-    search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
-    found: 'Studien gefunden', translating: 'Titel werden übersetzt...', noResult: 'Keine Ergebnisse',
+    search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
+    found: 'Studien gefunden', translating: 'Übersetzen...', noResult: 'Keine Ergebnisse',
     popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
-    translateRead: 'Zusammenfassung übersetzen', read: 'Zusammenfassung lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
+    translateRead: 'Übersetzen & Lesen', read: 'Lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
     source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
-    subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
-    heroSub: 'Wissenschaftliche Studien weltweit suchen.',
-    noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
-    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel auswählen',
-    collections: 'Meine Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
+    subtitle: 'Wissenschaft', hero: 'Wissenschaft entdecken',
+    heroSub: 'Millionen wissenschaftlicher Artikel sofort abrufen.',
+    noAbstract: 'Keine Zusammenfassung.', trending: 'Trending', readingList: 'Leseliste',
+    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel wählen',
+    collections: 'Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
     filters: 'Filter', allTime: 'Alle Zeit', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
-    allTypes: 'Alle Typen', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
-    randomized: 'Randomisierte Studie', systematicReview: 'Systematische Übersicht', caseReport: 'Fallbericht',
+    allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
+    randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
     clearFilters: 'Filter löschen',
+    features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
+    startSearch: 'Suchen →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['Artikel', 'Sprachen', 'Kostenlos'],
   },
   fr: {
-    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
+    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
     found: 'études trouvées', translating: 'Traduction...', noResult: 'Aucun résultat',
-    popular: 'Recherches populaires', newest: 'Plus récent', oldest: 'Plus ancien',
-    translateRead: 'Traduire et lire', read: 'Lire le résumé', close: 'Fermer', translatingBtn: 'Traduction...',
+    popular: 'Populaires', newest: 'Plus récent', oldest: 'Plus ancien',
+    translateRead: 'Traduire et lire', read: 'Lire', close: 'Fermer', translatingBtn: 'Traduction...',
     source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
-    subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
-    heroSub: 'Recherchez des études scientifiques mondiales.',
+    subtitle: 'Science', hero: 'Découvrir la science',
+    heroSub: 'Accédez instantanément à des millions de recherches.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
-    recentSearches: 'Recherches récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
-    collections: 'Mes Collections', community: 'Communauté', dailyArticle: "Article du Jour", readMore: 'Lire la suite →',
-    filters: 'Filtres', allTime: 'Tout le temps', last1year: 'Dernière année', last5years: '5 dernières années', last10years: '10 dernières années',
-    allTypes: 'Tous les types', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
-    randomized: 'Essai randomisé', systematicReview: 'Revue systématique', caseReport: 'Rapport de cas',
-    clearFilters: 'Effacer les filtres',
+    recentSearches: 'Récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2',
+    collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →',
+    filters: 'Filtres', allTime: 'Tout', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
+    allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
+    randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
+    clearFilters: 'Effacer',
+    features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
+    startSearch: 'Rechercher →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['Articles', 'Langues', 'Gratuit'],
   },
   es: {
-    search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
-    found: 'estudios encontrados', translating: 'Traduciendo...', noResult: 'Sin resultados',
-    popular: 'Búsquedas populares', newest: 'Más reciente', oldest: 'Más antiguo',
-    translateRead: 'Traducir y leer', read: 'Leer resumen', close: 'Cerrar', translatingBtn: 'Traduciendo...',
-    source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Cerrar sesión', login: 'Iniciar sesión',
-    subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
-    heroSub: 'Busca estudios científicos mundiales.',
-    noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
-    recentSearches: 'Búsquedas recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
-    collections: 'Mis Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer más →',
-    filters: 'Filtros', allTime: 'Todo el tiempo', last1year: 'Último año', last5years: 'Últimos 5 años', last10years: 'Últimos 10 años',
-    allTypes: 'Todos los tipos', clinicalTrial: 'Ensayo clínico', review: 'Revisión', metaAnalysis: 'Metaanálisis',
-    randomized: 'Ensayo aleatorio', systematicReview: 'Revisión sistemática', caseReport: 'Informe de caso',
-    clearFilters: 'Limpiar filtros',
+    search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
+    found: 'estudios', translating: 'Traduciendo...', noResult: 'Sin resultados',
+    popular: 'Populares', newest: 'Más reciente', oldest: 'Más antiguo',
+    translateRead: 'Traducir y leer', read: 'Leer', close: 'Cerrar', translatingBtn: 'Traduciendo...',
+    source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Salir', login: 'Entrar',
+    subtitle: 'Ciencia', hero: 'Descubrir la ciencia',
+    heroSub: 'Accede a millones de investigaciones al instante.',
+    noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
+    recentSearches: 'Recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2',
+    collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →',
+    filters: 'Filtros', allTime: 'Todo', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
+    allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
+    randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
+    clearFilters: 'Limpiar',
+    features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
+    startSearch: 'Buscar →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['Artículos', 'Idiomas', 'Gratis'],
   },
   ar: {
-    search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
-    found: 'دراسة وجدت', translating: 'جاري الترجمة...', noResult: 'لا توجد نتائج',
-    popular: 'البحث الشائع', newest: 'الأحدث', oldest: 'الأقدم',
-    translateRead: 'ترجمة وقراءة', read: 'قراءة الملخص', close: 'إغلاق', translatingBtn: 'جاري الترجمة...',
+    search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
+    found: 'دراسة', translating: 'ترجمة...', noResult: 'لا نتائج',
+    popular: 'شائع', newest: 'الأحدث', oldest: 'الأقدم',
+    translateRead: 'ترجمة وقراءة', read: 'قراءة', close: 'إغلاق', translatingBtn: 'ترجمة...',
     source: 'المصدر', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول',
-    subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
-    heroSub: 'ابحث في الدراسات العلمية العالمية.',
-    noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
-    recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين',
-    collections: 'مجموعاتي', community: 'المجتمع', dailyArticle: 'بحث اليوم', readMore: 'اقرأ المزيد →',
-    filters: 'فلاتر', allTime: 'كل الأوقات', last1year: 'آخر سنة', last5years: 'آخر 5 سنوات', last10years: 'آخر 10 سنوات',
-    allTypes: 'جميع الأنواع', clinicalTrial: 'تجربة سريرية', review: 'مراجعة', metaAnalysis: 'تحليل تلوي',
-    randomized: 'تجربة عشوائية', systematicReview: 'مراجعة منهجية', caseReport: 'تقرير حالة',
-    clearFilters: 'مسح الفلاتر',
+    subtitle: 'العلوم', hero: 'اكتشف العلم',
+    heroSub: 'الوصول الفوري إلى ملايين الأبحاث العلمية.',
+    noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
+    recentSearches: 'أخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2',
+    collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →',
+    filters: 'فلاتر', allTime: 'الكل', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
+    allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
+    randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
+    clearFilters: 'مسح',
+    features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
+    startSearch: 'ابدأ البحث →',
+    stats: ['35M+', '6', '100%'],
+    statsLabel: ['مقال', 'لغات', 'مجاني'],
   },
 }
+
+const FEATURE_ICONS = ['🌐', '🔍', '⚖️', '📊', '💬', '📚']
 
 const CATEGORIES = [
   { id: 'all', icon: '🔬' },
@@ -242,7 +268,6 @@ export default function Home() {
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
-
   const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
 
   useEffect(() => {
@@ -254,13 +279,7 @@ export default function Home() {
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) {
-        loadFavorites(data.user.id)
-        loadUsername(data.user.id)
-        loadReadingList(data.user.id)
-        checkNotifications(data.user.id)
-        loadCollections(data.user.id)
-      }
+      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
     fetch('/api/daily').then(r => r.json()).then(async d => {
@@ -279,13 +298,8 @@ export default function Home() {
 
   const addToCollection = async (collectionId, article) => {
     setAddingToCollection(true)
-    await supabase.from('collection_articles').upsert({
-      collection_id: collectionId, user_id: user.id, pubmed_id: article.pubmed_id,
-      title_en: article.title_en, title_tr: article.title_tr, journal: article.journal,
-      published_date: article.published_date, authors: article.authors,
-    })
-    setAddingToCollection(false)
-    setCollectionPopup(null)
+    await supabase.from('collection_articles').upsert({ collection_id: collectionId, user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, journal: article.journal, published_date: article.published_date, authors: article.authors })
+    setAddingToCollection(false); setCollectionPopup(null)
   }
 
   const toggleCompare = (article) => {
@@ -296,35 +310,19 @@ export default function Home() {
     })
   }
 
-  const goCompare = () => {
-    if (compareList.length === 2) window.location.href = `/compare?id1=${compareList[0].pubmed_id}&id2=${compareList[1].pubmed_id}`
-  }
+  const goCompare = () => { if (compareList.length === 2) window.location.href = `/compare?id1=${compareList[0].pubmed_id}&id2=${compareList[1].pubmed_id}` }
 
   const updateSuggestions = (value) => {
     if (!value.trim()) { setSuggestions([]); return }
     const base = SUGGESTIONS_BASE[lang] || SUGGESTIONS_BASE.tr
     const filtered = base.filter(s => s.toLowerCase().includes(value.toLowerCase()) && s.toLowerCase() !== value.toLowerCase()).slice(0, 5)
     const recentFiltered = recentSearches.filter(s => s.toLowerCase().includes(value.toLowerCase()) && s.toLowerCase() !== value.toLowerCase()).slice(0, 3)
-    const combined = [...new Set([...recentFiltered, ...filtered])].slice(0, 6)
-    setSuggestions(combined)
+    setSuggestions([...new Set([...recentFiltered, ...filtered])].slice(0, 6))
   }
 
-  const handleQueryChange = (e) => {
-    const value = e.target.value
-    setQuery(value)
-    updateSuggestions(value)
-    setShowSuggestions(true)
-  }
-
-  const selectSuggestion = (s) => {
-    setQuery(s); setShowSuggestions(false); setSuggestions([]); handleSearch(s)
-  }
-
-  const saveRecentSearch = (q) => {
-    const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10)
-    setRecentSearches(updated)
-    localStorage.setItem('bilimce_recent', JSON.stringify(updated))
-  }
+  const handleQueryChange = (e) => { setQuery(e.target.value); updateSuggestions(e.target.value); setShowSuggestions(true) }
+  const selectSuggestion = (s) => { setQuery(s); setShowSuggestions(false); setSuggestions([]); handleSearch(s) }
+  const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
   const checkNotifications = async (userId) => {
     try {
@@ -357,10 +355,7 @@ export default function Home() {
   const cardBg = dark ? 'bg-white/3' : 'bg-black/3'
   const inputBg = dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
 
-  const changeLang = (code) => {
-    setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
-    if (articlesRef.current.length > 0) retranslateArticles(code)
-  }
+  const changeLang = (code) => { setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false); if (articlesRef.current.length > 0) retranslateArticles(code) }
 
   const retranslateArticles = async (targetLang) => {
     setAutoTranslating(true)
@@ -375,38 +370,18 @@ export default function Home() {
     setAutoTranslating(false)
   }
 
-  const loadUsername = async (userId) => {
-    const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
-    if (data?.username) setUsername(data.username)
-  }
-
-  const loadFavorites = async (userId) => {
-    const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId)
-    if (data) { const m = {}; data.forEach(f => { m[f.pubmed_id] = true }); setFavorites(m) }
-  }
-
-  const loadReadingList = async (userId) => {
-    const { data } = await supabase.from('reading_list').select('pubmed_id').eq('user_id', userId)
-    if (data) { const m = {}; data.forEach(r => { m[r.pubmed_id] = true }); setReadingList(m) }
-  }
-
-  const saveSearchHistory = async (q) => {
-    if (!user) return
-    await supabase.from('search_history').insert({ user_id: user.id, query: q })
-  }
+  const loadUsername = async (userId) => { const { data } = await supabase.from('profiles').select('username').eq('id', userId).single(); if (data?.username) setUsername(data.username) }
+  const loadFavorites = async (userId) => { const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId); if (data) { const m = {}; data.forEach(f => { m[f.pubmed_id] = true }); setFavorites(m) } }
+  const loadReadingList = async (userId) => { const { data } = await supabase.from('reading_list').select('pubmed_id').eq('user_id', userId); if (data) { const m = {}; data.forEach(r => { m[r.pubmed_id] = true }); setReadingList(m) } }
+  const saveSearchHistory = async (q) => { if (!user) return; await supabase.from('search_history').insert({ user_id: user.id, query: q }) }
 
   const toggleFavorite = async (article) => {
     if (!user) { window.location.href = '/auth'; return }
     const isFav = favorites[article.pubmed_id]
     setFavLoading(prev => ({ ...prev, [article.pubmed_id]: true }))
     try {
-      if (isFav) {
-        await supabase.from('favorites').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
-        setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
-      } else {
-        await supabase.from('favorites').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr, journal: article.journal, published_date: article.published_date, authors: article.authors })
-        setFavorites(prev => ({ ...prev, [article.pubmed_id]: true }))
-      }
+      if (isFav) { await supabase.from('favorites').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id); setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n }) }
+      else { await supabase.from('favorites').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr, journal: article.journal, published_date: article.published_date, authors: article.authors }); setFavorites(prev => ({ ...prev, [article.pubmed_id]: true })) }
     } catch (err) { console.error(err) }
     finally { setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
@@ -416,44 +391,27 @@ export default function Home() {
     const isIn = readingList[article.pubmed_id]
     setReadLoading(prev => ({ ...prev, [article.pubmed_id]: true }))
     try {
-      if (isIn) {
-        await supabase.from('reading_list').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id)
-        setReadingList(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n })
-      } else {
-        await supabase.from('reading_list').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, journal: article.journal, published_date: article.published_date, authors: article.authors })
-        setReadingList(prev => ({ ...prev, [article.pubmed_id]: true }))
-      }
+      if (isIn) { await supabase.from('reading_list').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id); setReadingList(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n }) }
+      else { await supabase.from('reading_list').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, journal: article.journal, published_date: article.published_date, authors: article.authors }); setReadingList(prev => ({ ...prev, [article.pubmed_id]: true })) }
     } catch (err) { console.error(err) }
     finally { setReadLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
 
   const shareArticle = (article) => setSharePopup(article)
   const copyLink = (article) => { navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`); setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  const shareWhatsApp = (article) => {
-    const title = article.title_tr || article.title_en
-    window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank')
-  }
-
+  const shareWhatsApp = (article) => { window.open(`https://wa.me/?text=${encodeURIComponent(`*${article.title_tr || article.title_en}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank') }
   const updateArticles = (arr) => { articlesRef.current = arr; setArticles([...arr]) }
 
   const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    setShowSuggestions(false)
-    setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
+    setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
-
-    const activeFilters = customFilters || {
-      ...getDateFilter(filterPeriod),
-      articleType: filterType || undefined,
-    }
-
+    const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
     try {
       const results = await searchPubMed(q, 100, activeFilters)
       const sorted = sortArticles(results, sortBy)
-      updateArticles(sorted)
-      setLoading(false)
-      saveSearchHistory(q)
+      updateArticles(sorted); setLoading(false); saveSearchHistory(q)
       if (lang !== 'en') {
         setAutoTranslating(true)
         const updated = [...sorted]
@@ -461,8 +419,7 @@ export default function Home() {
           const group = updated.slice(g, g + 5)
           const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
           translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
-          updateArticles([...updated])
-          await new Promise(r => setTimeout(r, 150))
+          updateArticles([...updated]); await new Promise(r => setTimeout(r, 150))
         }
         setAutoTranslating(false)
       }
@@ -519,9 +476,7 @@ export default function Home() {
             <span className={`font-bold text-base tracking-tight ${text}`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={toggleTheme} style={{ fontSize: '11px', lineHeight: '1' }} className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}>
-              {dark ? '🌤' : '🌑'}
-            </button>
+            <button onClick={toggleTheme} style={{ fontSize: '11px', lineHeight: '1' }} className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}>{dark ? '🌤' : '🌑'}</button>
             <div className="relative" onClick={e => e.stopPropagation()}>
               <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-1 px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                 <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
@@ -539,8 +494,7 @@ export default function Home() {
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition max-w-[140px]`}>
-                  <span>👤</span>
-                  <span className="truncate">{displayName}</span>
+                  <span>👤</span><span className="truncate">{displayName}</span>
                   {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1 py-0.5 min-w-[16px] text-center leading-none shrink-0">{notifCount > 99 ? '99+' : notifCount}</span>}
                   <span className="shrink-0">▾</span>
                 </button>
@@ -571,10 +525,7 @@ export default function Home() {
             <h3 className="text-white font-semibold mb-1 text-sm">Koleksiyon Seç</h3>
             <p className="text-white/40 text-xs mb-4 truncate">{collectionPopup.title_tr || collectionPopup.title_en}</p>
             {collections.length === 0 ? (
-              <div className="text-center py-4">
-                <p className="text-white/30 text-sm mb-3">Henüz koleksiyon yok</p>
-                <a href="/collections" className="text-blue-400 text-xs hover:text-blue-300 transition">Koleksiyon oluştur →</a>
-              </div>
+              <div className="text-center py-4"><p className="text-white/30 text-sm mb-3">Henüz koleksiyon yok</p><a href="/collections" className="text-blue-400 text-xs">Koleksiyon oluştur →</a></div>
             ) : (
               <div className="flex flex-col gap-2 mb-4">
                 {collections.map(col => (
@@ -602,17 +553,11 @@ export default function Home() {
                       <button onClick={() => toggleCompare(a)} className="text-white/30 hover:text-red-400 transition text-xs shrink-0">✕</button>
                     </div>
                   ))}
-                  {compareList.length === 1 && (
-                    <div className="flex items-center px-2 py-1 bg-white/5 border border-white/10 border-dashed rounded-lg">
-                      <span className="text-white/30 text-xs">+1</span>
-                    </div>
-                  )}
+                  {compareList.length === 1 && <div className="flex items-center px-2 py-1 bg-white/5 border border-white/10 border-dashed rounded-lg"><span className="text-white/30 text-xs">+1</span></div>}
                 </div>
               </div>
               {compareList.length === 2 && (
-                <button onClick={goCompare} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition whitespace-nowrap shrink-0">
-                  {t.compareBtn}
-                </button>
+                <button onClick={goCompare} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition whitespace-nowrap shrink-0">{t.compareBtn}</button>
               )}
             </div>
           </div>
@@ -640,8 +585,40 @@ export default function Home() {
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
           <div className="text-center mb-12">
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{t.hero}</h1>
-            <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed`}>{t.heroSub}</p>
+            {/* Hero */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-6">
+              <span>🔬</span>
+              <span>35M+ PubMed Makalesi</span>
+              <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
+              <span>Ücretsiz</span>
+            </div>
+            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
+            <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed mb-8`}>{t.heroSub}</p>
+
+            {/* İstatistikler */}
+            <div className="flex justify-center gap-8 mb-10">
+              {t.stats.map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className={`text-2xl font-bold ${text}`}>{stat}</div>
+                  <div className={`text-xs ${textMuted}`}>{t.statsLabel[i]}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Özellik kartları */}
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
+              {t.features.map((feature, i) => (
+                <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center`}>
+                  <div className="text-2xl mb-1">{FEATURE_ICONS[i]}</div>
+                  <div className={`text-xs ${textMuted} leading-tight`}>{feature}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA butonu */}
+            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">
+              {t.startSearch}
+            </button>
           </div>
         )}
 
@@ -649,10 +626,7 @@ export default function Home() {
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
               <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}
-              >
+              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
                 ⚙️ {hasActiveFilters ? '●' : t.filters}
               </button>
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
@@ -675,7 +649,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Filtre paneli */}
           {showFilters && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
@@ -699,9 +672,7 @@ export default function Home() {
                 </div>
               </div>
               {hasActiveFilters && (
-                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">
-                  ✕ {t.clearFilters}
-                </button>
+                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">✕ {t.clearFilters}</button>
               )}
             </div>
           )}
@@ -719,9 +690,7 @@ export default function Home() {
           <div className="mb-8">
             <p className={`${textMuted} text-sm font-medium mb-3`}>⭐ {t.dailyArticle}</p>
             <a href={`/article/${dailyArticle.pubmed_id}`} className="block bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-5 hover:border-blue-500/40 transition-all group">
-              <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">
-                {dailyTitleTr || dailyArticle.title_en}
-              </p>
+              <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">{dailyTitleTr || dailyArticle.title_en}</p>
               <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3">
                 {dailyArticle.journal && <span>{dailyArticle.journal}</span>}
                 {dailyArticle.published_date && <span>{dailyArticle.published_date.slice(0,4)}</span>}
@@ -756,6 +725,7 @@ export default function Home() {
             ))}
           </div>
         )}
+
         {!loading && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
@@ -810,14 +780,10 @@ export default function Home() {
                         {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                       </button>
                       {article.pubmed_id && (
-                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>
-                          {t.source}
-                        </a>
+                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>{t.source}</a>
                       )}
                       {user && (
-                        <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">
-                          📚
-                        </button>
+                        <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">📚</button>
                       )}
                       <button onClick={() => toggleCompare(article)} disabled={!isInCompare && compareList.length >= 2} className={`px-4 py-2 border rounded-xl text-xs transition disabled:opacity-30 ${isInCompare ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/40 hover:text-white/70'}`}>
                         {isInCompare ? '✓ Seçildi' : `⚖️ ${t.compare}`}
@@ -829,12 +795,14 @@ export default function Home() {
             </div>
           </div>
         )}
+
         {!loading && searched && articles.length === 0 && (
           <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>
             <p>{t.noResult}</p>
           </div>
         )}
+
         {!searched && (
           <div className="mt-8 text-center">
             <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
@@ -846,6 +814,7 @@ export default function Home() {
           </div>
         )}
       </main>
+
       <footer className={`border-t ${border} py-8 mt-20`}>
         <div className={`max-w-5xl mx-auto px-4 text-center ${textMuted} text-xs`}>
           BİLİMCE - PubMed - {t.subtitle}

@@ -49,7 +49,7 @@ const UI_TEXT = {
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
-    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel zum Vergleichen auswählen',
+    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel auswählen',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -82,7 +82,7 @@ const UI_TEXT = {
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
-    recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين للمقارنة',
+    recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين',
   },
 }
 
@@ -473,27 +473,27 @@ export default function Home() {
 
       {/* Karşılaştırma çubuğu */}
       {compareList.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4">
-          <div className="max-w-2xl mx-auto bg-[#1a1a2e] border border-blue-500/30 rounded-2xl p-4 shadow-xl">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex-1">
-                <p className="text-xs text-white/50 mb-1">{t.compareSelect}</p>
+        <div className="fixed bottom-0 left-0 right-0 z-40 px-3 pb-3">
+          <div className="max-w-2xl mx-auto bg-[#1a1a2e] border border-blue-500/30 rounded-2xl p-3 shadow-xl">
+            <div className="flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-white/40 mb-1.5">{t.compareSelect}</p>
                 <div className="flex gap-2">
                   {compareList.map((a, i) => (
-                    <div key={a.pubmed_id} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                      <span className="text-blue-300 text-xs truncate max-w-[120px]">{a.title_tr || a.title_en}</span>
-                      <button onClick={() => toggleCompare(a)} className="text-white/30 hover:text-red-400 transition text-xs">✕</button>
+                    <div key={a.pubmed_id} className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                      <span className={`text-xs font-bold shrink-0 ${i === 0 ? 'text-blue-300' : 'text-purple-300'}`}>#{i+1}</span>
+                      <button onClick={() => toggleCompare(a)} className="text-white/30 hover:text-red-400 transition text-xs shrink-0">✕</button>
                     </div>
                   ))}
                   {compareList.length === 1 && (
-                    <div className="flex items-center px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl border-dashed">
-                      <span className="text-white/30 text-xs">+ 1 makale daha</span>
+                    <div className="flex items-center px-2 py-1 bg-white/5 border border-white/10 border-dashed rounded-lg">
+                      <span className="text-white/30 text-xs">+1</span>
                     </div>
                   )}
                 </div>
               </div>
               {compareList.length === 2 && (
-                <button onClick={goCompare} className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition whitespace-nowrap">
+                <button onClick={goCompare} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition whitespace-nowrap shrink-0">
                   {t.compareBtn}
                 </button>
               )}
@@ -584,7 +584,7 @@ export default function Home() {
           </div>
         )}
         {!loading && articles.length > 0 && (
-          <div className={compareList.length > 0 ? 'pb-32' : ''}>
+          <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
               <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>

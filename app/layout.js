@@ -1,6 +1,7 @@
 import './globals.css'
 
 export const metadata = {
+  metadataBase: new URL('https://bilimce.vercel.app'),
   title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
   description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun. PubMed makalelerini yapay zeka ile çevirin. Kanser, alzheimer, diyabet ve daha fazlası.',
   keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet',
@@ -23,11 +24,20 @@ export const metadata = {
     title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
     description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun. PubMed makalelerini yapay zeka ile çevirin.',
     siteName: 'BİLİMCE',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
+      }
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
     description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun.',
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: 'https://bilimce.vercel.app',

@@ -7,25 +7,36 @@ const supabase = createClient(
   'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
 )
 
+const decodeHtml = (str) => {
+  if (!str) return str
+  return str
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+}
+
 async function fetchArticle(pubmedId) {
   try {
     const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${pubmedId}&retmode=xml`)
     const xml = await res.text()
-    const title = xml.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || ''
+    const title = decodeHtml(xml.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || '')
     const abstractSection = xml.match(/<Abstract>([\s\S]*?)<\/Abstract>/)?.[1] || ''
     const abstractParts = []
     const abstractTextMatches = abstractSection.match(/<AbstractText[^>]*>([\s\S]*?)<\/AbstractText>/g) || []
     for (const part of abstractTextMatches) {
       const label = part.match(/Label="([^"]+)"/)?.[1]
-      const text = part.replace(/<[^>]+>/g, '').trim()
+      const text = decodeHtml(part.replace(/<[^>]+>/g, '').trim())
       if (text) abstractParts.push(label ? `${label}: ${text}` : text)
     }
     const abstract = abstractParts.join('\n\n')
-    const journal = xml.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
+    const journal = decodeHtml(xml.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || '')
     const year = xml.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
-    const lastNames = xml.match(/<LastName>([\s\S]*?)<\/LastName>/g)?.slice(0, 5).map(n => n.replace(/<[^>]+>/g, '')) || []
-    const meshTerms = xml.match(/<DescriptorName[^>]*>([\s\S]*?)<\/DescriptorName>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
-    const keywords = xml.match(/<Keyword[^>]*>([\s\S]*?)<\/Keyword>/g)?.slice(0, 3).map(n => n.replace(/<[^>]+>/g, '')) || []
+    const lastNames = xml.match(/<LastName>([\s\S]*?)<\/LastName>/g)?.slice(0, 5).map(n => decodeHtml(n.replace(/<[^>]+>/g, ''))) || []
+    const meshTerms = xml.match(/<DescriptorName[^>]*>([\s\S]*?)<\/DescriptorName>/g)?.slice(0, 3).map(n => decodeHtml(n.replace(/<[^>]+>/g, ''))) || []
+    const keywords = xml.match(/<Keyword[^>]*>([\s\S]*?)<\/Keyword>/g)?.slice(0, 3).map(n => decodeHtml(n.replace(/<[^>]+>/g, ''))) || []
     const allKeywords = [...new Set([...meshTerms, ...keywords])].slice(0, 3)
     const searchTerms = allKeywords.length > 0 ? allKeywords : title.split(' ').slice(0, 3).join(' ')
     return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: allKeywords, searchTerms }
@@ -59,8 +70,8 @@ async function fetchRelated(searchTerms, currentId) {
     const matches = xml.match(/<PubmedArticle>[\s\S]*?<\/PubmedArticle>/g) || []
     for (const article of matches) {
       const pubmedId = article.match(/<PMID[^>]*>(\d+)<\/PMID>/)?.[1]
-      const title = article.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || ''
-      const journal = article.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || ''
+      const title = decodeHtml(article.match(/<ArticleTitle[^>]*>([\s\S]*?)<\/ArticleTitle>/)?.[1]?.replace(/<[^>]+>/g, '') || '')
+      const journal = decodeHtml(article.match(/<Title>([\s\S]*?)<\/Title>/)?.[1] || '')
       const year = article.match(/<PubDate>[\s\S]*?<Year>(\d+)<\/Year>/)?.[1] || ''
       if (pubmedId && title) articles.push({ pubmed_id: pubmedId, title_en: title, journal, published_date: year })
     }

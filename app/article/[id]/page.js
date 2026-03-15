@@ -86,10 +86,7 @@ export default function ArticlePage({ params }) {
     loadRatings()
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) {
-        loadUsername(data.user.id)
-        loadUserRating(data.user.id)
-      }
+      if (data?.user) { loadUsername(data.user.id); loadUserRating(data.user.id) }
     })
   }, [pubmedId])
 
@@ -102,28 +99,19 @@ export default function ArticlePage({ params }) {
     const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId)
     if (data && data.length > 0) {
       const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length
-      setAvgRating(avg)
-      setTotalRatings(data.length)
+      setAvgRating(avg); setTotalRatings(data.length)
     }
   }
 
   const loadUserRating = async (userId) => {
     const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId).eq('user_id', userId).single()
-    if (data) {
-      setUserRating(data.rating)
-      setSelectedRating(data.rating)
-    }
+    if (data) { setUserRating(data.rating); setSelectedRating(data.rating) }
   }
 
   const handleRate = async () => {
     if (!user || !selectedRating) return
     const { error } = await supabase.from('ratings').upsert({ user_id: user.id, pubmed_id: pubmedId, rating: selectedRating })
-    if (!error) {
-      setUserRating(selectedRating)
-      setRatingSuccess(true)
-      setTimeout(() => setRatingSuccess(false), 2000)
-      loadRatings()
-    }
+    if (!error) { setUserRating(selectedRating); setRatingSuccess(true); setTimeout(() => setRatingSuccess(false), 2000); loadRatings() }
   }
 
   const loadComments = async () => {
@@ -134,12 +122,7 @@ export default function ArticlePage({ params }) {
   const submitComment = async () => {
     if (!newComment.trim() || !user) return
     setSubmitting(true)
-    const { error } = await supabase.from('comments').insert({
-      user_id: user.id,
-      pubmed_id: pubmedId,
-      username: username || user.email?.split('@')[0],
-      content: newComment.trim(),
-    })
+    const { error } = await supabase.from('comments').insert({ user_id: user.id, pubmed_id: pubmedId, username: username || user.email?.split('@')[0], content: newComment.trim() })
     if (!error) { setNewComment(''); loadComments() }
     setSubmitting(false)
   }
@@ -166,7 +149,9 @@ export default function ArticlePage({ params }) {
             <a href="/" className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</a>
             <span className="font-bold text-lg tracking-tight text-white">BİLİMCE</span>
           </div>
-          <a href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Ana Sayfa</a>
+          <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
+            ← Geri Dön
+          </button>
         </div>
       </header>
       <main className="max-w-3xl mx-auto px-4 py-12">
@@ -174,7 +159,7 @@ export default function ArticlePage({ params }) {
           <div className="text-center py-20 text-white/30">
             <div className="text-5xl mb-4">🔭</div>
             <p>Makale bulunamadı</p>
-            <a href="/" className="mt-4 inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">Ana Sayfaya Dön</a>
+            <button onClick={() => window.history.back()} className="mt-4 inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">Geri Dön</button>
           </div>
         ) : (
           <>
@@ -226,31 +211,20 @@ export default function ArticlePage({ params }) {
                       <div className="flex items-center gap-3 flex-wrap">
                         <div className="flex items-center gap-1">
                           {[1,2,3,4,5].map(star => (
-                            <button
-                              key={star}
-                              onClick={() => setSelectedRating(star)}
-                              onMouseEnter={() => setHovered(star)}
-                              onMouseLeave={() => setHovered(0)}
-                              className="text-3xl transition-transform hover:scale-110 leading-none"
-                            >
+                            <button key={star} onClick={() => setSelectedRating(star)} onMouseEnter={() => setHovered(star)} onMouseLeave={() => setHovered(0)} className="text-3xl transition-transform hover:scale-110 leading-none cursor-pointer">
                               <span style={{ color: star <= (hovered || selectedRating) ? '#facc15' : 'rgba(255,255,255,0.15)' }}>★</span>
                             </button>
                           ))}
                         </div>
                         {selectedRating > 0 && selectedRating !== userRating && (
-                          <button
-                            onClick={handleRate}
-                            className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition cursor-pointer"
-
-                          >
+                          <button onClick={handleRate} className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition cursor-pointer">
                             Onayla ✓
                           </button>
                         )}
                         {ratingSuccess && <span className="text-green-400 text-xs">Puanlandı!</span>}
                         {totalRatings > 0 && (
                           <span className="text-xs text-white/40">
-                            Ortalama: <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span>
-                            {' '}({totalRatings} oy)
+                            Ortalama: <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span> ({totalRatings} oy)
                           </span>
                         )}
                       </div>
@@ -269,7 +243,9 @@ export default function ArticlePage({ params }) {
                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
                   PubMed'de Görüntüle →
                 </a>
-                <a href="/" className="px-6 py-3 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">← Geri Dön</a>
+                <button onClick={() => window.history.back()} className="px-6 py-3 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
+                  ← Geri Dön
+                </button>
               </div>
             </article>
 
@@ -294,13 +270,7 @@ export default function ArticlePage({ params }) {
               <h2 className="text-lg font-semibold text-white mb-6">💬 Yorumlar ({comments.length})</h2>
               {user ? (
                 <div className="mb-6">
-                  <textarea
-                    value={newComment}
-                    onChange={e => setNewComment(e.target.value)}
-                    placeholder="Bu araştırma hakkında görüşünüzü paylaşın..."
-                    rows={3}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 resize-none mb-3"
-                  />
+                  <textarea value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Bu araştırma hakkında görüşünüzü paylaşın..." rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 resize-none mb-3" />
                   <button onClick={submitComment} disabled={submitting || !newComment.trim()} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold hover:opacity-90 transition disabled:opacity-50">
                     {submitting ? 'Gönderiliyor...' : 'Yorum Yap'}
                   </button>

@@ -28,8 +28,7 @@ const UI_TEXT = {
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
-    collections: 'Koleksiyonlarım', addToCollection: 'Koleksiyona Ekle', selectCollection: 'Koleksiyon Seç',
-    community: 'Topluluk',
+    collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -41,8 +40,7 @@ const UI_TEXT = {
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
-    collections: 'My Collections', addToCollection: 'Add to Collection', selectCollection: 'Select Collection',
-    community: 'Community',
+    collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -54,8 +52,7 @@ const UI_TEXT = {
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
     recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel auswählen',
-    collections: 'Meine Sammlungen', addToCollection: 'Zur Sammlung', selectCollection: 'Sammlung wählen',
-    community: 'Gemeinschaft',
+    collections: 'Meine Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -67,8 +64,7 @@ const UI_TEXT = {
     heroSub: 'Recherchez des études scientifiques mondiales.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
     recentSearches: 'Recherches récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
-    collections: 'Mes Collections', addToCollection: 'Ajouter', selectCollection: 'Choisir',
-    community: 'Communauté',
+    collections: 'Mes Collections', community: 'Communauté', dailyArticle: "Article du Jour", readMore: 'Lire la suite →',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -80,8 +76,7 @@ const UI_TEXT = {
     heroSub: 'Busca estudios científicos mundiales.',
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
     recentSearches: 'Búsquedas recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
-    collections: 'Mis Colecciones', addToCollection: 'Agregar', selectCollection: 'Seleccionar',
-    community: 'Comunidad',
+    collections: 'Mis Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer más →',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -93,8 +88,7 @@ const UI_TEXT = {
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
     recentSearches: 'عمليات البحث الأخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين',
-    collections: 'مجموعاتي', addToCollection: 'أضف للمجموعة', selectCollection: 'اختر مجموعة',
-    community: 'المجتمع',
+    collections: 'مجموعاتي', community: 'المجتمع', dailyArticle: 'بحث اليوم', readMore: 'اقرأ المزيد →',
   },
 }
 
@@ -208,6 +202,8 @@ export default function Home() {
   const [collections, setCollections] = useState([])
   const [collectionPopup, setCollectionPopup] = useState(null)
   const [addingToCollection, setAddingToCollection] = useState(false)
+  const [dailyArticle, setDailyArticle] = useState(null)
+  const [dailyTitleTr, setDailyTitleTr] = useState(null)
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
@@ -230,6 +226,14 @@ export default function Home() {
       }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
+    // Günün araştırması
+    fetch('/api/daily').then(r => r.json()).then(async d => {
+      if (d.article) {
+        setDailyArticle(d.article)
+        const titleTr = await translateOne(d.article.title_en, savedLang || 'tr')
+        setDailyTitleTr(titleTr)
+      }
+    })
   }, [])
 
   const loadCollections = async (userId) => {
@@ -405,11 +409,9 @@ export default function Home() {
     try {
       const results = await searchPubMed(q, 100)
       const sorted = sortArticles(results, sortBy)
-      // Önce İngilizce başlıklarla göster — hızlı!
       updateArticles(sorted)
       setLoading(false)
       saveSearchHistory(q)
-      // Sonra arka planda çevir
       if (lang !== 'en') {
         setAutoTranslating(true)
         const updated = [...sorted]
@@ -507,7 +509,7 @@ export default function Home() {
       {collectionPopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setCollectionPopup(null)}>
           <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
-            <h3 className="text-white font-semibold mb-1 text-sm">{t.selectCollection}</h3>
+            <h3 className="text-white font-semibold mb-1 text-sm">Koleksiyon Seç</h3>
             <p className="text-white/40 text-xs mb-4 truncate">{collectionPopup.title_tr || collectionPopup.title_en}</p>
             {collections.length === 0 ? (
               <div className="text-center py-4">
@@ -614,6 +616,23 @@ export default function Home() {
             </button>
           ))}
         </div>
+
+        {!searched && dailyArticle && (
+          <div className="mb-8">
+            <p className={`${textMuted} text-sm font-medium mb-3`}>⭐ {t.dailyArticle}</p>
+            <a href={`/article/${dailyArticle.pubmed_id}`} className="block bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-5 hover:border-blue-500/40 transition-all group">
+              <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">
+                {dailyTitleTr || dailyArticle.title_en}
+              </p>
+              <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3">
+                {dailyArticle.journal && <span>{dailyArticle.journal}</span>}
+                {dailyArticle.published_date && <span>{dailyArticle.published_date.slice(0,4)}</span>}
+                {dailyArticle.authors && <span>{dailyArticle.authors}</span>}
+              </div>
+              <span className="text-xs text-blue-400 group-hover:text-blue-300 transition">{t.readMore}</span>
+            </a>
+          </div>
+        )}
 
         {!searched && trending.length > 0 && (
           <div className="mb-10">

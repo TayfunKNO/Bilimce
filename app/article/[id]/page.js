@@ -7,6 +7,8 @@ const supabase = createClient(
   'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
 )
 
+const GEMINI_KEY = 'AIzaSyCcGlFkV4ixx3xnWCRp3MaWJ4mo1s9ICU8'
+
 const decodeHtml = (str) => {
   if (!str) return str
   return str
@@ -177,13 +179,24 @@ export default function ArticlePage({ params }) {
     setShowAI(true)
     setShowTr(false)
     try {
-      const res = await fetch('/api/ai-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ abstract: article.abstract_en }),
-      })
-      const data = await res.json()
-      setAiSummary(data.summary || 'Özet oluşturulamadı.')
+      const geminiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun.\n\n🎯 ANA AMAÇ: [amaç]\n\n🔬 BULGULAR: [bulgular]\n\n✅ SONUÇ: [sonuç]\n\nÖzet:\n${article.abstract_en?.slice(0, 2000)}`
+              }]
+            }],
+            generationConfig: { maxOutputTokens: 400, temperature: 0.1 }
+          })
+        }
+      )
+      const data = await geminiRes.json()
+      const summary = data.candidates?.[0]?.content?.parts?.[0]?.text || null
+      setAiSummary(summary || 'Özet oluşturulamadı.')
     } catch (err) {
       console.error(err)
       setAiSummary('Özet oluşturulamadı.')
@@ -283,10 +296,10 @@ export default function ArticlePage({ params }) {
                     <div className="flex flex-col gap-3">
                       {loadingAI ? (
                         <div className="flex items-center gap-3 py-4">
-                          <div className="animate-pulse flex gap-1">
+                          <div className="flex gap-1">
                             <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.1s'}}></div>
-                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.2s'}}></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.15s'}}></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.3s'}}></div>
                           </div>
                           <span className="text-white/40 text-sm">AI özeti hazırlanıyor...</span>
                         </div>

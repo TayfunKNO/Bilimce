@@ -27,7 +27,6 @@ const UI_TEXT = {
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki bilimsel araştırmaları arayın, yapay zeka ile özetlerini okuyun.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
-    backToSearch: '← Aramaya Dön',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -38,7 +37,6 @@ const UI_TEXT = {
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Search scientific research worldwide, read summaries translated by AI.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
-    backToSearch: '← Back to Search',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer, Krebsbehandlung...',
@@ -49,7 +47,6 @@ const UI_TEXT = {
     subtitle: 'Wissenschaftliche Forschung', hero: 'Wissenschaft entdecken',
     heroSub: 'Wissenschaftliche Studien weltweit suchen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Diese Woche Trending', readingList: 'Leseliste',
-    backToSearch: '← Zurück zur Suche',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer, traitement cancer...',
@@ -60,7 +57,6 @@ const UI_TEXT = {
     subtitle: 'Recherche scientifique', hero: 'Découvrir la science',
     heroSub: 'Recherchez des études scientifiques mondiales.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
-    backToSearch: '← Retour à la recherche',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer, tratamiento cáncer...',
@@ -71,7 +67,6 @@ const UI_TEXT = {
     subtitle: 'Investigación científica', hero: 'Descubrir la ciencia',
     heroSub: 'Busca estudios científicos mundiales.',
     noAbstract: 'No hay resumen.', trending: 'Tendencias', readingList: 'Lista de lectura',
-    backToSearch: '← Volver a la búsqueda',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر، علاج السرطان...',
@@ -82,7 +77,6 @@ const UI_TEXT = {
     subtitle: 'البحث العلمي', hero: 'اكتشف العلم',
     heroSub: 'ابحث في الدراسات العلمية العالمية.',
     noAbstract: 'لا يوجد ملخص.', trending: 'الأكثر رواجاً', readingList: 'قائمة القراءة',
-    backToSearch: '← العودة للبحث',
   },
 }
 
@@ -183,6 +177,7 @@ export default function Home() {
   const [showLang, setShowLang] = useState(false)
   const [trending, setTrending] = useState([])
   const [dark, setDark] = useState(true)
+  const [notifCount, setNotifCount] = useState(0)
 
   const t = UI_TEXT[lang]
 
@@ -193,10 +188,36 @@ export default function Home() {
     if (savedTheme === 'light') { setDark(false); document.documentElement.classList.add('light') }
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id) }
+      if (data?.user) {
+        loadFavorites(data.user.id)
+        loadUsername(data.user.id)
+        loadReadingList(data.user.id)
+        checkNotifications(data.user.id)
+      }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
   }, [])
+
+  const checkNotifications = async (userId) => {
+    try {
+      const { data: subs } = await supabase.from('topic_subscriptions').select('topic').eq('user_id', userId)
+      if (!subs || subs.length === 0) return
+
+      const lastWeek = new Date()
+      lastWeek.setDate(lastWeek.getDate() - 7)
+      const dateStr = lastWeek.toISOString().split('T')[0].replace(/-/g, '/')
+
+      let total = 0
+      for (const sub of subs) {
+        try {
+          const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(sub.topic)}[Title]&mindate=${dateStr}&datetype=pdat&retmode=json&retmax=1`)
+          const data = await res.json()
+          total += parseInt(data.esearchresult?.count || 0)
+        } catch {}
+      }
+      setNotifCount(total)
+    } catch {}
+  }
 
   const toggleTheme = () => {
     const newDark = !dark
@@ -296,7 +317,7 @@ export default function Home() {
     if (!q.trim()) return
     setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     try {
-      const results = await searchPubMed(q, 50)
+      const results = await searchPubMed(q, 100)
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted); setLoading(false); saveSearchHistory(q); setAutoTranslating(true)
       const updated = [...sorted]
@@ -338,24 +359,11 @@ export default function Home() {
       <header className={`border-b ${border} px-6 py-4`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {searched ? (
-              <button onClick={() => { setSearched(false); setQuery(''); updateArticles([]) }} className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
-                <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
-              </button>
-            ) : (
-              <>
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
-                <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
-              </>
-            )}
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</div>
+            <span className={`font-bold text-lg tracking-tight ${text}`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              style={{ fontSize: '11px', lineHeight: '1' }}
-              className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}
-            >
+            <button onClick={toggleTheme} style={{ fontSize: '11px', lineHeight: '1' }} className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}>
               {dark ? '🌤' : '🌑'}
             </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
@@ -375,14 +383,24 @@ export default function Home() {
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
-                  <span>👤</span><span>{username || user.email?.split('@')[0]}</span><span>▾</span>
+                  <span>👤</span>
+                  <span>{username || user.email?.split('@')[0]}</span>
+                  {notifCount > 0 && (
+                    <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none">
+                      {notifCount > 99 ? '99+' : notifCount}
+                    </span>
+                  )}
+                  <span>▾</span>
                 </button>
                 {showMenu && (
                   <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-40`}>
-                    <a href="/profile" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>👤 {t.profile}</a>
+                    <a href="/profile" className={`flex items-center justify-between px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>
+                      <span>👤 {t.profile}</span>
+                      {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{notifCount > 99 ? '99+' : notifCount}</span>}
+                    </a>
                     <a href="/favorites" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>❤️ {t.favorites}</a>
                     <a href="/reading-list" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
-                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
+                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>

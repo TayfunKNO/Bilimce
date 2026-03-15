@@ -25,21 +25,6 @@ async function fetchArticle(pubmedId) {
   }
 }
 
-const translateText = async (text) => {
-  if (!text) return ''
-  try {
-    const res = await fetch('/api/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: '', abstract: text }),
-    })
-    const data = await res.json()
-    return data.abstract_tr || text
-  } catch {
-    return text
-  }
-}
-
 export default function ComparePage() {
   const [articles, setArticles] = useState([null, null])
   const [loading, setLoading] = useState(true)
@@ -125,10 +110,10 @@ export default function ComparePage() {
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={translateAll} disabled={translating || (translated[0] && translated[1])} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
+            <button onClick={translateAll} disabled={translating || (translated[0] && translated[1])} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50 shrink-0">
               {translating ? 'Çevriliyor...' : translated[0] && translated[1] ? '✓ Türkçe' : 'Türkçeye Çevir'}
             </button>
-            <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 text-white/60 rounded-xl text-xs hover:text-white transition">← Geri</button>
+            <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 text-white/60 rounded-xl text-xs hover:text-white transition shrink-0">← Geri</button>
           </div>
         </div>
       </header>
@@ -170,7 +155,6 @@ export default function ComparePage() {
               <div className="px-4 py-3 text-xs text-white/70">{row.format ? row.format(articles[1]?.[row.key]) : articles[1]?.[row.key] || '-'}</div>
             </div>
           ))}
-          {/* Anahtar Kelimeler */}
           <div className="grid grid-cols-3 bg-white/2">
             <div className="px-4 py-3 text-xs font-semibold text-white/40 border-r border-white/5">Anahtar Kelimeler</div>
             {articles.map((a, i) => (
@@ -186,7 +170,7 @@ export default function ComparePage() {
         </div>
 
         {/* Abstractlar */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {articles.map((a, i) => (
             <div key={i} className="bg-white/3 border border-white/5 rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-4">

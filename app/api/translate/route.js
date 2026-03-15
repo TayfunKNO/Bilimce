@@ -1,65 +1,64 @@
 export async function POST(request) {
   try {
-    const { title, abstract, titles } = await request.json()
+    const { title, abstract } = await request.json()
+    if (!abstract && !title) return Response.json({ title_tr: title, abstract_tr: null })
 
-    const translateText = async (text) => {
+    // Google Translate ile çevir
+    const translateText = async (text, targetLang = 'tr') => {
       if (!text) return null
       try {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=${encodeURIComponent(text)}`
-        const res = await fetch(url)
-        const data = await res.json()
-        return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
-      } catch (e) {
-        return null
-      }
-    }
-
-    if (titles && Array.isArray(titles)) {
-      const results = []
-      for (let i = 0; i < titles.length; i += 10) {
-        const chunk = titles.slice(i, i + 10)
-        const translated = await Promise.all(chunk.map(t => translateText(t)))
-        results.push(...translated)
-      }
-      return Response.json({ titles_tr: results })
-    }
-
-    const title_tr = await translateText(title)
-
-    let abstract_tr = null
-    if (abstract) {
-      const sections = abstract.split('\n\n').filter(Boolean)
-      if (sections.length > 1) {
-        const translated = []
-        for (const section of sections) {
-          const parts = []
-          for (let i = 0; i < section.length; i += 8000) {
-            parts.push(section.slice(i, i + 8000))
-          }
-          const partResults = []
-          for (const part of parts) {
-            const t = await translateText(part)
-            partResults.push(t || part)
-          }
-          translated.push(partResults.join(' '))
-        }
-        abstract_tr = translated.join('\n\n')
-      } else {
         const chunks = []
-        for (let i = 0; i < abstract.length; i += 8000) {
-          chunks.push(abstract.slice(i, i + 8000))
-        }
-        const translated = []
-        for (const chunk of chunks) {
-          const t = await translateText(chunk)
-          translated.push(t)
-        }
-        abstract_tr = translated.filter(Boolean).join(' ')
-      }
+        const maxLen = 4500
+        for (let i = 0; i < text.length; i += maxLen) chunks.push(text.slice(i, i + maxLen))
+        const results = await Promise.all(chunks.map(async chunk => {
+          const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`
+          const res = await fetch(url)
+          const data = await res.json()
+          return data[0]?.map(t => t[0]).filter(Boolean).join('') || chunk
+        }))
+        return results.join(' ')
+      } catch { return text }
     }
 
-    return Response.json({ title_tr, abstract_tr })
-  } catch (error) {
-    return Response.json({ title_tr: null, abstract_tr: null }, { status: 500 })
+    const [title_tr, abstract_tr] = await Promise.all([
+      translateText(title),
+      translateText(abstract),
+    ])
+
+    // AI ile özet oluştur
+    let ai_summary = null
+    if (abstract && abstract.length > 200) {
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            messages: [{
+              role: 'user',
+              content: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 kısa bölümde özetle. Her bölüm 1-2 cümle olsun.
+
+Format:
+🎯 ANA AMAÇ: [Araştırmanın amacı]
+🔬 BULGULAR: [Önemli bulgular]  
+✅ SONUÇ: [Klinik önemi/sonuç]
+
+Makale özeti:
+${abstract.slice(0, 3000)}
+
+Sadece 3 bölümü yaz, başka açıklama ekleme.`
+            }]
+          })
+        })
+        const data = await response.json()
+        ai_summary = data.content?.[0]?.text || null
+      } catch { ai_summary = null }
+    }
+
+    return Response.json({ title_tr, abstract_tr, ai_summary })
+  } catch (err) {
+    console.error(err)
+    return Response.json({ title_tr: null, abstract_tr: null, ai_summary: null })
   }
 }

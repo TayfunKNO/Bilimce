@@ -12,10 +12,7 @@ const decodeHtml = (str) => {
   return str
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
 }
 
 async function fetchArticle(pubmedId) {
@@ -40,20 +37,15 @@ async function fetchArticle(pubmedId) {
     const allKeywords = [...new Set([...meshTerms, ...keywords])].slice(0, 3)
     const searchTerms = allKeywords.length > 0 ? allKeywords : title.split(' ').slice(0, 3).join(' ')
     return { pubmed_id: pubmedId, title_en: title, abstract_en: abstract, journal, published_date: year, authors: lastNames.join(', '), keywords: allKeywords, searchTerms }
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 async function fetchCitationCount(pubmedId) {
   try {
     const res = await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:${pubmedId}%20AND%20SRC:MED&format=json&resulttype=core`)
     const data = await res.json()
-    const article = data.resultList?.result?.[0]
-    return article?.citedByCount || 0
-  } catch {
-    return null
-  }
+    return data.resultList?.result?.[0]?.citedByCount || 0
+  } catch { return null }
 }
 
 async function fetchRelated(searchTerms, currentId) {
@@ -76,72 +68,26 @@ async function fetchRelated(searchTerms, currentId) {
       if (pubmedId && title) articles.push({ pubmed_id: pubmedId, title_en: title, journal, published_date: year })
     }
     return articles
-  } catch {
-    return []
-  }
+  } catch { return [] }
 }
 
 const printArticle = (article, titleTr, abstractTr) => {
   const title = titleTr || article.title_en
   const abstract = abstractTr || article.abstract_en || 'Özet mevcut değil.'
-  const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>${title}</title>
-<style>
-  body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #1a1a1a; line-height: 1.6; }
-  .header { border-bottom: 2px solid #3b82f6; padding-bottom: 16px; margin-bottom: 24px; }
-  .badge { background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; }
-  h1 { font-size: 20px; font-weight: bold; color: #111827; margin: 0 0 12px; line-height: 1.4; }
-  .meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: #6b7280; }
-  .meta span { background: #f3f4f6; padding: 3px 10px; border-radius: 12px; }
-  .section { margin: 24px 0; }
-  .section-title { font-size: 11px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .abstract-part { margin-bottom: 12px; font-size: 14px; color: #374151; }
-  .abstract-label { font-size: 11px; font-weight: bold; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px; }
-  .keywords { display: flex; flex-wrap: wrap; gap: 6px; }
-  .keyword { background: #f5f3ff; color: #7c3aed; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
-  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; text-align: center; }
-  @media print { body { margin: 20px; } }
-</style>
-</head>
-<body>
-<div class="header">
-  <div class="badge">BİLİMCE</div>
-  <h1>${title}</h1>
-  <div class="meta">
-    ${article.journal ? `<span>📖 ${article.journal}</span>` : ''}
-    ${article.published_date ? `<span>📅 ${article.published_date.slice(0,4)}</span>` : ''}
-    ${article.authors ? `<span>👤 ${article.authors}</span>` : ''}
-    <span>🔬 PubMed ID: ${article.pubmed_id}</span>
-  </div>
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;color:#1a1a1a;line-height:1.6}.header{border-bottom:2px solid #3b82f6;padding-bottom:16px;margin-bottom:24px}.badge{background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:12px}h1{font-size:20px;font-weight:bold;color:#111827;margin:0 0 12px;line-height:1.4}.meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#6b7280}.meta span{background:#f3f4f6;padding:3px 10px;border-radius:12px}.section{margin:24px 0}.section-title{font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.abstract-part{margin-bottom:12px;font-size:14px;color:#374151}.abstract-label{font-size:11px;font-weight:bold;color:#3b82f6;text-transform:uppercase;display:block;margin-bottom:4px}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center}@media print{body{margin:20px}}</style>
+</head><body>
+<div class="header"><div class="badge">BİLİMCE</div><h1>${title}</h1>
+<div class="meta">${article.journal?`<span>📖 ${article.journal}</span>`:''} ${article.published_date?`<span>📅 ${article.published_date.slice(0,4)}</span>`:''} ${article.authors?`<span>👤 ${article.authors}</span>`:''}<span>🔬 PubMed ID: ${article.pubmed_id}</span></div></div>
+<div class="section"><div class="section-title">${titleTr?'Özet (Türkçe)':'Abstract'}</div>
+${abstract.split('\n\n').map(s=>{const c=s.indexOf(':');if(c>0&&c<30){const l=s.slice(0,c);const t=s.slice(c+1).trim();return`<div class="abstract-part"><span class="abstract-label">${l}</span>${t}</div>`}return`<div class="abstract-part">${s}</div>`}).join('')}
 </div>
-${article.keywords?.length > 0 ? `<div class="section"><div class="section-title">Anahtar Kelimeler</div><div class="keywords">${article.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}</div></div>` : ''}
-<div class="section">
-  <div class="section-title">${titleTr ? 'Özet (Türkçe)' : 'Abstract'}</div>
-  ${abstract.split('\n\n').map(section => {
-    const colonIdx = section.indexOf(':')
-    if (colonIdx > 0 && colonIdx < 30) {
-      const label = section.slice(0, colonIdx)
-      const content = section.slice(colonIdx + 1).trim()
-      return `<div class="abstract-part"><span class="abstract-label">${label}</span>${content}</div>`
-    }
-    return `<div class="abstract-part">${section}</div>`
-  }).join('')}
-</div>
-<div class="footer">
-  <p>Kaynak: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p>
-  <p>BİLİMCE - bilimce.vercel.app | ${new Date().toLocaleDateString('tr-TR')}</p>
-</div>
-</body>
-</html>`
-  const printWindow = window.open('', '_blank')
-  if (!printWindow) { alert('Lütfen pop-up engelleyiciyi kapatın'); return }
-  printWindow.document.write(html)
-  printWindow.document.close()
-  printWindow.focus()
-  setTimeout(() => { printWindow.print() }, 600)
+<div class="footer"><p>Kaynak: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p><p>BİLİMCE - bilimce.vercel.app | ${new Date().toLocaleDateString('tr-TR')}</p></div>
+</body></html>`
+  const w = window.open('', '_blank')
+  if (!w) { alert('Pop-up engelleyiciyi kapatın'); return }
+  w.document.write(html); w.document.close(); w.focus()
+  setTimeout(() => w.print(), 600)
 }
 
 export default function ArticlePage({ params }) {
@@ -163,34 +109,22 @@ export default function ArticlePage({ params }) {
   const [ratingSuccess, setRatingSuccess] = useState(false)
   const [abstractTr, setAbstractTr] = useState(null)
   const [titleTr, setTitleTr] = useState(null)
+  const [aiSummary, setAiSummary] = useState(null)
   const [translating, setTranslating] = useState(false)
   const [showTr, setShowTr] = useState(false)
+  const [showAI, setShowAI] = useState(false)
 
   useEffect(() => {
     fetchArticle(pubmedId).then(a => {
-      setArticle(a)
-      setLoading(false)
+      setArticle(a); setLoading(false)
       if (a?.searchTerms) fetchRelated(a.searchTerms, pubmedId).then(setRelated)
       if (a) {
-        const schema = {
-          '@context': 'https://schema.org',
-          '@type': 'ScholarlyArticle',
-          headline: a.title_en,
-          description: a.abstract_en?.slice(0, 200),
-          author: a.authors ? a.authors.split(', ').map(name => ({ '@type': 'Person', name })) : [],
-          datePublished: a.published_date,
-          isPartOf: { '@type': 'Periodical', name: a.journal },
-          url: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`,
-        }
-        const script = document.createElement('script')
-        script.type = 'application/ld+json'
-        script.text = JSON.stringify(schema)
-        document.head.appendChild(script)
+        const schema = { '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: a.title_en, description: a.abstract_en?.slice(0, 200), author: a.authors ? a.authors.split(', ').map(name => ({ '@type': 'Person', name })) : [], datePublished: a.published_date, isPartOf: { '@type': 'Periodical', name: a.journal }, url: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/` }
+        const script = document.createElement('script'); script.type = 'application/ld+json'; script.text = JSON.stringify(schema); document.head.appendChild(script)
       }
     })
-    fetchCitationCount(pubmedId).then(count => setCitationCount(count))
-    loadComments()
-    loadRatings()
+    fetchCitationCount(pubmedId).then(setCitationCount)
+    loadComments(); loadRatings()
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
       if (data?.user) { loadUsername(data.user.id); loadUserRating(data.user.id) }
@@ -204,10 +138,7 @@ export default function ArticlePage({ params }) {
 
   const loadRatings = async () => {
     const { data } = await supabase.from('ratings').select('rating').eq('pubmed_id', pubmedId)
-    if (data && data.length > 0) {
-      const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length
-      setAvgRating(avg); setTotalRatings(data.length)
-    }
+    if (data && data.length > 0) { const avg = data.reduce((s, r) => s + r.rating, 0) / data.length; setAvgRating(avg); setTotalRatings(data.length) }
   }
 
   const loadUserRating = async (userId) => {
@@ -222,18 +153,13 @@ export default function ArticlePage({ params }) {
   }
 
   const translateAbstract = async () => {
-    if (abstractTr) { setShowTr(!showTr); return }
+    if (abstractTr) { setShowTr(!showTr); setShowAI(false); return }
     setTranslating(true)
     try {
-      const res = await fetch('/api/translate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
-      })
+      const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
       const data = await res.json()
-      setTitleTr(data.title_tr)
-      setAbstractTr(data.abstract_tr)
-      setShowTr(true)
+      setTitleTr(data.title_tr); setAbstractTr(data.abstract_tr); setAiSummary(data.ai_summary)
+      setShowTr(true); setShowAI(false)
     } catch (err) { console.error(err) }
     finally { setTranslating(false) }
   }
@@ -256,14 +182,11 @@ export default function ArticlePage({ params }) {
     setComments(prev => prev.filter(c => c.id !== id))
   }
 
-  if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-      <div className="text-white/30">Yükleniyor...</div>
-    </div>
-  )
+  if (loading) return <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center"><div className="text-white/30">Yükleniyor...</div></div>
 
   const abstract = article?.abstract_en || ''
-  const sections = (showTr && abstractTr ? abstractTr : abstract).split('\n\n').filter(Boolean)
+  const displayAbstract = showTr && abstractTr ? abstractTr : abstract
+  const sections = displayAbstract.split('\n\n').filter(Boolean)
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -273,25 +196,21 @@ export default function ArticlePage({ params }) {
             <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
-          <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
-            ← Geri Dön
-          </button>
+          <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">← Geri Dön</button>
         </div>
       </header>
+
       <main className="max-w-3xl mx-auto px-4 py-12">
         {!article ? (
           <div className="text-center py-20 text-white/30">
-            <div className="text-5xl mb-4">🔭</div>
-            <p>Makale bulunamadı</p>
+            <div className="text-5xl mb-4">🔭</div><p>Makale bulunamadı</p>
             <button onClick={() => window.history.back()} className="mt-4 inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">Geri Dön</button>
           </div>
         ) : (
           <>
             <article>
               <div className="mb-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-2">
-                  {showTr && titleTr ? titleTr : article.title_en}
-                </h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-2">{showTr && titleTr ? titleTr : article.title_en}</h1>
                 {showTr && titleTr && <p className="text-white/40 text-sm mb-3">{article.title_en}</p>}
                 <div className="flex flex-wrap gap-2 text-xs text-white/40 mb-4">
                   {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
@@ -299,9 +218,7 @@ export default function ArticlePage({ params }) {
                   {article.authors && (
                     <div className="flex flex-wrap gap-2">
                       {article.authors.split(', ').map((author, i) => (
-                        <a key={i} href={`/author/${encodeURIComponent(author)}`} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg hover:border-blue-500/30 hover:text-blue-300 transition">
-                          👤 {author}
-                        </a>
+                        <a key={i} href={`/author/${encodeURIComponent(author)}`} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg hover:border-blue-500/30 hover:text-blue-300 transition">👤 {author}</a>
                       ))}
                     </div>
                   )}
@@ -314,42 +231,56 @@ export default function ArticlePage({ params }) {
                 </div>
                 {article.keywords?.length > 0 && (
                   <div className="flex flex-wrap gap-2">
-                    {article.keywords.map((k, i) => (
-                      <span key={i} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg text-xs">{k}</span>
-                    ))}
+                    {article.keywords.map((k, i) => <span key={i} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg text-xs">{k}</span>)}
                   </div>
                 )}
               </div>
 
               {abstract ? (
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                     <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">
-                      {showTr ? 'Özet (Türkçe)' : 'Abstract'}
+                      {showAI ? '🤖 AI Özeti' : showTr ? 'Özet (Türkçe)' : 'Abstract'}
                     </h2>
-                    <button onClick={translateAbstract} disabled={translating} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
-                      {translating ? 'Çevriliyor...' : showTr ? 'İngilizce Göster' : 'Türkçeye Çevir'}
-                    </button>
+                    <div className="flex gap-2 flex-wrap">
+                      <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
+                        {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
+                      </button>
+                      {(aiSummary || !translating) && abstractTr && (
+                        <button onClick={() => { setShowAI(!showAI); setShowTr(showAI) }} className={`px-3 py-1.5 border rounded-xl text-xs font-medium transition ${showAI ? 'bg-purple-500/30 border-purple-500/50 text-purple-200' : 'bg-purple-500/20 border-purple-500/20 text-purple-300 hover:bg-purple-500/30'}`}>
+                          🤖 AI Özet
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  {sections.length > 1 ? (
-                    <div className="flex flex-col gap-4">
-                      {sections.map((section, i) => {
-                        const colonIdx = section.indexOf(':')
-                        if (colonIdx > 0 && colonIdx < 30) {
-                          const label = section.slice(0, colonIdx)
-                          const content = section.slice(colonIdx + 1).trim()
-                          return (
-                            <div key={i}>
-                              <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
-                              <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
-                            </div>
-                          )
-                        }
-                        return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
-                      })}
+
+                  {showAI && aiSummary ? (
+                    <div className="flex flex-col gap-3">
+                      {aiSummary.split('\n').filter(Boolean).map((line, i) => (
+                        <p key={i} className="text-sm text-white/80 leading-relaxed">{line}</p>
+                      ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
+                    sections.length > 1 ? (
+                      <div className="flex flex-col gap-4">
+                        {sections.map((section, i) => {
+                          const colonIdx = section.indexOf(':')
+                          if (colonIdx > 0 && colonIdx < 30) {
+                            const label = section.slice(0, colonIdx)
+                            const content = section.slice(colonIdx + 1).trim()
+                            return (
+                              <div key={i}>
+                                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
+                                <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
+                              </div>
+                            )
+                          }
+                          return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
+                    )
                   )}
 
                   <div className="mt-6 pt-4 border-t border-white/5">
@@ -364,16 +295,10 @@ export default function ArticlePage({ params }) {
                           ))}
                         </div>
                         {selectedRating > 0 && selectedRating !== userRating && (
-                          <button onClick={handleRate} className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition cursor-pointer">
-                            Onayla ✓
-                          </button>
+                          <button onClick={handleRate} className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-medium hover:bg-yellow-500/30 transition">Onayla ✓</button>
                         )}
                         {ratingSuccess && <span className="text-green-400 text-xs">Puanlandı!</span>}
-                        {totalRatings > 0 && (
-                          <span className="text-xs text-white/40">
-                            Ortalama: <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span> ({totalRatings} oy)
-                          </span>
-                        )}
+                        {totalRatings > 0 && <span className="text-xs text-white/40">Ortalama: <span className="text-yellow-400 font-semibold">{avgRating.toFixed(1)}</span> ({totalRatings} oy)</span>}
                       </div>
                     ) : (
                       <a href="/auth" className="text-xs text-blue-400 hover:text-blue-300 transition">Puan vermek için giriş yapın →</a>
@@ -387,15 +312,9 @@ export default function ArticlePage({ params }) {
               )}
 
               <div className="flex flex-wrap gap-3 mb-12">
-                <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
-                  PubMed'de Görüntüle →
-                </a>
-                <button onClick={() => printArticle(article, titleTr, abstractTr)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">
-                  📄 PDF Kaydet
-                </button>
-                <button onClick={() => window.history.back()} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
-                  ← Geri Dön
-                </button>
+                <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">PubMed'de Görüntüle →</a>
+                <button onClick={() => printArticle(article, titleTr, abstractTr)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">📄 PDF Kaydet</button>
+                <button onClick={() => window.history.back()} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">← Geri Dön</button>
               </div>
             </article>
 
@@ -441,9 +360,7 @@ export default function ArticlePage({ params }) {
                         <span className="text-blue-400 text-xs font-semibold">👤 {comment.username}</span>
                         <div className="flex items-center gap-3">
                           <span className="text-white/25 text-xs">{new Date(comment.created_at).toLocaleDateString('tr-TR')}</span>
-                          {user && user.id === comment.user_id && (
-                            <button onClick={() => deleteComment(comment.id)} className="text-white/25 hover:text-red-400 transition text-xs">✕</button>
-                          )}
+                          {user && user.id === comment.user_id && <button onClick={() => deleteComment(comment.id)} className="text-white/25 hover:text-red-400 transition text-xs">✕</button>}
                         </div>
                       </div>
                       <p className="text-sm text-white/70 leading-relaxed">{comment.content}</p>

@@ -59,6 +59,85 @@ async function fetchRelated(searchTerms, currentId) {
   }
 }
 
+const downloadPDF = (article, titleTr, abstractTr) => {
+  const title = titleTr || article.title_en
+  const abstract = abstractTr || article.abstract_en || 'Özet mevcut değil.'
+  
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; color: #1a1a1a; line-height: 1.6; }
+  .header { border-bottom: 2px solid #3b82f6; padding-bottom: 16px; margin-bottom: 24px; }
+  .badge { background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: bold; color: #111827; margin: 0 0 12px; line-height: 1.4; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: #6b7280; }
+  .meta span { background: #f3f4f6; padding: 3px 10px; border-radius: 12px; }
+  .section { margin: 24px 0; }
+  .section-title { font-size: 11px; font-weight: bold; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .abstract { font-size: 14px; color: #374151; }
+  .abstract-part { margin-bottom: 12px; }
+  .abstract-label { font-size: 11px; font-weight: bold; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 6px; }
+  .keyword { background: #f5f3ff; color: #7c3aed; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; text-align: center; }
+  .pubmed-link { color: #3b82f6; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="badge">BİLİMCE</div>
+  <h1>${title}</h1>
+  <div class="meta">
+    ${article.journal ? `<span>📖 ${article.journal}</span>` : ''}
+    ${article.published_date ? `<span>📅 ${article.published_date.slice(0,4)}</span>` : ''}
+    ${article.authors ? `<span>👤 ${article.authors}</span>` : ''}
+    <span>🔬 PubMed ID: ${article.pubmed_id}</span>
+  </div>
+</div>
+
+${article.keywords?.length > 0 ? `
+<div class="section">
+  <div class="section-title">Anahtar Kelimeler</div>
+  <div class="keywords">
+    ${article.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+  </div>
+</div>` : ''}
+
+<div class="section">
+  <div class="section-title">${titleTr ? 'Özet (Türkçe)' : 'Abstract'}</div>
+  <div class="abstract">
+    ${abstract.split('\n\n').map(section => {
+      const colonIdx = section.indexOf(':')
+      if (colonIdx > 0 && colonIdx < 30) {
+        const label = section.slice(0, colonIdx)
+        const content = section.slice(colonIdx + 1).trim()
+        return `<div class="abstract-part"><span class="abstract-label">${label}</span>${content}</div>`
+      }
+      return `<div class="abstract-part">${section}</div>`
+    }).join('')}
+  </div>
+</div>
+
+<div class="footer">
+  <p>Kaynak: <a class="pubmed-link" href="https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/">https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</a></p>
+  <p>BİLİMCE - bilimce.vercel.app | ${new Date().toLocaleDateString('tr-TR')}</p>
+</div>
+</body>
+</html>`
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `bilimce-${article.pubmed_id}.html`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
 export default function ArticlePage({ params }) {
   const pubmedId = params.id
   const [article, setArticle] = useState(null)
@@ -85,7 +164,6 @@ export default function ArticlePage({ params }) {
       setArticle(a)
       setLoading(false)
       if (a?.searchTerms) fetchRelated(a.searchTerms, pubmedId).then(setRelated)
-      // Structured data ekle
       if (a) {
         const schema = {
           '@context': 'https://schema.org',
@@ -96,7 +174,6 @@ export default function ArticlePage({ params }) {
           datePublished: a.published_date,
           isPartOf: { '@type': 'Periodical', name: a.journal },
           url: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`,
-          sameAs: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`,
         }
         const script = document.createElement('script')
         script.type = 'application/ld+json'
@@ -182,11 +259,11 @@ export default function ArticlePage({ params }) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
-      <header className="border-b border-white/5 px-6 py-4">
+      <header className="border-b border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="/" className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">B</a>
-            <span className="font-bold text-lg tracking-tight text-white">BİLİMCE</span>
+          <div className="flex items-center gap-2">
+            <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
+            <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
           <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">
             ← Geri Dön
@@ -288,11 +365,17 @@ export default function ArticlePage({ params }) {
                 </div>
               )}
 
-              <div className="flex gap-3 mb-12">
-                <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
+              <div className="flex flex-wrap gap-3 mb-12">
+                <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
                   PubMed'de Görüntüle →
                 </a>
-                <button onClick={() => window.history.back()} className="px-6 py-3 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
+                <button
+                  onClick={() => downloadPDF(article, titleTr, abstractTr)}
+                  className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition"
+                >
+                  📄 İndir
+                </button>
+                <button onClick={() => window.history.back()} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
                   ← Geri Dön
                 </button>
               </div>

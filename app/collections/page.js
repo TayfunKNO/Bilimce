@@ -18,6 +18,7 @@ export default function CollectionsPage() {
   const [selectedCollection, setSelectedCollection] = useState(null)
   const [collectionArticles, setCollectionArticles] = useState([])
   const [articlesLoading, setArticlesLoading] = useState(false)
+  const [copied, setCopied] = useState(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -29,8 +30,6 @@ export default function CollectionsPage() {
 
   const loadCollections = async (userId) => {
     const { data } = await supabase.from('collections').select('*').eq('user_id', userId).order('created_at', { ascending: false })
-    
-    // Her koleksiyonun makale sayısını al
     if (data) {
       const withCounts = await Promise.all(data.map(async (col) => {
         const { count } = await supabase.from('collection_articles').select('id', { count: 'exact' }).eq('collection_id', col.id)
@@ -53,6 +52,20 @@ export default function CollectionsPage() {
     await supabase.from('collections').delete().eq('id', id)
     setCollections(prev => prev.filter(c => c.id !== id))
     if (selectedCollection?.id === id) setSelectedCollection(null)
+  }
+
+  const togglePublic = async (col) => {
+    const newVal = !col.is_public
+    await supabase.from('collections').update({ is_public: newVal }).eq('id', col.id)
+    setCollections(prev => prev.map(c => c.id === col.id ? { ...c, is_public: newVal } : c))
+    if (selectedCollection?.id === col.id) setSelectedCollection(prev => ({ ...prev, is_public: newVal }))
+  }
+
+  const copyShareLink = (col) => {
+    const link = `${window.location.origin}/collection/${col.id}`
+    navigator.clipboard.writeText(link)
+    setCopied(col.id)
+    setTimeout(() => setCopied(null), 2000)
   }
 
   const openCollection = async (col) => {
@@ -100,15 +113,13 @@ export default function CollectionsPage() {
             {showCreate && (
               <div className="bg-white/3 border border-white/10 rounded-2xl p-6 mb-6">
                 <h2 className="text-sm font-semibold text-white/60 mb-4">Yeni Koleksiyon</h2>
-                <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Koleksiyon adı (örn: Kanser Araştırmaları)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm mb-3" />
+                <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="Koleksiyon adı" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm mb-3" />
                 <input type="text" value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Açıklama (isteğe bağlı)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm mb-4" />
                 <div className="flex gap-3">
                   <button onClick={createCollection} disabled={creating || !newName.trim()} className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
                     {creating ? 'Oluşturuluyor...' : 'Oluştur'}
                   </button>
-                  <button onClick={() => setShowCreate(false)} className="px-6 py-2.5 bg-white/5 border border-white/10 text-white/50 rounded-xl text-sm hover:text-white transition">
-                    İptal
-                  </button>
+                  <button onClick={() => setShowCreate(false)} className="px-6 py-2.5 bg-white/5 border border-white/10 text-white/50 rounded-xl text-sm hover:text-white transition">İptal</button>
                 </div>
               </div>
             )}
@@ -123,13 +134,26 @@ export default function CollectionsPage() {
               <div className="grid gap-4">
                 {collections.map(col => (
                   <div key={col.id} className="bg-white/3 border border-white/5 rounded-2xl p-5 hover:border-white/10 transition-all">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start justify-between gap-4 mb-3">
                       <button onClick={() => openCollection(col)} className="flex-1 text-left">
-                        <h2 className="font-semibold text-white mb-1 hover:text-blue-300 transition">{col.name}</h2>
-                        {col.description && <p className="text-white/40 text-sm mb-2">{col.description}</p>}
+                        <div className="flex items-center gap-2 mb-1">
+                          <h2 className="font-semibold text-white hover:text-blue-300 transition">{col.name}</h2>
+                          {col.is_public && <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg text-xs">🌐 Herkese Açık</span>}
+                        </div>
+                        {col.description && <p className="text-white/40 text-sm mb-1">{col.description}</p>}
                         <p className="text-xs text-blue-400/60">{col.article_count} makale</p>
                       </button>
-                      <button onClick={() => deleteCollection(col.id)} className="text-white/25 hover:text-red-400 transition text-xs shrink-0 mt-1">✕</button>
+                      <button onClick={() => deleteCollection(col.id)} className="text-white/20 hover:text-red-400 transition text-xs shrink-0">✕</button>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      <button onClick={() => togglePublic(col)} className={`px-3 py-1.5 rounded-xl text-xs transition border ${col.is_public ? 'bg-green-500/20 border-green-500/30 text-green-300 hover:bg-green-500/30' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>
+                        {col.is_public ? '🌐 Herkese Açık' : '🔒 Gizli'}
+                      </button>
+                      {col.is_public && (
+                        <button onClick={() => copyShareLink(col)} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs hover:bg-blue-500/30 transition">
+                          {copied === col.id ? '✓ Kopyalandı!' : '🔗 Linki Kopyala'}
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -138,10 +162,22 @@ export default function CollectionsPage() {
           </>
         ) : (
           <>
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-6 flex-wrap">
               <button onClick={() => setSelectedCollection(null)} className="text-white/40 hover:text-white transition text-sm">← Koleksiyonlar</button>
               <span className="text-white/20">/</span>
               <h1 className="text-xl font-bold text-white">{selectedCollection.name}</h1>
+              {selectedCollection.is_public && <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg text-xs">🌐 Herkese Açık</span>}
+            </div>
+
+            <div className="flex gap-2 mb-6 flex-wrap">
+              <button onClick={() => togglePublic(selectedCollection)} className={`px-4 py-2 rounded-xl text-xs transition border ${selectedCollection.is_public ? 'bg-green-500/20 border-green-500/30 text-green-300' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>
+                {selectedCollection.is_public ? '🌐 Herkese Açık' : '🔒 Gizli'}
+              </button>
+              {selectedCollection.is_public && (
+                <button onClick={() => copyShareLink(selectedCollection)} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs hover:bg-blue-500/30 transition">
+                  {copied === selectedCollection.id ? '✓ Kopyalandı!' : '🔗 Linki Kopyala'}
+                </button>
+              )}
             </div>
 
             {articlesLoading && (
@@ -159,9 +195,7 @@ export default function CollectionsPage() {
               <div className="text-center py-20 text-white/30">
                 <div className="text-5xl mb-4">📄</div>
                 <p>Bu koleksiyonda makale yok</p>
-                <a href="/" className="mt-4 inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">
-                  Araştırmalara Göz At
-                </a>
+                <a href="/" className="mt-4 inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">Araştırmalara Göz At</a>
               </div>
             )}
 

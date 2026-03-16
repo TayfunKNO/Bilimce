@@ -32,7 +32,7 @@ const UI_TEXT = {
     filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
-    clearFilters: 'Filtreleri Temizle', invite: 'Davet Et',
+    clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
     features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
     startSearch: 'Aramaya Başla →',
     stats: ['35M+', '6', '100%'],
@@ -52,7 +52,7 @@ const UI_TEXT = {
     filters: 'Filters', allTime: 'All Time', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
-    clearFilters: 'Clear Filters', invite: 'Invite',
+    clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
     features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
     startSearch: 'Start Searching →',
     stats: ['35M+', '6', '100%'],
@@ -72,7 +72,7 @@ const UI_TEXT = {
     filters: 'Filter', allTime: 'Alle Zeit', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
     allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
-    clearFilters: 'Filter löschen', invite: 'Einladen',
+    clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
     features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
     startSearch: 'Suchen →',
     stats: ['35M+', '6', '100%'],
@@ -92,7 +92,7 @@ const UI_TEXT = {
     filters: 'Filtres', allTime: 'Tout', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
     allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
-    clearFilters: 'Effacer', invite: 'Inviter',
+    clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
     features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
     startSearch: 'Rechercher →',
     stats: ['35M+', '6', '100%'],
@@ -112,7 +112,7 @@ const UI_TEXT = {
     filters: 'Filtros', allTime: 'Todo', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
-    clearFilters: 'Limpiar', invite: 'Invitar',
+    clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
     features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
     startSearch: 'Buscar →',
     stats: ['35M+', '6', '100%'],
@@ -132,7 +132,7 @@ const UI_TEXT = {
     filters: 'فلاتر', allTime: 'الكل', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
-    clearFilters: 'مسح', invite: 'دعوة',
+    clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
     features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
     startSearch: 'ابدأ البحث →',
     stats: ['35M+', '6', '100%'],
@@ -141,6 +141,19 @@ const UI_TEXT = {
 }
 
 const FEATURE_ICONS = ['🌐', '🔍', '⚖️', '📊', '💬', '📚']
+
+const POPULAR_TOPICS = [
+  { slug: 'kanser', icon: '🎗️', label: 'Kanser' },
+  { slug: 'alzheimer', icon: '🧠', label: 'Alzheimer' },
+  { slug: 'diyabet', icon: '💉', label: 'Diyabet' },
+  { slug: 'depresyon', icon: '🧘', label: 'Depresyon' },
+  { slug: 'kalp', icon: '❤️', label: 'Kalp' },
+  { slug: 'covid', icon: '🦠', label: 'COVID-19' },
+  { slug: 'obezite', icon: '⚖️', label: 'Obezite' },
+  { slug: 'yapay-zeka', icon: '🤖', label: 'Yapay Zeka' },
+  { slug: 'hipertansiyon', icon: '🩺', label: 'Hipertansiyon' },
+  { slug: 'kanser-tedavisi', icon: '💊', label: 'Kanser Tedavisi' },
+]
 
 const CATEGORIES = [
   { id: 'all', icon: '🔬' },
@@ -693,14 +706,35 @@ export default function Home() {
           </div>
         )}
 
+        {/* Popüler Konular */}
+        {!searched && (
+          <div className="mb-10">
+            <p className={`${textMuted} text-sm font-medium mb-4`}>🏷️ {t.topics}</p>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {POPULAR_TOPICS.map(topic => (
+                <a key={topic.slug} href={`/topic/${topic.slug}`} className={`${cardBg} border ${border} rounded-xl p-4 text-center hover:border-blue-500/20 transition-all group`}>
+                  <div className="text-2xl mb-2">{topic.icon}</div>
+                  <div className={`text-xs font-medium ${text} group-hover:text-blue-400 transition`}>{topic.label}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Trending */}
         {!searched && trending.length > 0 && (
           <div className="mb-10">
             <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {trending.map((item, i) => (
-                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className={`${cardBg} border ${border} rounded-xl p-4 text-left hover:border-blue-500/20 transition-all group`}>
+                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
+                  <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
+                    <span className="text-xs text-white/30">Bu hafta</span>
+                  </div>
                   <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
-                  <p className="text-xs text-blue-400/60">{item.count}+ makale bu hafta</p>
+                  <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
                 </button>
               ))}
             </div>

@@ -109,11 +109,8 @@ export default function ArticlePage({ params }) {
   const [ratingSuccess, setRatingSuccess] = useState(false)
   const [abstractTr, setAbstractTr] = useState(null)
   const [titleTr, setTitleTr] = useState(null)
-  const [aiSummary, setAiSummary] = useState(null)
   const [translating, setTranslating] = useState(false)
-  const [loadingAI, setLoadingAI] = useState(false)
   const [showTr, setShowTr] = useState(false)
-  const [showAI, setShowAI] = useState(false)
 
   useEffect(() => {
     fetchArticle(pubmedId).then(a => {
@@ -154,7 +151,7 @@ export default function ArticlePage({ params }) {
   }
 
   const translateAbstract = async () => {
-    if (abstractTr) { setShowTr(!showTr); setShowAI(false); return }
+    if (abstractTr) { setShowTr(!showTr); return }
     setTranslating(true)
     try {
       const res = await fetch('/api/translate', {
@@ -163,32 +160,9 @@ export default function ArticlePage({ params }) {
         body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }),
       })
       const data = await res.json()
-      setTitleTr(data.title_tr)
-      setAbstractTr(data.abstract_tr)
-      setShowTr(true)
-      setShowAI(false)
+      setTitleTr(data.title_tr); setAbstractTr(data.abstract_tr); setShowTr(true)
     } catch (err) { console.error(err) }
     finally { setTranslating(false) }
-  }
-
-  const loadAISummary = async () => {
-    if (aiSummary) { setShowAI(!showAI); if (!showAI) setShowTr(false); else setShowTr(true); return }
-    setLoadingAI(true)
-    setShowAI(true)
-    setShowTr(false)
-    try {
-      const res = await fetch('/api/ai-summary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ abstract: article.abstract_en }),
-      })
-      const data = await res.json()
-      setAiSummary(data.summary || 'Özet oluşturulamadı.')
-    } catch (err) {
-      console.error(err)
-      setAiSummary('Özet oluşturulamadı.')
-    }
-    finally { setLoadingAI(false) }
   }
 
   const loadComments = async () => {
@@ -240,7 +214,11 @@ export default function ArticlePage({ params }) {
                 <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-2">{showTr && titleTr ? titleTr : article.title_en}</h1>
                 {showTr && titleTr && <p className="text-white/40 text-sm mb-3">{article.title_en}</p>}
                 <div className="flex flex-wrap gap-2 text-xs text-white/40 mb-4">
-                  {article.journal && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.journal}</span>}
+                  {article.journal && (
+                    <a href={`/journal/${encodeURIComponent(article.journal)}`} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg hover:border-green-500/30 hover:text-green-300 transition">
+                      📖 {article.journal}
+                    </a>
+                  )}
                   {article.published_date && <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg">{article.published_date.slice(0,4)}</span>}
                   {article.authors && (
                     <div className="flex flex-wrap gap-2">
@@ -267,54 +245,32 @@ export default function ArticlePage({ params }) {
                 <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
                   <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                     <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">
-                      {showAI ? '🤖 AI Özeti' : showTr ? 'Özet (Türkçe)' : 'Abstract'}
+                      {showTr ? 'Özet (Türkçe)' : 'Abstract'}
                     </h2>
-                    <div className="flex gap-2 flex-wrap">
-                      <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
-                        {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
-                      </button>
-                      
-                    </div>
+                    <button onClick={translateAbstract} disabled={translating} className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
+                      {translating ? 'Çevriliyor...' : showTr ? 'İngilizce' : 'Türkçe'}
+                    </button>
                   </div>
 
-                  {showAI ? (
-                    <div className="flex flex-col gap-3">
-                      {loadingAI ? (
-                        <div className="flex items-center gap-3 py-4">
-                          <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.15s'}}></div>
-                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay:'0.3s'}}></div>
-                          </div>
-                          <span className="text-white/40 text-sm">AI özeti hazırlanıyor...</span>
-                        </div>
-                      ) : (
-                        aiSummary?.split('\n').filter(Boolean).map((line, i) => (
-                          <p key={i} className="text-sm text-white/80 leading-relaxed">{line}</p>
-                        ))
-                      )}
+                  {sections.length > 1 ? (
+                    <div className="flex flex-col gap-4">
+                      {sections.map((section, i) => {
+                        const colonIdx = section.indexOf(':')
+                        if (colonIdx > 0 && colonIdx < 30) {
+                          const label = section.slice(0, colonIdx)
+                          const content = section.slice(colonIdx + 1).trim()
+                          return (
+                            <div key={i}>
+                              <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
+                              <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
+                            </div>
+                          )
+                        }
+                        return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
+                      })}
                     </div>
                   ) : (
-                    sections.length > 1 ? (
-                      <div className="flex flex-col gap-4">
-                        {sections.map((section, i) => {
-                          const colonIdx = section.indexOf(':')
-                          if (colonIdx > 0 && colonIdx < 30) {
-                            const label = section.slice(0, colonIdx)
-                            const content = section.slice(colonIdx + 1).trim()
-                            return (
-                              <div key={i}>
-                                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
-                                <p className="text-sm text-white/80 leading-relaxed mt-1">{content}</p>
-                              </div>
-                            )
-                          }
-                          return <p key={i} className="text-sm text-white/80 leading-relaxed">{section}</p>
-                        })}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
-                    )
+                    <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
                   )}
 
                   <div className="mt-6 pt-4 border-t border-white/5">

@@ -32,7 +32,7 @@ const UI_TEXT = {
     filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
-    clearFilters: 'Filtreleri Temizle',
+    clearFilters: 'Filtreleri Temizle', invite: 'Davet Et',
     features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
     startSearch: 'Aramaya Başla →',
     stats: ['35M+', '6', '100%'],
@@ -52,7 +52,7 @@ const UI_TEXT = {
     filters: 'Filters', allTime: 'All Time', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
-    clearFilters: 'Clear Filters',
+    clearFilters: 'Clear Filters', invite: 'Invite',
     features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
     startSearch: 'Start Searching →',
     stats: ['35M+', '6', '100%'],
@@ -72,7 +72,7 @@ const UI_TEXT = {
     filters: 'Filter', allTime: 'Alle Zeit', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
     allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
-    clearFilters: 'Filter löschen',
+    clearFilters: 'Filter löschen', invite: 'Einladen',
     features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
     startSearch: 'Suchen →',
     stats: ['35M+', '6', '100%'],
@@ -92,7 +92,7 @@ const UI_TEXT = {
     filters: 'Filtres', allTime: 'Tout', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
     allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
-    clearFilters: 'Effacer',
+    clearFilters: 'Effacer', invite: 'Inviter',
     features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
     startSearch: 'Rechercher →',
     stats: ['35M+', '6', '100%'],
@@ -112,7 +112,7 @@ const UI_TEXT = {
     filters: 'Filtros', allTime: 'Todo', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
-    clearFilters: 'Limpiar',
+    clearFilters: 'Limpiar', invite: 'Invitar',
     features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
     startSearch: 'Buscar →',
     stats: ['35M+', '6', '100%'],
@@ -132,7 +132,7 @@ const UI_TEXT = {
     filters: 'فلاتر', allTime: 'الكل', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
-    clearFilters: 'مسح',
+    clearFilters: 'مسح', invite: 'دعوة',
     features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
     startSearch: 'ابدأ البحث →',
     stats: ['35M+', '6', '100%'],
@@ -508,6 +508,7 @@ export default function Home() {
                     <a href="/reading-list" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
                     <a href="/collections" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>📚 {t.collections}</a>
                     <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
+                    <a href="/invite" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
                     <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
@@ -585,17 +586,12 @@ export default function Home() {
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
           <div className="text-center mb-12">
-            {/* Hero */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-6">
-              <span>🔬</span>
-              <span>35M+ PubMed Makalesi</span>
-              <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-              <span>Ücretsiz</span>
+              <span>🔬</span><span>35M+ PubMed Makalesi</span>
+              <span className="w-1 h-1 bg-blue-400 rounded-full"></span><span>Ücretsiz</span>
             </div>
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
             <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed mb-8`}>{t.heroSub}</p>
-
-            {/* İstatistikler */}
             <div className="flex justify-center gap-8 mb-10">
               {t.stats.map((stat, i) => (
                 <div key={i} className="text-center">
@@ -604,8 +600,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-
-            {/* Özellik kartları */}
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
               {t.features.map((feature, i) => (
                 <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center`}>
@@ -614,8 +608,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-
-            {/* CTA butonu */}
             <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">
               {t.startSearch}
             </button>

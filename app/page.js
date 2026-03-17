@@ -35,8 +35,13 @@ const UI_TEXT = {
     clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
     features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
     startSearch: 'Aramaya Başla →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['PubMed Makalesi', 'Dil Desteği', 'Ücretsiz'],
+    stats: ['35M+', '6', 'Ücretsiz'],
+    statsLabel: ['PubMed Makalesi', 'Dil Desteği', 'Başlangıç'],
+    emailPlaceholder: 'email@adresin.com',
+    emailBtn: 'Abone Ol',
+    emailSuccess: '✓ Abone oldunuz!',
+    emailTitle: '📬 Yeni özelliklerden haberdar ol',
+    emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -55,8 +60,13 @@ const UI_TEXT = {
     clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
     features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
     startSearch: 'Start Searching →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['PubMed Articles', 'Languages', 'Free'],
+    stats: ['35M+', '6', 'Free'],
+    statsLabel: ['PubMed Articles', 'Languages', 'to start'],
+    emailPlaceholder: 'your@email.com',
+    emailBtn: 'Subscribe',
+    emailSuccess: '✓ Subscribed!',
+    emailTitle: '📬 Stay updated',
+    emailSub: 'Get weekly science digest and new features',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -75,8 +85,13 @@ const UI_TEXT = {
     clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
     features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
     startSearch: 'Suchen →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['Artikel', 'Sprachen', 'Kostenlos'],
+    stats: ['35M+', '6', 'Kostenlos'],
+    statsLabel: ['Artikel', 'Sprachen', 'Start'],
+    emailPlaceholder: 'ihre@email.de',
+    emailBtn: 'Abonnieren',
+    emailSuccess: '✓ Abonniert!',
+    emailTitle: '📬 Auf dem Laufenden bleiben',
+    emailSub: 'Wöchentliche Wissenschaftszusammenfassung',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -95,8 +110,13 @@ const UI_TEXT = {
     clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
     features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
     startSearch: 'Rechercher →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['Articles', 'Langues', 'Gratuit'],
+    stats: ['35M+', '6', 'Gratuit'],
+    statsLabel: ['Articles', 'Langues', 'Pour commencer'],
+    emailPlaceholder: 'votre@email.fr',
+    emailBtn: "S'abonner",
+    emailSuccess: '✓ Abonné!',
+    emailTitle: '📬 Restez informé',
+    emailSub: 'Résumé scientifique hebdomadaire',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -115,8 +135,13 @@ const UI_TEXT = {
     clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
     features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
     startSearch: 'Buscar →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['Artículos', 'Idiomas', 'Gratis'],
+    stats: ['35M+', '6', 'Gratis'],
+    statsLabel: ['Artículos', 'Idiomas', 'Para empezar'],
+    emailPlaceholder: 'tu@email.com',
+    emailBtn: 'Suscribirse',
+    emailSuccess: '✓ Suscrito!',
+    emailTitle: '📬 Mantente informado',
+    emailSub: 'Resumen semanal de ciencia',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -135,8 +160,13 @@ const UI_TEXT = {
     clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
     features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
     startSearch: 'ابدأ البحث →',
-    stats: ['35M+', '6', '100%'],
-    statsLabel: ['مقال', 'لغات', 'مجاني'],
+    stats: ['35M+', '6', 'مجاني'],
+    statsLabel: ['مقال', 'لغات', 'للبدء'],
+    emailPlaceholder: 'بريدك@email.com',
+    emailBtn: 'اشترك',
+    emailSuccess: '✓ تم الاشتراك!',
+    emailTitle: '📬 ابق على اطلاع',
+    emailSub: 'ملخص علمي أسبوعي',
   },
 }
 
@@ -251,6 +281,53 @@ const SCHEMA = {
     target: 'https://bilimce.vercel.app/?q={search_term_string}',
     'query-input': 'required name=search_term_string'
   }
+}
+
+function EmailForm({ dark, t }) {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async () => {
+    if (!email.trim() || !email.includes('@')) return
+    setLoading(true)
+    try {
+      await supabase.from('email_subscribers').upsert({ email: email.trim() })
+      setStatus('success')
+      setEmail('')
+    } catch { setStatus('error') }
+    setLoading(false)
+  }
+
+  const border = dark ? 'border-white/10' : 'border-black/10'
+  const inputBg = dark ? 'bg-white/5' : 'bg-black/5'
+  const textColor = dark ? 'text-white' : 'text-black'
+
+  return (
+    <div className="flex gap-2 max-w-sm mx-auto">
+      {status === 'success' ? (
+        <p className="text-green-400 text-sm font-medium w-full text-center py-3">{t.emailSuccess}</p>
+      ) : (
+        <>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+            placeholder={t.emailPlaceholder}
+            className={`flex-1 ${inputBg} border ${border} rounded-xl px-4 py-2.5 ${textColor} placeholder-white/25 outline-none text-sm`}
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={loading || !email.trim()}
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap"
+          >
+            {loading ? '...' : t.emailBtn}
+          </button>
+        </>
+      )}
+    </div>
+  )
 }
 
 export default function Home() {
@@ -496,22 +573,27 @@ export default function Home() {
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
-      <header className={`border-b ${border} px-3 py-3`}>
+
+      <header className={`border-b ${border} px-4 py-3 backdrop-blur-sm sticky top-0 z-30`} style={{ background: dark ? 'rgba(10,10,15,0.95)' : 'rgba(248,249,255,0.95)' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="B" className="w-7 h-7" />
-            <span className={`font-bold text-base tracking-tight ${text}`}>BİLİMCE</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.svg" alt="B" className="w-8 h-8" />
+            <span className={`font-black text-lg tracking-tight ${text}`}>BİLİMCE</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <button onClick={toggleTheme} style={{ fontSize: '11px', lineHeight: '1' }} className={`px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg transition hover:scale-110`}>{dark ? '🌤' : '🌑'}</button>
+          <div className="flex items-center gap-2">
+            <button onClick={toggleTheme} className={`px-3 py-2 ${dark ? 'bg-white/8 border-white/15 hover:bg-white/15' : 'bg-black/8 border-black/15 hover:bg-black/15'} border rounded-xl text-sm font-medium transition`}>
+              {dark ? '🌤' : '🌑'}
+            </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-1 px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
-                <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
+              <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-1.5 px-3 py-2 ${dark ? 'bg-white/8 border-white/15 text-white/70 hover:text-white hover:bg-white/15' : 'bg-black/8 border-black/15 text-black/70 hover:text-black hover:bg-black/15'} border rounded-xl text-sm font-medium transition`}>
+                <span>{currentLang?.flag}</span>
+                <span className="hidden sm:block">{currentLang?.label}</span>
+                <span className="text-xs opacity-60">▾</span>
               </button>
               {showLang && (
-                <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36`}>
+                <div className={`absolute right-0 top-11 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36 shadow-xl`}>
                   {LANGUAGES.map(l => (
-                    <button key={l.code} onClick={() => changeLang(l.code)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-xs hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>
+                    <button key={l.code} onClick={() => changeLang(l.code)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm font-medium hover:bg-white/5 transition ${lang === l.code ? 'text-blue-400' : dark ? 'text-white/70' : 'text-black/70'}`}>
                       <span>{l.flag}</span><span>{l.label}</span>
                     </button>
                   ))}
@@ -520,28 +602,32 @@ export default function Home() {
             </div>
             {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
-                <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition max-w-[140px]`}>
-                  <span>👤</span><span className="truncate">{displayName}</span>
-                  {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1 py-0.5 min-w-[16px] text-center leading-none shrink-0">{notifCount > 99 ? '99+' : notifCount}</span>}
-                  <span className="shrink-0">▾</span>
+                <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-2 px-3 py-2 ${dark ? 'bg-white/8 border-white/15 text-white/70 hover:text-white hover:bg-white/15' : 'bg-black/8 border-black/15 text-black/70 hover:text-black hover:bg-black/15'} border rounded-xl text-sm font-medium transition max-w-[160px]`}>
+                  <span>👤</span>
+                  <span className="truncate">{displayName}</span>
+                  {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none shrink-0 font-bold">{notifCount > 99 ? '99+' : notifCount}</span>}
+                  <span className="text-xs opacity-60 shrink-0">▾</span>
                 </button>
                 {showMenu && (
-                  <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-40`}>
-                    <a href="/profile" className={`flex items-center justify-between px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>
+                  <div className={`absolute right-0 top-11 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-44 shadow-xl`}>
+                    <a href="/profile" className={`flex items-center justify-between px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>
                       <span>👤 {t.profile}</span>
-                      {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{notifCount > 99 ? '99+' : notifCount}</span>}
+                      {notifCount > 0 && <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold">{notifCount > 99 ? '99+' : notifCount}</span>}
                     </a>
-                    <a href="/favorites" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>❤️ {t.favorites}</a>
-                    <a href="/reading-list" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
-                    <a href="/collections" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>📚 {t.collections}</a>
-                    <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
-                    <a href="/invite" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
-                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
+                    <a href="/favorites" className={`block px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>❤️ {t.favorites}</a>
+                    <a href="/reading-list" className={`block px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>🔖 {t.readingList}</a>
+                    <a href="/collections" className={`block px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>📚 {t.collections}</a>
+                    <a href="/community" className={`block px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
+                    <a href="/invite" className={`block px-4 py-3 text-sm font-medium ${dark ? 'text-white/70 hover:text-white hover:bg-white/5' : 'text-black/70 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
+                    <div className={`border-t ${border}`} />
+                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-sm font-medium text-red-400/70 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>
             ) : (
-              <a href="/auth" className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>{t.login}</a>
+              <a href="/auth" className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">
+                {t.login}
+              </a>
             )}
           </div>
         </div>
@@ -613,29 +699,29 @@ export default function Home() {
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-semibold mb-6">
               <span>🔬</span><span>35M+ PubMed Makalesi</span>
-              <span className="w-1 h-1 bg-blue-400 rounded-full"></span><span>Ücretsiz</span>
+              <span className="w-1 h-1 bg-blue-400 rounded-full"></span><span>Freemium</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
+            <h1 className="text-5xl sm:text-6xl font-black mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
             <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed mb-8`}>{t.heroSub}</p>
-            <div className="flex justify-center gap-8 mb-10">
+            <div className="flex justify-center gap-10 mb-10">
               {t.stats.map((stat, i) => (
                 <div key={i} className="text-center">
-                  <div className={`text-2xl font-bold ${text}`}>{stat}</div>
-                  <div className={`text-xs ${textMuted}`}>{t.statsLabel[i]}</div>
+                  <div className={`text-3xl font-black ${text}`}>{stat}</div>
+                  <div className={`text-xs font-medium ${textMuted} mt-1`}>{t.statsLabel[i]}</div>
                 </div>
               ))}
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
               {t.features.map((feature, i) => (
-                <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center`}>
+                <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center hover:border-blue-500/20 transition`}>
                   <div className="text-2xl mb-1">{FEATURE_ICONS[i]}</div>
-                  <div className={`text-xs ${textMuted} leading-tight`}>{feature}</div>
+                  <div className={`text-xs font-medium ${textMuted} leading-tight`}>{feature}</div>
                 </div>
               ))}
             </div>
-            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">
+            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-bold text-white hover:opacity-90 transition shadow-xl shadow-blue-500/30">
               {t.startSearch}
             </button>
           </div>
@@ -643,24 +729,24 @@ export default function Home() {
 
         <div className="mb-4">
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
-            <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
-              <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
-              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
+            <div className={`relative flex gap-2 ${inputBg} border rounded-2xl p-2`}>
+              <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm font-medium`} />
+              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2 border rounded-xl text-xs font-semibold transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/8 border-white/15 text-white/50 hover:text-white' : 'bg-black/8 border-black/15 text-black/50 hover:text-black'}`}>
                 ⚙️ {hasActiveFilters ? '●' : t.filters}
               </button>
-              <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
+              <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-bold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap shadow-lg shadow-blue-500/20">
                 {loading ? t.searching : t.search}
               </button>
             </div>
             {showSuggestions && suggestions.length > 0 && (
               <div className={`absolute top-full left-0 right-0 mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl overflow-hidden z-20 shadow-xl`}>
                 {recentSearches.filter(s => s.toLowerCase().includes(query.toLowerCase()) && s !== query).slice(0, 3).map((s, i) => (
-                  <button key={`r-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
+                  <button key={`r-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm font-medium ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
                     <span className="text-white/30">🕐</span><span>{s}</span>
                   </button>
                 ))}
                 {suggestions.filter(s => !recentSearches.includes(s)).map((s, i) => (
-                  <button key={`s-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
+                  <button key={`s-${i}`} onClick={() => selectSuggestion(s)} className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm font-medium ${dark ? 'text-white/70 hover:bg-white/5' : 'text-black/70 hover:bg-black/5'} transition`}>
                     <span className="text-white/30">🔍</span><span>{s}</span>
                   </button>
                 ))}
@@ -671,27 +757,27 @@ export default function Home() {
           {showFilters && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 Yayın Tarihi</p>
+                <p className={`text-xs font-bold ${textMuted} mb-2 uppercase tracking-wide`}>📅 Yayın Tarihi</p>
                 <div className="flex flex-wrap gap-2">
                   {PERIOD_OPTIONS.map(opt => (
-                    <button key={opt.id} onClick={() => setFilterPeriod(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterPeriod === opt.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
+                    <button key={opt.id} onClick={() => setFilterPeriod(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${filterPeriod === opt.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
                       {opt.label}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 Makale Türü</p>
+                <p className={`text-xs font-bold ${textMuted} mb-2 uppercase tracking-wide`}>📄 Makale Türü</p>
                 <div className="flex flex-wrap gap-2">
                   {TYPE_OPTIONS.map(opt => (
-                    <button key={opt.id} onClick={() => setFilterType(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterType === opt.id ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
+                    <button key={opt.id} onClick={() => setFilterType(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${filterType === opt.id ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
                       {opt.label}
                     </button>
                   ))}
                 </div>
               </div>
               {hasActiveFilters && (
-                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">✕ {t.clearFilters}</button>
+                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs font-semibold text-red-400/60 hover:text-red-400 transition">✕ {t.clearFilters}</button>
               )}
             </div>
           )}
@@ -699,7 +785,7 @@ export default function Home() {
 
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
           {CATEGORIES.map(cat => (
-            <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : `${dark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-black/5 border-black/5 hover:bg-black/10'} border`}`}>
+            <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2.5 rounded-xl text-lg whitespace-nowrap transition-all font-medium ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40 shadow-lg shadow-blue-500/10' : `${dark ? 'bg-white/5 border-white/8 hover:bg-white/10' : 'bg-black/5 border-black/8 hover:bg-black/10'} border`}`}>
               {cat.icon}
             </button>
           ))}
@@ -707,27 +793,27 @@ export default function Home() {
 
         {!searched && dailyArticle && (
           <div className="mb-8">
-            <p className={`${textMuted} text-sm font-medium mb-3`}>⭐ {t.dailyArticle}</p>
+            <p className={`${textMuted} text-sm font-bold mb-3 uppercase tracking-wide`}>⭐ {t.dailyArticle}</p>
             <a href={`/article/${dailyArticle.pubmed_id}`} className="block bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-5 hover:border-blue-500/40 transition-all group">
-              <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">{dailyTitleTr || dailyArticle.title_en}</p>
-              <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3">
+              <p className="font-bold text-white leading-snug mb-2 group-hover:text-blue-300 transition">{dailyTitleTr || dailyArticle.title_en}</p>
+              <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3 font-medium">
                 {dailyArticle.journal && <span>{dailyArticle.journal}</span>}
                 {dailyArticle.published_date && <span>{dailyArticle.published_date.slice(0,4)}</span>}
                 {dailyArticle.authors && <span>{dailyArticle.authors}</span>}
               </div>
-              <span className="text-xs text-blue-400 group-hover:text-blue-300 transition">{t.readMore}</span>
+              <span className="text-xs font-semibold text-blue-400 group-hover:text-blue-300 transition">{t.readMore}</span>
             </a>
           </div>
         )}
 
         {!searched && (
           <div className="mb-10">
-            <p className={`${textMuted} text-sm font-medium mb-4`}>🏷️ {t.topics}</p>
+            <p className={`${textMuted} text-sm font-bold mb-4 uppercase tracking-wide`}>🏷️ {t.topics}</p>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               {POPULAR_TOPICS.map(topic => (
-                <a key={topic.slug} href={`/topic/${topic.slug}`} className={`${cardBg} border ${border} rounded-xl p-4 text-center hover:border-blue-500/20 transition-all group`}>
+                <a key={topic.slug} href={`/topic/${topic.slug}`} className={`${cardBg} border ${border} rounded-xl p-4 text-center hover:border-blue-500/30 hover:bg-blue-500/5 transition-all group`}>
                   <div className="text-2xl mb-2">{topic.icon}</div>
-                  <div className={`text-xs font-medium ${text} group-hover:text-blue-400 transition`}>{topic.label}</div>
+                  <div className={`text-xs font-semibold ${text} group-hover:text-blue-400 transition`}>{topic.label}</div>
                 </a>
               ))}
             </div>
@@ -736,17 +822,17 @@ export default function Home() {
 
         {!searched && trending.length > 0 && (
           <div className="mb-10">
-            <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
+            <p className={`${textMuted} text-sm font-bold mb-4 uppercase tracking-wide`}>🔥 {t.trending}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {trending.map((item, i) => (
                 <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
                   <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
-                    <span className="text-xs text-white/30">Bu hafta</span>
+                    <span className="text-xs font-medium text-white/30">Bu hafta</span>
                   </div>
-                  <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
-                  <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
+                  <p className={`text-sm font-bold ${text} leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
+                  <p className="text-xs font-medium text-blue-400/60">{item.count}+ yeni makale</p>
                 </button>
               ))}
             </div>
@@ -767,17 +853,17 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
-              <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
+              <p className={`${textMuted} text-sm font-semibold`}>{articles.length} {t.found}</p>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
-                {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
+                {autoTranslating && <p className="text-blue-400/60 text-xs font-medium animate-pulse">{t.translating}</p>}
                 <div className="relative">
-                  <button onClick={() => setShowSort(!showSort)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
+                  <button onClick={() => setShowSort(!showSort)} className={`flex items-center gap-2 px-4 py-2 ${dark ? 'bg-white/8 border-white/15 text-white/60 hover:text-white' : 'bg-black/8 border-black/15 text-black/60 hover:text-black'} border rounded-xl text-xs font-semibold transition`}>
                     <span>↕</span><span>{sortBy === 'newest' ? t.newest : t.oldest}</span>
                   </button>
                   {showSort && (
-                    <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36`}>
-                      <button onClick={() => handleSortChange('newest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'newest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.newest}</button>
-                      <button onClick={() => handleSortChange('oldest')} className={`w-full px-4 py-3 text-left text-xs hover:bg-white/5 transition ${sortBy === 'oldest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.oldest}</button>
+                    <div className={`absolute right-0 top-10 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-xl overflow-hidden z-10 min-w-36 shadow-xl`}>
+                      <button onClick={() => handleSortChange('newest')} className={`w-full px-4 py-3 text-left text-xs font-semibold hover:bg-white/5 transition ${sortBy === 'newest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.newest}</button>
+                      <button onClick={() => handleSortChange('oldest')} className={`w-full px-4 py-3 text-left text-xs font-semibold hover:bg-white/5 transition ${sortBy === 'oldest' ? 'text-blue-400' : dark ? 'text-white/60' : 'text-black/60'}`}>{t.oldest}</button>
                     </div>
                   )}
                 </div>
@@ -790,22 +876,22 @@ export default function Home() {
                   <article key={article.pubmed_id || i} className={`${cardBg} border ${isInCompare ? 'border-blue-500/40' : border} rounded-2xl p-6 hover:border-blue-500/20 transition-all`}>
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <div className="flex-1">
-                        <a href={`/article/${article.pubmed_id}`} className={`font-semibold ${text} leading-snug mb-1 hover:text-blue-400 transition block`}>{article.title_tr || article.title_en}</a>
+                        <a href={`/article/${article.pubmed_id}`} className={`font-bold ${text} leading-snug mb-1 hover:text-blue-400 transition block`}>{article.title_tr || article.title_en}</a>
                         {article.title_tr && lang !== 'en' && <p className={`${textMuted} text-sm leading-snug mt-1`}>{article.title_en}</p>}
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{favorites[article.pubmed_id] ? '❤️' : '🤍'}</button>
-                        <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-lg hover:scale-110 transition-transform">{readingList[article.pubmed_id] ? '🔖' : '📌'}</button>
-                        <button onClick={() => shareArticle(article)} className="text-lg hover:scale-110 transition-transform">📤</button>
-                        <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
+                        <button onClick={() => toggleFavorite(article)} disabled={favLoading[article.pubmed_id]} className="text-xl hover:scale-110 transition-transform">{favorites[article.pubmed_id] ? '❤️' : '🤍'}</button>
+                        <button onClick={() => toggleReadingList(article)} disabled={readLoading[article.pubmed_id]} className="text-xl hover:scale-110 transition-transform">{readingList[article.pubmed_id] ? '🔖' : '📌'}</button>
+                        <button onClick={() => shareArticle(article)} className="text-xl hover:scale-110 transition-transform">📤</button>
+                        <span className="text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                       </div>
                     </div>
-                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-4`}>
+                    <div className={`flex flex-wrap gap-2 text-xs font-medium ${textMuted} mb-4`}>
                       {article.journal && <span>{article.journal}</span>}
                       {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
                       {article.authors && <span>{article.authors}</span>}
                       {article.pub_types?.slice(0,1).map((pt, j) => (
-                        <span key={j} className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg">{pt}</span>
+                        <span key={j} className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg font-semibold">{pt}</span>
                       ))}
                     </div>
                     {expandedId === i && (
@@ -814,16 +900,16 @@ export default function Home() {
                       </div>
                     )}
                     <div className="flex gap-2 flex-wrap">
-                      <button onClick={() => translateArticle(article, i)} disabled={translating[i]} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition disabled:opacity-50">
+                      <button onClick={() => translateArticle(article, i)} disabled={translating[i]} className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-bold hover:bg-blue-500/30 transition disabled:opacity-50">
                         {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                       </button>
                       {article.pubmed_id && (
-                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>{t.source}</a>
+                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/8 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/8 text-black/40 hover:text-black/70'} border rounded-xl text-xs font-semibold transition`}>{t.source}</a>
                       )}
                       {user && (
-                        <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">📚</button>
+                        <button onClick={() => setCollectionPopup(article)} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/8 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/8 text-black/40'} border rounded-xl text-xs font-semibold transition`}>📚</button>
                       )}
-                      <button onClick={() => toggleCompare(article)} disabled={!isInCompare && compareList.length >= 2} className={`px-4 py-2 border rounded-xl text-xs transition disabled:opacity-30 ${isInCompare ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/40 hover:text-white/70'}`}>
+                      <button onClick={() => toggleCompare(article)} disabled={!isInCompare && compareList.length >= 2} className={`px-4 py-2 border rounded-xl text-xs font-bold transition disabled:opacity-30 ${isInCompare ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : dark ? 'bg-white/5 border-white/8 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/8 text-black/40'}`}>
                         {isInCompare ? '✓ Seçildi' : `⚖️ ${t.compare}`}
                       </button>
                     </div>
@@ -837,25 +923,32 @@ export default function Home() {
         {!loading && searched && articles.length === 0 && (
           <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>
-            <p>{t.noResult}</p>
+            <p className="font-semibold">{t.noResult}</p>
           </div>
         )}
 
         {!searched && (
           <div className="mt-8 text-center">
-            <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
+            <p className={`${textMuted} text-sm font-semibold mb-4`}>{t.popular}</p>
             <div className="flex flex-wrap justify-center gap-2">
               {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
-                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-sm transition`}>{s}</button>
+                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/8 text-white/50 hover:text-white/80 hover:bg-white/10' : 'bg-black/5 border-black/8 text-black/50 hover:text-black/80'} border rounded-xl text-sm font-medium transition`}>{s}</button>
               ))}
             </div>
           </div>
         )}
       </main>
 
-      <footer className={`border-t ${border} py-8 mt-20`}>
-        <div className={`max-w-5xl mx-auto px-4 text-center ${textMuted} text-xs`}>
-          BİLİMCE - PubMed - {t.subtitle}
+      <footer className={`border-t ${border} py-12 mt-20`}>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <h3 className={`text-xl font-black ${text} mb-2`}>{t.emailTitle}</h3>
+            <p className={`${textMuted} text-sm font-medium mb-5`}>{t.emailSub}</p>
+            <EmailForm dark={dark} t={t} />
+          </div>
+          <div className={`text-center ${textMuted} text-xs font-medium border-t ${border} pt-6`}>
+            BİLİMCE - PubMed - {t.subtitle}
+          </div>
         </div>
       </footer>
     </div>

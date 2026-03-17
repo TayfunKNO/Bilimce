@@ -8,21 +8,24 @@ const supabase = createClient(
 )
 
 const FREE_FEATURES = [
-  { label: 'PubMed araması', included: true },
-  { label: 'Türkçe çeviri', included: true },
+  { label: 'Günlük 10 arama hakkı', included: true },
+  { label: 'Max 20 sonuç / arama', included: true },
+  { label: 'Günde 5 özet çevirisi', included: true },
   { label: 'Makale favorileme', included: true },
   { label: 'Okuma listesi', included: true },
   { label: 'Topluluk', included: true },
   { label: '3 koleksiyon', included: true },
-  { label: 'Makale karşılaştırma', included: true },
   { label: 'Atıf sayısı', included: true },
+  { label: 'Sınırsız arama', included: false },
+  { label: '100 sonuç / arama', included: false },
+  { label: 'Sınırsız çeviri', included: false },
   { label: 'Sınırsız koleksiyon', included: false },
   { label: 'Gelişmiş filtreler', included: false },
   { label: 'PDF dışa aktarma', included: false },
   { label: 'Öncelikli destek', included: false },
   { label: 'Premium rozet 🏆', included: false },
-  { label: 'Reklamsız deneyim', included: false },
 ]
+
 
 const PREMIUM_FEATURES = [
   { label: 'PubMed araması', included: true },

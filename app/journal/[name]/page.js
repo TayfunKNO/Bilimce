@@ -1,18 +1,3 @@
-export async function generateMetadata({ params }) {
-  const name = decodeURIComponent(params.name)
-  return {
-    title: `${name} - Bilimsel Makaleler | BİLİMCE`,
-    description: `${name} dergisindeki en güncel bilimsel makaleleri Türkçe okuyun. PubMed'den otomatik çeviri ile.`,
-    keywords: `${name}, ${name} makalesi, ${name} araştırması, pubmed dergi, bilimsel makale`,
-    openGraph: {
-      title: `${name} - BİLİMCE`,
-      description: `${name} dergisindeki makaleleri Türkçe okuyun.`,
-      url: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}`,
-    },
-    alternates: { canonical: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}` },
-  }
-}
-
 'use client'
 import { useState, useEffect } from 'react'
 
@@ -34,6 +19,7 @@ export default function JournalPage({ params }) {
   const [sortBy, setSortBy] = useState('newest')
 
   useEffect(() => {
+    document.title = `${journalName} - Bilimsel Makaleler | BİLİMCE`
     fetchJournalArticles(journalName)
   }, [journalName])
 
@@ -103,51 +89,3 @@ export default function JournalPage({ params }) {
           <p className="text-white/40 text-sm">
             {loading ? 'Yükleniyor...' : `${articles.length} makale bulundu`}
             {autoTranslating && <span className="text-blue-400/60 ml-2 animate-pulse">· Çevriliyor...</span>}
-          </p>
-        </div>
-
-        {!loading && articles.length > 0 && (
-          <div className="flex justify-end mb-4">
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white/60 text-xs outline-none">
-              <option value="newest">En Yeni</option>
-              <option value="oldest">En Eski</option>
-            </select>
-          </div>
-        )}
-
-        {loading && (
-          <div className="grid gap-4">
-            {[1,2,3].map(i => (
-              <div key={i} className="bg-white/3 border border-white/5 rounded-2xl p-6 animate-pulse">
-                <div className="h-4 bg-white/10 rounded w-3/4 mb-3"></div>
-                <div className="h-3 bg-white/5 rounded w-full"></div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!loading && articles.length === 0 && (
-          <div className="text-center py-20 text-white/30">
-            <div className="text-5xl mb-4">📖</div>
-            <p>Bu dergi için makale bulunamadı</p>
-          </div>
-        )}
-
-        {!loading && sorted.length > 0 && (
-          <div className="grid gap-4">
-            {sorted.map(article => (
-              <a key={article.pubmed_id} href={`/article/${article.pubmed_id}`} className="bg-white/3 border border-white/5 rounded-2xl p-5 hover:border-blue-500/20 transition-all block">
-                <p className="font-semibold text-white leading-snug mb-1 hover:text-blue-300 transition">{article.title_tr || article.title_en}</p>
-                {article.title_tr && <p className="text-white/30 text-xs leading-snug mb-2">{article.title_en}</p>}
-                <div className="flex flex-wrap gap-3 text-xs text-white/40">
-                  {article.published_date && <span>📅 {article.published_date.slice(0,4)}</span>}
-                  {article.authors && <span>👤 {article.authors}</span>}
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
-      </main>
-    </div>
-  )
-}

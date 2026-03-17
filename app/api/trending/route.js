@@ -1,5 +1,16 @@
+let cache = null
+let cacheTime = null
+const CACHE_DURATION = 3600 * 1000 // 1 saat
+
 export async function GET() {
   try {
+    // Cache kontrolü
+    if (cache && cacheTime && Date.now() - cacheTime < CACHE_DURATION) {
+      return Response.json({ trending: cache }, {
+        headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200' }
+      })
+    }
+
     const topics = [
       { en: 'artificial intelligence medicine', tr: 'Yapay Zeka ve Tıp' },
       { en: 'cancer immunotherapy', tr: 'Kanser İmmünoterapisi' },
@@ -17,7 +28,9 @@ export async function GET() {
 
     const results = await Promise.all(topics.map(async (topic) => {
       try {
-        const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(topic.en)}&mindate=${dateStr}&datetype=pdat&retmode=json&retmax=1`)
+        const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(topic.en)}&mindate=${dateStr}&datetype=pdat&retmode=json&retmax=1`, {
+          next: { revalidate: 3600 }
+        })
         const data = await res.json()
         const count = parseInt(data.esearchresult?.count || 0)
         return { topic: topic.tr, query: topic.en, count }
@@ -27,7 +40,15 @@ export async function GET() {
     }))
 
     results.sort((a, b) => b.count - a.count)
-    return Response.json({ trending: results.slice(0, 6) })
+    const trending = results.slice(0, 6)
+
+    // Cache'e kaydet
+    cache = trending
+    cacheTime = Date.now()
+
+    return Response.json({ trending }, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200' }
+    })
   } catch (err) {
     return Response.json({ trending: [] }, { status: 500 })
   }

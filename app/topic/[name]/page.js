@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+'use client'
+import { useState, useEffect } from 'react'
 
 const TOPIC_INFO = {
   'kanser': { en: 'cancer', icon: '🎗️', desc: 'Kanser araştırmaları ve tedavi yöntemleri', title: 'Kanser Araştırmaları' },
@@ -12,25 +13,6 @@ const TOPIC_INFO = {
   'kanser-tedavisi': { en: 'cancer treatment', icon: '💊', desc: 'Kanser tedavi yöntemleri araştırmaları', title: 'Kanser Tedavisi Araştırmaları' },
   'yapay-zeka': { en: 'artificial intelligence medicine', icon: '🤖', desc: 'Tıpta yapay zeka uygulamaları araştırmaları', title: 'Tıpta Yapay Zeka Araştırmaları' },
 }
-
-export async function generateMetadata({ params }) {
-  const slug = decodeURIComponent(params.name).toLowerCase()
-  const info = TOPIC_INFO[slug] || { title: slug, desc: `${slug} bilimsel araştırmaları` }
-  return {
-    title: `${info.title} - BİLİMCE`,
-    description: `${info.desc}. PubMed'deki en güncel ${slug} makalelerini Türkçe okuyun.`,
-    keywords: `${slug}, ${slug} araştırması, ${slug} makalesi, pubmed ${slug}, bilimsel araştırma`,
-    openGraph: {
-      title: `${info.title} - BİLİMCE`,
-      description: `${info.desc}. PubMed'deki en güncel makaleleri Türkçe okuyun.`,
-      url: `https://bilimce.vercel.app/topic/${slug}`,
-    },
-    alternates: { canonical: `https://bilimce.vercel.app/topic/${slug}` },
-  }
-}
-
-'use client'
-import { useState, useEffect } from 'react'
 
 const translateOne = async (text) => {
   if (!text) return null
@@ -52,6 +34,7 @@ export default function TopicPage({ params }) {
   const [filterType, setFilterType] = useState('')
 
   useEffect(() => {
+    document.title = `${topicInfo.title} - BİLİMCE`
     fetchTopicArticles(topicInfo.en)
   }, [topicSlug])
 
@@ -128,7 +111,7 @@ export default function TopicPage({ params }) {
       <main className="max-w-3xl mx-auto px-4 py-12">
         <div className="mb-8">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center text-3xl mb-4">{topicInfo.icon}</div>
-          <h1 className="text-2xl font-bold text-white mb-1 capitalize">{topicInfo.title || topicSlug}</h1>
+          <h1 className="text-2xl font-bold text-white mb-1">{topicInfo.title || topicSlug}</h1>
           <p className="text-white/40 text-sm mb-1">{topicInfo.desc}</p>
           <p className="text-white/30 text-xs">
             {loading ? 'Yükleniyor...' : `${articles.length} makale bulundu`}

@@ -1,12 +1,12 @@
 export async function generateMetadata({ params }) {
   const name = decodeURIComponent(params.name)
   return {
-    title: `${name} Makaleleri - BİLİMCE`,
-    description: `${name} dergisindeki en güncel bilimsel makaleleri Türkçe okuyun. PubMed'den otomatik çeviri.`,
-    keywords: `${name}, ${name} makalesi, bilimsel dergi, pubmed, araştırma`,
+    title: `${name} - Bilimsel Makaleler | BİLİMCE`,
+    description: `${name} dergisindeki en güncel bilimsel makaleleri Türkçe okuyun. PubMed'den otomatik çeviri ile.`,
+    keywords: `${name}, ${name} makalesi, ${name} araştırması, pubmed dergi, bilimsel makale`,
     openGraph: {
-      title: `${name} Makaleleri - BİLİMCE`,
-      description: `${name} dergisindeki en güncel makaleleri Türkçe okuyun.`,
+      title: `${name} - BİLİMCE`,
+      description: `${name} dergisindeki makaleleri Türkçe okuyun.`,
       url: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}`,
     },
     alternates: { canonical: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}` },

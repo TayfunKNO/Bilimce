@@ -1,3 +1,34 @@
+import { Metadata } from 'next'
+
+const TOPIC_INFO = {
+  'kanser': { en: 'cancer', icon: '🎗️', desc: 'Kanser araştırmaları ve tedavi yöntemleri', title: 'Kanser Araştırmaları' },
+  'alzheimer': { en: 'alzheimer', icon: '🧠', desc: 'Alzheimer hastalığı araştırmaları', title: 'Alzheimer Araştırmaları' },
+  'diyabet': { en: 'diabetes', icon: '💉', desc: 'Diyabet ve metabolik hastalıklar araştırmaları', title: 'Diyabet Araştırmaları' },
+  'depresyon': { en: 'depression', icon: '🧘', desc: 'Depresyon ve ruh sağlığı araştırmaları', title: 'Depresyon Araştırmaları' },
+  'kalp': { en: 'cardiovascular', icon: '❤️', desc: 'Kardiyovasküler hastalıklar araştırmaları', title: 'Kalp Hastalıkları Araştırmaları' },
+  'covid': { en: 'covid-19', icon: '🦠', desc: 'COVID-19 araştırmaları ve tedavi yöntemleri', title: 'COVID-19 Araştırmaları' },
+  'obezite': { en: 'obesity', icon: '⚖️', desc: 'Obezite ve metabolizma araştırmaları', title: 'Obezite Araştırmaları' },
+  'hipertansiyon': { en: 'hypertension', icon: '🩺', desc: 'Hipertansiyon araştırmaları', title: 'Hipertansiyon Araştırmaları' },
+  'kanser-tedavisi': { en: 'cancer treatment', icon: '💊', desc: 'Kanser tedavi yöntemleri araştırmaları', title: 'Kanser Tedavisi Araştırmaları' },
+  'yapay-zeka': { en: 'artificial intelligence medicine', icon: '🤖', desc: 'Tıpta yapay zeka uygulamaları araştırmaları', title: 'Tıpta Yapay Zeka Araştırmaları' },
+}
+
+export async function generateMetadata({ params }) {
+  const slug = decodeURIComponent(params.name).toLowerCase()
+  const info = TOPIC_INFO[slug] || { title: slug, desc: `${slug} bilimsel araştırmaları` }
+  return {
+    title: `${info.title} - BİLİMCE`,
+    description: `${info.desc}. PubMed'deki en güncel ${slug} makalelerini Türkçe okuyun.`,
+    keywords: `${slug}, ${slug} araştırması, ${slug} makalesi, pubmed ${slug}, bilimsel araştırma`,
+    openGraph: {
+      title: `${info.title} - BİLİMCE`,
+      description: `${info.desc}. PubMed'deki en güncel makaleleri Türkçe okuyun.`,
+      url: `https://bilimce.vercel.app/topic/${slug}`,
+    },
+    alternates: { canonical: `https://bilimce.vercel.app/topic/${slug}` },
+  }
+}
+
 'use client'
 import { useState, useEffect } from 'react'
 
@@ -11,22 +42,9 @@ const translateOne = async (text) => {
   } catch { return null }
 }
 
-const TOPIC_INFO = {
-  'kanser': { en: 'cancer', icon: '🎗️', desc: 'Kanser araştırmaları ve tedavi yöntemleri' },
-  'alzheimer': { en: 'alzheimer', icon: '🧠', desc: 'Alzheimer hastalığı araştırmaları' },
-  'diyabet': { en: 'diabetes', icon: '💉', desc: 'Diyabet ve metabolik hastalıklar' },
-  'depresyon': { en: 'depression', icon: '🧘', desc: 'Depresyon ve ruh sağlığı araştırmaları' },
-  'kalp': { en: 'cardiovascular', icon: '❤️', desc: 'Kardiyovasküler hastalıklar' },
-  'covid': { en: 'covid-19', icon: '🦠', desc: 'COVID-19 araştırmaları' },
-  'obezite': { en: 'obesity', icon: '⚖️', desc: 'Obezite ve metabolizma araştırmaları' },
-  'hipertansiyon': { en: 'hypertension', icon: '🩺', desc: 'Hipertansiyon araştırmaları' },
-  'kanser-tedavisi': { en: 'cancer treatment', icon: '💊', desc: 'Kanser tedavi yöntemleri' },
-  'yapay-zeka': { en: 'artificial intelligence medicine', icon: '🤖', desc: 'Tıpta yapay zeka uygulamaları' },
-}
-
 export default function TopicPage({ params }) {
   const topicSlug = decodeURIComponent(params.name).toLowerCase()
-  const topicInfo = TOPIC_INFO[topicSlug] || { en: topicSlug, icon: '🔬', desc: `${topicSlug} araştırmaları` }
+  const topicInfo = TOPIC_INFO[topicSlug] || { en: topicSlug, icon: '🔬', desc: `${topicSlug} araştırmaları`, title: topicSlug }
   const [articles, setArticles] = useState([])
   const [loading, setLoading] = useState(true)
   const [autoTranslating, setAutoTranslating] = useState(false)
@@ -100,7 +118,7 @@ export default function TopicPage({ params }) {
       <header className="border-b border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
+            <a href="/"><img src="/logo.svg" alt="B" className="w-7 h-7" /></a>
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
           <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">← Geri Dön</button>
@@ -110,7 +128,7 @@ export default function TopicPage({ params }) {
       <main className="max-w-3xl mx-auto px-4 py-12">
         <div className="mb-8">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/10 flex items-center justify-center text-3xl mb-4">{topicInfo.icon}</div>
-          <h1 className="text-2xl font-bold text-white mb-1 capitalize">{topicSlug}</h1>
+          <h1 className="text-2xl font-bold text-white mb-1 capitalize">{topicInfo.title || topicSlug}</h1>
           <p className="text-white/40 text-sm mb-1">{topicInfo.desc}</p>
           <p className="text-white/30 text-xs">
             {loading ? 'Yükleniyor...' : `${articles.length} makale bulundu`}
@@ -118,7 +136,6 @@ export default function TopicPage({ params }) {
           </p>
         </div>
 
-        {/* Filtreler */}
         <div className="flex gap-2 mb-6 flex-wrap">
           <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white/60 text-xs outline-none">
             <option value="newest">En Yeni</option>
@@ -132,7 +149,6 @@ export default function TopicPage({ params }) {
           </select>
         </div>
 
-        {/* Popüler konular */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
           {Object.entries(TOPIC_INFO).map(([slug, info]) => (
             <a key={slug} href={`/topic/${slug}`} className={`px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition border ${topicSlug === slug ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : 'bg-white/5 border-white/5 text-white/40 hover:text-white'}`}>

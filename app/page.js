@@ -240,6 +240,19 @@ const AbstractDisplay = ({ text, noAbstract, dark }) => {
   )
 }
 
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'BİLİMCE',
+  url: 'https://bilimce.vercel.app',
+  description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://bilimce.vercel.app/?q={search_term_string}',
+    'query-input': 'required name=search_term_string'
+  }
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -482,11 +495,11 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
       <header className={`border-b ${border} px-3 py-3`}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="B" className="w-7 h-7" />
-
             <span className={`font-bold text-base tracking-tight ${text}`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -707,7 +720,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Popüler Konular */}
         {!searched && (
           <div className="mb-10">
             <p className={`${textMuted} text-sm font-medium mb-4`}>🏷️ {t.topics}</p>
@@ -722,7 +734,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Trending */}
         {!searched && trending.length > 0 && (
           <div className="mb-10">
             <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>

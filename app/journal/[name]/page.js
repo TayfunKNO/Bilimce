@@ -1,3 +1,18 @@
+export async function generateMetadata({ params }) {
+  const name = decodeURIComponent(params.name)
+  return {
+    title: `${name} Makaleleri - BİLİMCE`,
+    description: `${name} dergisindeki en güncel bilimsel makaleleri Türkçe okuyun. PubMed'den otomatik çeviri.`,
+    keywords: `${name}, ${name} makalesi, bilimsel dergi, pubmed, araştırma`,
+    openGraph: {
+      title: `${name} Makaleleri - BİLİMCE`,
+      description: `${name} dergisindeki en güncel makaleleri Türkçe okuyun.`,
+      url: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}`,
+    },
+    alternates: { canonical: `https://bilimce.vercel.app/journal/${encodeURIComponent(name)}` },
+  }
+}
+
 'use client'
 import { useState, useEffect } from 'react'
 
@@ -47,7 +62,6 @@ export default function JournalPage({ params }) {
       setArticles(results)
       setLoading(false)
 
-      // Türkçe çeviri
       setAutoTranslating(true)
       const updated = [...results]
       for (let g = 0; g < updated.length; g += 5) {
@@ -75,7 +89,7 @@ export default function JournalPage({ params }) {
       <header className="border-b border-white/5 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
+            <a href="/"><img src="/logo.svg" alt="B" className="w-7 h-7" /></a>
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
           <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">← Geri Dön</button>

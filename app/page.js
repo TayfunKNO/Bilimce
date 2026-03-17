@@ -42,6 +42,12 @@ const UI_TEXT = {
     emailSuccess: '✓ Abone oldunuz!',
     emailTitle: '📬 Yeni özelliklerden haberdar ol',
     emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
+    searchLimit: 'Günlük arama limitine ulaştınız (10/10)',
+    translateLimit: 'Günlük çeviri limitine ulaştınız (5/5)',
+    premiumRequired: 'Bu özellik Premium üyelik gerektirir',
+    goPremiun: '👑 Premium\'a Geç',
+    searchesLeft: 'arama hakkın kaldı',
+    translatesLeft: 'çeviri hakkın kaldı',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -67,6 +73,12 @@ const UI_TEXT = {
     emailSuccess: '✓ Subscribed!',
     emailTitle: '📬 Stay updated',
     emailSub: 'Get weekly science digest and new features',
+    searchLimit: 'Daily search limit reached (10/10)',
+    translateLimit: 'Daily translation limit reached (5/5)',
+    premiumRequired: 'This feature requires Premium',
+    goPremiun: '👑 Go Premium',
+    searchesLeft: 'searches left',
+    translatesLeft: 'translations left',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -92,6 +104,12 @@ const UI_TEXT = {
     emailSuccess: '✓ Abonniert!',
     emailTitle: '📬 Auf dem Laufenden bleiben',
     emailSub: 'Wöchentliche Wissenschaftszusammenfassung',
+    searchLimit: 'Tageslimit erreicht (10/10)',
+    translateLimit: 'Übersetzungslimit erreicht (5/5)',
+    premiumRequired: 'Premium erforderlich',
+    goPremiun: '👑 Premium',
+    searchesLeft: 'Suchen übrig',
+    translatesLeft: 'Übersetzungen übrig',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -117,6 +135,12 @@ const UI_TEXT = {
     emailSuccess: '✓ Abonné!',
     emailTitle: '📬 Restez informé',
     emailSub: 'Résumé scientifique hebdomadaire',
+    searchLimit: 'Limite atteinte (10/10)',
+    translateLimit: 'Limite traduction (5/5)',
+    premiumRequired: 'Premium requis',
+    goPremiun: '👑 Premium',
+    searchesLeft: 'recherches restantes',
+    translatesLeft: 'traductions restantes',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -142,6 +166,12 @@ const UI_TEXT = {
     emailSuccess: '✓ Suscrito!',
     emailTitle: '📬 Mantente informado',
     emailSub: 'Resumen semanal de ciencia',
+    searchLimit: 'Límite alcanzado (10/10)',
+    translateLimit: 'Límite traducción (5/5)',
+    premiumRequired: 'Se requiere Premium',
+    goPremiun: '👑 Premium',
+    searchesLeft: 'búsquedas restantes',
+    translatesLeft: 'traducciones restantes',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -167,6 +197,12 @@ const UI_TEXT = {
     emailSuccess: '✓ تم الاشتراك!',
     emailTitle: '📬 ابق على اطلاع',
     emailSub: 'ملخص علمي أسبوعي',
+    searchLimit: 'تم الوصول للحد (10/10)',
+    translateLimit: 'تم الوصول لحد الترجمة (5/5)',
+    premiumRequired: 'يتطلب Premium',
+    goPremiun: '👑 Premium',
+    searchesLeft: 'بحث متبقي',
+    translatesLeft: 'ترجمة متبقية',
   },
 }
 
@@ -353,10 +389,16 @@ export default function Home() {
   const [showFilters, setShowFilters] = useState(false)
   const [filterPeriod, setFilterPeriod] = useState('allTime')
   const [filterType, setFilterType] = useState('')
+  const [isPremium, setIsPremium] = useState(false)
+  const [searchCount, setSearchCount] = useState(0)
+  const [translateCount, setTranslateCount] = useState(0)
+  const [limitPopup, setLimitPopup] = useState(null)
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
   const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
+  const SEARCH_LIMIT = 10
+  const TRANSLATE_LIMIT = 5
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang')
@@ -367,7 +409,11 @@ export default function Home() {
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
-      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
+      if (data?.user) {
+        loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id)
+        checkNotifications(data.user.id); loadCollections(data.user.id)
+        loadUsage(data.user.id)
+      }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
     fetch('/api/daily').then(r => r.json()).then(async d => {
@@ -378,6 +424,26 @@ export default function Home() {
       }
     })
   }, [])
+
+  const loadUsage = async (userId) => {
+    try {
+      const res = await fetch(`/api/usage?userId=${userId}`)
+      const data = await res.json()
+      setIsPremium(data.isPremium || false)
+      setSearchCount(data.searchCount || 0)
+      setTranslateCount(data.translateCount || 0)
+    } catch {}
+  }
+
+  const incrementUsage = async (type) => {
+    if (!user) return
+    try {
+      const res = await fetch('/api/usage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, type }) })
+      const data = await res.json()
+      if (type === 'search') setSearchCount(data.count || 0)
+      if (type === 'translate') setTranslateCount(data.count || 0)
+    } catch {}
+  }
 
   const loadCollections = async (userId) => {
     const { data } = await supabase.from('collections').select('*').eq('user_id', userId).order('created_at', { ascending: false })
@@ -493,13 +559,32 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
+
+    // Arama limiti kontrolü (sadece giriş yapmış free kullanıcılar)
+    if (user && !isPremium && searchCount >= SEARCH_LIMIT) {
+      setLimitPopup('search'); return
+    }
+
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
+
+    // Filtre kontrolü — premium gerektirir
+    const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
+    if (hasAdvancedFilters && !isPremium && user) {
+      setLimitPopup('filters'); setLoading(false); return
+    }
+
     const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
+    const resultLimit = isPremium ? 100 : 20
+
     try {
-      const results = await searchPubMed(q, 100, activeFilters)
+      const results = await searchPubMed(q, resultLimit, activeFilters)
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted); setLoading(false); saveSearchHistory(q)
+
+      // Kullanım sayacını artır
+      if (user) await incrementUsage('search')
+
       if (lang !== 'en') {
         setAutoTranslating(true)
         const updated = [...sorted]
@@ -512,7 +597,7 @@ export default function Home() {
         setAutoTranslating(false)
       }
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
-  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
+  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType, user, isPremium, searchCount])
 
   const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
@@ -524,6 +609,12 @@ export default function Home() {
 
   const translateArticle = async (article, index) => {
     if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
+
+    // Çeviri limiti kontrolü
+    if (user && !isPremium && translateCount >= TRANSLATE_LIMIT) {
+      setLimitPopup('translate'); return
+    }
+
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
@@ -531,6 +622,7 @@ export default function Home() {
       const updated = [...articlesRef.current]
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
       updateArticles(updated); setExpandedId(index)
+      if (user) await incrementUsage('translate')
     } catch (err) { console.error(err) }
     finally { setTranslating(prev => ({ ...prev, [index]: false })) }
   }
@@ -559,6 +651,23 @@ export default function Home() {
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
 
+      {/* Limit popup */}
+      {limitPopup && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4" onClick={() => setLimitPopup(null)}>
+          <div className="bg-[#1a1a2e] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
+            <div className="text-4xl mb-4">👑</div>
+            <h2 className="text-xl font-bold text-white mb-2">
+              {limitPopup === 'search' ? t.searchLimit : limitPopup === 'translate' ? t.translateLimit : t.premiumRequired}
+            </h2>
+            <p className="text-white/50 text-sm mb-6">Premium üyelik ile sınırsız kullanım yapabilirsiniz.</p>
+            <a href="/premium" className="block w-full px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl text-sm font-bold text-black hover:opacity-90 transition mb-3">
+              {t.goPremiun}
+            </a>
+            <button onClick={() => setLimitPopup(null)} className="text-white/30 text-sm hover:text-white transition">Kapat</button>
+          </div>
+        </div>
+      )}
+
       <header className={`border-b ${border} px-3 py-3 sticky top-0 z-30`} style={{ background: dark ? 'rgba(10,10,15,0.97)' : 'rgba(248,249,255,0.97)' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 shrink-0">
@@ -566,7 +675,17 @@ export default function Home() {
             <span className={`font-bold text-base tracking-tight ${text} whitespace-nowrap`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition hover:scale-105`}>
+            {user && !isPremium && (
+              <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">
+                👑 Premium
+              </a>
+            )}
+            {isPremium && (
+              <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold">
+                👑 Premium
+              </span>
+            )}
+            <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition`}>
               {dark ? '🌤' : '🌑'}
             </button>
             <div className="relative" onClick={e => e.stopPropagation()}>
@@ -601,6 +720,7 @@ export default function Home() {
                     <a href="/collections" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>📚 {t.collections}</a>
                     <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
                     <a href="/invite" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
+                    <a href="/premium" className="block px-4 py-3 text-xs text-yellow-400/70 hover:text-yellow-400 hover:bg-white/5 transition">👑 Premium</a>
                     <div className={`border-t ${border}`} />
                     <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
@@ -709,12 +829,26 @@ export default function Home() {
           </div>
         )}
 
+        {/* Kullanım göstergesi */}
+        {user && !isPremium && searched && (
+          <div className="max-w-2xl mx-auto mb-4 flex items-center justify-between px-1">
+            <div className="flex items-center gap-4 text-xs text-white/30">
+              <span>🔍 {SEARCH_LIMIT - searchCount} {t.searchesLeft}</span>
+              <span>📝 {TRANSLATE_LIMIT - translateCount} {t.translatesLeft}</span>
+            </div>
+            <a href="/premium" className="text-xs text-yellow-400/60 hover:text-yellow-400 transition">👑 Premium →</a>
+          </div>
+        )}
+
         <div className="mb-4">
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
               <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
-              <button onClick={() => setShowFilters(!showFilters)} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
-                ⚙️ {hasActiveFilters ? '●' : t.filters}
+              <button onClick={() => {
+                if (!isPremium && user && hasActiveFilters) { setLimitPopup('filters'); return }
+                setShowFilters(!showFilters)
+              }} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
+                {!isPremium && user ? '👑' : '⚙️'} {hasActiveFilters ? '●' : t.filters}
               </button>
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
@@ -736,7 +870,7 @@ export default function Home() {
             )}
           </div>
 
-          {showFilters && (
+          {showFilters && (isPremium || !user) && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
                 <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 Yayın Tarihi</p>
@@ -835,7 +969,10 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
-              <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
+              <div>
+                <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
+                {!isPremium && user && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 sonuç · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
+              </div>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
                 {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
                 <div className="relative">

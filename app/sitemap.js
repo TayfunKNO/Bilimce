@@ -1,3 +1,4 @@
+export const revalidate = 0
 export default function sitemap() {
   const topics = [
     'kanser', 'alzheimer', 'diyabet', 'depresyon', 'kalp',

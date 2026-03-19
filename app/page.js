@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, memo } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { searchPubMed } from '../lib/pubmed'
 
@@ -23,7 +23,7 @@ const UI_TEXT = {
     found: 'araştırma bulundu', translating: 'Başlıklar çevriliyor...', noResult: 'Sonuç bulunamadı',
     popular: 'Popüler aramalar', newest: 'En Yeni', oldest: 'En Eski',
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
-    source: 'Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
+    source: 'Bilimsel Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
     heroSub: 'Dünya genelindeki milyonlarca bilimsel araştırmaya anında erişin.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
@@ -34,27 +34,22 @@ const UI_TEXT = {
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
     clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
     features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
-    startSearch: 'Aramaya Başla →',
+    startSearch: 'Aramaya Başla →', back: '← Geri',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['PubMed Makalesi', 'Dil Desteği', ''],
-    emailPlaceholder: 'email@adresin.com',
-    emailBtn: 'Abone Ol',
-    emailSuccess: '✓ Abone oldunuz!',
-    emailTitle: '📬 Yeni özelliklerden haberdar ol',
-    emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
-    searchLimit: 'Günlük arama limitine ulaştınız (10/10)',
-    translateLimit: 'Günlük çeviri limitine ulaştınız (5/5)',
-    premiumRequired: 'Bu özellik Premium üyelik gerektirir',
-    goPremiun: '👑 Premium\'a Geç',
-    searchesLeft: 'arama hakkın kaldı',
-    translatesLeft: 'çeviri hakkın kaldı',
+    emailPlaceholder: 'email@adresin.com', emailBtn: 'Abone Ol', emailSuccess: '✓ Abone oldunuz!',
+    emailTitle: '📬 Yeni özelliklerden haberdar ol', emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
+    searchLimit: 'Günlük arama limitine ulaştınız (10/10)', translateLimit: 'Günlük çeviri limitine ulaştınız (5/5)',
+    premiumRequired: 'Bu özellik Premium üyelik gerektirir', goPremiun: '👑 Premium\'a Geç',
+    searchesLeft: 'arama hakkın kaldı', translatesLeft: 'çeviri hakkın kaldı',
+    sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
     found: 'research found', translating: 'Translating titles...', noResult: 'No results found',
     popular: 'Popular searches', newest: 'Newest', oldest: 'Oldest',
     translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
-    source: 'Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
+    source: 'Scientific Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Access millions of scientific research instantly.',
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
@@ -65,27 +60,22 @@ const UI_TEXT = {
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
     clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
     features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
-    startSearch: 'Start Searching →',
+    startSearch: 'Start Searching →', back: '← Back',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['PubMed Articles', 'Languages', ''],
-    emailPlaceholder: 'your@email.com',
-    emailBtn: 'Subscribe',
-    emailSuccess: '✓ Subscribed!',
-    emailTitle: '📬 Stay updated',
-    emailSub: 'Get weekly science digest and new features',
-    searchLimit: 'Daily search limit reached (10/10)',
-    translateLimit: 'Daily translation limit reached (5/5)',
-    premiumRequired: 'This feature requires Premium',
-    goPremiun: '👑 Go Premium',
-    searchesLeft: 'searches left',
-    translatesLeft: 'translations left',
+    emailPlaceholder: 'your@email.com', emailBtn: 'Subscribe', emailSuccess: '✓ Subscribed!',
+    emailTitle: '📬 Stay updated', emailSub: 'Get weekly science digest and new features',
+    searchLimit: 'Daily search limit reached (10/10)', translateLimit: 'Daily translation limit reached (5/5)',
+    premiumRequired: 'This feature requires Premium', goPremiun: '👑 Go Premium',
+    searchesLeft: 'searches left', translatesLeft: 'translations left',
+    sourceLabel: 'Source: PubMed · NIH National Library of Medicine',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
     found: 'Studien gefunden', translating: 'Übersetzen...', noResult: 'Keine Ergebnisse',
     popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
     translateRead: 'Übersetzen & Lesen', read: 'Lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
-    source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
+    source: 'Wissenschaftliche Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
     subtitle: 'Wissenschaft', hero: 'Wissenschaft entdecken',
     heroSub: 'Millionen wissenschaftlicher Artikel sofort abrufen.',
     noAbstract: 'Keine Zusammenfassung.', trending: 'Trending', readingList: 'Leseliste',
@@ -96,27 +86,22 @@ const UI_TEXT = {
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
     clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
     features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
-    startSearch: 'Suchen →',
+    startSearch: 'Suchen →', back: '← Zurück',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['Artikel', 'Sprachen', ''],
-    emailPlaceholder: 'ihre@email.de',
-    emailBtn: 'Abonnieren',
-    emailSuccess: '✓ Abonniert!',
-    emailTitle: '📬 Auf dem Laufenden bleiben',
-    emailSub: 'Wöchentliche Wissenschaftszusammenfassung',
-    searchLimit: 'Tageslimit erreicht (10/10)',
-    translateLimit: 'Übersetzungslimit erreicht (5/5)',
-    premiumRequired: 'Premium erforderlich',
-    goPremiun: '👑 Premium',
-    searchesLeft: 'Suchen übrig',
-    translatesLeft: 'Übersetzungen übrig',
+    emailPlaceholder: 'ihre@email.de', emailBtn: 'Abonnieren', emailSuccess: '✓ Abonniert!',
+    emailTitle: '📬 Auf dem Laufenden bleiben', emailSub: 'Wöchentliche Wissenschaftszusammenfassung',
+    searchLimit: 'Tageslimit erreicht (10/10)', translateLimit: 'Übersetzungslimit erreicht (5/5)',
+    premiumRequired: 'Premium erforderlich', goPremiun: '👑 Premium',
+    searchesLeft: 'Suchen übrig', translatesLeft: 'Übersetzungen übrig',
+    sourceLabel: 'Quelle: PubMed · NIH',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
     found: 'études trouvées', translating: 'Traduction...', noResult: 'Aucun résultat',
     popular: 'Populaires', newest: 'Plus récent', oldest: 'Plus ancien',
     translateRead: 'Traduire et lire', read: 'Lire', close: 'Fermer', translatingBtn: 'Traduction...',
-    source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
+    source: 'Source Scientifique', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
     subtitle: 'Science', hero: 'Découvrir la science',
     heroSub: 'Accédez instantanément à des millions de recherches.',
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
@@ -127,27 +112,22 @@ const UI_TEXT = {
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
     clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
     features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
-    startSearch: 'Rechercher →',
+    startSearch: 'Rechercher →', back: '← Retour',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['Articles', 'Langues', ''],
-    emailPlaceholder: 'votre@email.fr',
-    emailBtn: "S'abonner",
-    emailSuccess: '✓ Abonné!',
-    emailTitle: '📬 Restez informé',
-    emailSub: 'Résumé scientifique hebdomadaire',
-    searchLimit: 'Limite atteinte (10/10)',
-    translateLimit: 'Limite traduction (5/5)',
-    premiumRequired: 'Premium requis',
-    goPremiun: '👑 Premium',
-    searchesLeft: 'recherches restantes',
-    translatesLeft: 'traductions restantes',
+    emailPlaceholder: 'votre@email.fr', emailBtn: "S'abonner", emailSuccess: '✓ Abonné!',
+    emailTitle: '📬 Restez informé', emailSub: 'Résumé scientifique hebdomadaire',
+    searchLimit: 'Limite atteinte (10/10)', translateLimit: 'Limite traduction (5/5)',
+    premiumRequired: 'Premium requis', goPremiun: '👑 Premium',
+    searchesLeft: 'recherches restantes', translatesLeft: 'traductions restantes',
+    sourceLabel: 'Source: PubMed · NIH',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
     found: 'estudios', translating: 'Traduciendo...', noResult: 'Sin resultados',
     popular: 'Populares', newest: 'Más reciente', oldest: 'Más antiguo',
     translateRead: 'Traducir y leer', read: 'Leer', close: 'Cerrar', translatingBtn: 'Traduciendo...',
-    source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Salir', login: 'Entrar',
+    source: 'Fuente Científica', favorites: 'Favoritos', profile: 'Perfil', logout: 'Salir', login: 'Entrar',
     subtitle: 'Ciencia', hero: 'Descubrir la ciencia',
     heroSub: 'Accede a millones de investigaciones al instante.',
     noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
@@ -158,27 +138,22 @@ const UI_TEXT = {
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
     clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
     features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
-    startSearch: 'Buscar →',
+    startSearch: 'Buscar →', back: '← Volver',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['Artículos', 'Idiomas', ''],
-    emailPlaceholder: 'tu@email.com',
-    emailBtn: 'Suscribirse',
-    emailSuccess: '✓ Suscrito!',
-    emailTitle: '📬 Mantente informado',
-    emailSub: 'Resumen semanal de ciencia',
-    searchLimit: 'Límite alcanzado (10/10)',
-    translateLimit: 'Límite traducción (5/5)',
-    premiumRequired: 'Se requiere Premium',
-    goPremiun: '👑 Premium',
-    searchesLeft: 'búsquedas restantes',
-    translatesLeft: 'traducciones restantes',
+    emailPlaceholder: 'tu@email.com', emailBtn: 'Suscribirse', emailSuccess: '✓ Suscrito!',
+    emailTitle: '📬 Mantente informado', emailSub: 'Resumen semanal de ciencia',
+    searchLimit: 'Límite alcanzado (10/10)', translateLimit: 'Límite traducción (5/5)',
+    premiumRequired: 'Se requiere Premium', goPremiun: '👑 Premium',
+    searchesLeft: 'búsquedas restantes', translatesLeft: 'traducciones restantes',
+    sourceLabel: 'Fuente: PubMed · NIH',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
     found: 'دراسة', translating: 'ترجمة...', noResult: 'لا نتائج',
     popular: 'شائع', newest: 'الأحدث', oldest: 'الأقدم',
     translateRead: 'ترجمة وقراءة', read: 'قراءة', close: 'إغلاق', translatingBtn: 'ترجمة...',
-    source: 'المصدر', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول',
+    source: 'المصدر العلمي', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول',
     subtitle: 'العلوم', hero: 'اكتشف العلم',
     heroSub: 'الوصول الفوري إلى ملايين الأبحاث العلمية.',
     noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
@@ -189,20 +164,15 @@ const UI_TEXT = {
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
     clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
     features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
-    startSearch: 'ابدأ البحث →',
+    startSearch: 'ابدأ البحث →', back: '← رجوع',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['مقال', 'لغات', ''],
-    emailPlaceholder: 'بريدك@email.com',
-    emailBtn: 'اشترك',
-    emailSuccess: '✓ تم الاشتراك!',
-    emailTitle: '📬 ابق على اطلاع',
-    emailSub: 'ملخص علمي أسبوعي',
-    searchLimit: 'تم الوصول للحد (10/10)',
-    translateLimit: 'تم الوصول لحد الترجمة (5/5)',
-    premiumRequired: 'يتطلب Premium',
-    goPremiun: '👑 Premium',
-    searchesLeft: 'بحث متبقي',
-    translatesLeft: 'ترجمة متبقية',
+    emailPlaceholder: 'بريدك@email.com', emailBtn: 'اشترك', emailSuccess: '✓ تم الاشتراك!',
+    emailTitle: '📬 ابق على اطلاع', emailSub: 'ملخص علمي أسبوعي',
+    searchLimit: 'تم الوصول للحد (10/10)', translateLimit: 'تم الوصول لحد الترجمة (5/5)',
+    premiumRequired: 'يتطلب Premium', goPremiun: '👑 Premium',
+    searchesLeft: 'بحث متبقي', translatesLeft: 'ترجمة متبقية',
+    sourceLabel: 'المصدر: PubMed · NIH',
   },
 }
 
@@ -282,7 +252,7 @@ const sortArticles = (articles, sortBy) => {
   return arr
 }
 
-const AbstractDisplay = ({ text, noAbstract, dark }) => {
+const AbstractDisplay = memo(({ text, noAbstract, dark }) => {
   if (!text) return <p className={`text-sm italic ${dark ? 'text-white/40' : 'text-black/40'}`}>{noAbstract}</p>
   const sections = text.split('\n\n').filter(Boolean)
   if (sections.length <= 1) return <p className={`text-sm leading-relaxed ${dark ? 'text-white/80' : 'text-black/80'}`}>{text}</p>
@@ -304,7 +274,7 @@ const AbstractDisplay = ({ text, noAbstract, dark }) => {
       })}
     </div>
   )
-}
+})
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -411,8 +381,7 @@ export default function Home() {
       setUser(data?.user || null)
       if (data?.user) {
         loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id)
-        checkNotifications(data.user.id); loadCollections(data.user.id)
-        loadUsage(data.user.id)
+        checkNotifications(data.user.id); loadCollections(data.user.id); loadUsage(data.user.id)
       }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
@@ -559,32 +528,18 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
-
-    // Arama limiti kontrolü (sadece giriş yapmış free kullanıcılar)
-    if (user && !isPremium && searchCount >= SEARCH_LIMIT) {
-      setLimitPopup('search'); return
-    }
-
+    if (user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
-
-    // Filtre kontrolü — premium gerektirir
     const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
-    if (hasAdvancedFilters && !isPremium && user) {
-      setLimitPopup('filters'); setLoading(false); return
-    }
-
+    if (hasAdvancedFilters && !isPremium && user) { setLimitPopup('filters'); setLoading(false); return }
     const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
     const resultLimit = isPremium ? 100 : 20
-
     try {
       const results = await searchPubMed(q, resultLimit, activeFilters)
       const sorted = sortArticles(results, sortBy)
       updateArticles(sorted); setLoading(false); saveSearchHistory(q)
-
-      // Kullanım sayacını artır
       if (user) await incrementUsage('search')
-
       if (lang !== 'en') {
         setAutoTranslating(true)
         const updated = [...sorted]
@@ -609,12 +564,7 @@ export default function Home() {
 
   const translateArticle = async (article, index) => {
     if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
-
-    // Çeviri limiti kontrolü
-    if (user && !isPremium && translateCount >= TRANSLATE_LIMIT) {
-      setLimitPopup('translate'); return
-    }
-
+    if (user && !isPremium && translateCount >= TRANSLATE_LIMIT) { setLimitPopup('translate'); return }
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
@@ -651,7 +601,6 @@ export default function Home() {
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
 
-      {/* Limit popup */}
       {limitPopup && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4" onClick={() => setLimitPopup(null)}>
           <div className="bg-[#1a1a2e] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
@@ -660,9 +609,7 @@ export default function Home() {
               {limitPopup === 'search' ? t.searchLimit : limitPopup === 'translate' ? t.translateLimit : t.premiumRequired}
             </h2>
             <p className="text-white/50 text-sm mb-6">Premium üyelik ile sınırsız kullanım yapabilirsiniz.</p>
-            <a href="/premium" className="block w-full px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl text-sm font-bold text-black hover:opacity-90 transition mb-3">
-              {t.goPremiun}
-            </a>
+            <a href="/premium" className="block w-full px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl text-sm font-bold text-black hover:opacity-90 transition mb-3">{t.goPremiun}</a>
             <button onClick={() => setLimitPopup(null)} className="text-white/30 text-sm hover:text-white transition">Kapat</button>
           </div>
         </div>
@@ -676,15 +623,9 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-1.5">
             {user && !isPremium && (
-              <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">
-                👑 Premium
-              </a>
+              <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">👑 Premium</a>
             )}
-            {isPremium && (
-              <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold">
-                👑 Premium
-              </span>
-            )}
+            {isPremium && <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold">👑 Premium</span>}
             <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition`}>
               {dark ? '🌤' : '🌑'}
             </button>
@@ -727,9 +668,7 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">
-                {t.login}
-              </a>
+              <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
             )}
           </div>
         </div>
@@ -829,7 +768,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Kullanım göstergesi */}
         {user && !isPremium && searched && (
           <div className="max-w-2xl mx-auto mb-4 flex items-center justify-between px-1">
             <div className="flex items-center gap-4 text-xs text-white/30">
@@ -969,9 +907,14 @@ export default function Home() {
         {!loading && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
-                {!isPremium && user && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 sonuç · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
+              <div className="flex items-center gap-3">
+                <button onClick={() => { setSearched(false); setQuery(''); updateArticles([]) }} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>
+                  {t.back}
+                </button>
+                <div>
+                  <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
+                  {!isPremium && user && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
+                </div>
               </div>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
                 {autoTranslating && <p className="text-blue-400/60 text-xs animate-pulse">{t.translating}</p>}
@@ -1005,7 +948,7 @@ export default function Home() {
                         <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                       </div>
                     </div>
-                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-4`}>
+                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-2`}>
                       {article.journal && <span>{article.journal}</span>}
                       {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
                       {article.authors && <span>{article.authors}</span>}
@@ -1013,6 +956,7 @@ export default function Home() {
                         <span key={j} className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg">{pt}</span>
                       ))}
                     </div>
+                    <p className="text-xs text-white/20 mb-4">{t.sourceLabel}</p>
                     {expandedId === i && (
                       <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>
                         <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} dark={dark} />
@@ -1023,7 +967,9 @@ export default function Home() {
                         {translating[i] ? t.translatingBtn : article.abstract_tr ? (expandedId === i ? t.close : t.read) : t.translateRead}
                       </button>
                       {article.pubmed_id && (
-                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>{t.source}</a>
+                        <a href={`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`} target="_blank" rel="noopener noreferrer" className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-xs transition`}>
+                          🔬 {t.source} →
+                        </a>
                       )}
                       {user && (
                         <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">📚</button>

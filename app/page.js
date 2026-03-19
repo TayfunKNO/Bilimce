@@ -29,7 +29,7 @@ const UI_TEXT = {
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
-    filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1week: 'Son 1 Hafta', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
+    filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1week: 'Son 1 Hafta', last1month: 'Son 1 Ay', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
     clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
@@ -56,7 +56,7 @@ const UI_TEXT = {
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
-    filters: 'Filters', allTime: 'All Time', last1week: 'Last 1 Week', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
+    filters: 'Filters', allTime: 'All Time', last1week: 'Last 1 Week', last1month: 'Last 1 Month', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
     clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
@@ -83,7 +83,7 @@ const UI_TEXT = {
     noAbstract: 'Keine Zusammenfassung.', trending: 'Trending', readingList: 'Leseliste',
     recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel wählen',
     collections: 'Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
-    filters: 'Filter', allTime: 'Alle Zeit', last1week: 'Letzte Woche', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
+    filters: 'Filter', allTime: 'Alle Zeit', last1week: 'Letzte Woche', last1month: 'Letzter Monat', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
     allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
     clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
@@ -110,7 +110,7 @@ const UI_TEXT = {
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
     recentSearches: 'Récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2',
     collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →',
-    filters: 'Filtres', allTime: 'Tout', last1week: 'Dernière semaine', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
+    filters: 'Filtres', allTime: 'Tout', last1week: 'Dernière semaine', last1month: 'Dernier mois', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
     allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
     clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
@@ -137,7 +137,7 @@ const UI_TEXT = {
     noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
     recentSearches: 'Recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2',
     collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →',
-    filters: 'Filtros', allTime: 'Todo', last1week: 'Última semana', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
+    filters: 'Filtros', allTime: 'Todo', last1week: 'Última semana', last1month: 'Último mes', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
     clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
@@ -164,7 +164,7 @@ const UI_TEXT = {
     noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
     recentSearches: 'أخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2',
     collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →',
-    filters: 'فلاتر', allTime: 'الكل', last1week: 'آخر أسبوع', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
+    filters: 'فلاتر', allTime: 'الكل', last1week: 'آخر أسبوع', last1month: 'آخر شهر', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
     clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
@@ -234,13 +234,14 @@ const SUGGESTIONS_BASE = {
 
 const getDateFilter = (period) => {
   const now = new Date()
-  if (period === 'last1week') {
-    const d = new Date(); d.setDate(d.getDate() - 7)
-    return { minDate: d.toISOString().split('T')[0].replace(/-/g, '/'), maxDate: `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}` }
-  }
-  if (period === 'last1year') return { minDate: `${now.getFullYear() - 1}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
-  if (period === 'last5years') return { minDate: `${now.getFullYear() - 5}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
-  if (period === 'last10years') return { minDate: `${now.getFullYear() - 10}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  const pad = n => String(n).padStart(2, '0')
+  const fmt = d => `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}`
+  const today = fmt(now)
+  if (period === 'last1week') { const d = new Date(); d.setDate(d.getDate()-7); return { minDate: fmt(d), maxDate: today } }
+  if (period === 'last1month') { const d = new Date(); d.setMonth(d.getMonth()-1); return { minDate: fmt(d), maxDate: today } }
+  if (period === 'last1year') return { minDate: `${now.getFullYear()-1}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  if (period === 'last5years') return { minDate: `${now.getFullYear()-5}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
+  if (period === 'last10years') return { minDate: `${now.getFullYear()-10}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
   return {}
 }
 
@@ -252,13 +253,13 @@ const translateOne = async (text, targetLang = 'tr') => {
     const res = await fetch(url)
     const data = await res.json()
     return data[0]?.map(t => t[0]).filter(Boolean).join('') || null
-  } catch (e) { return null }
+  } catch { return null }
 }
 
 const sortArticles = (articles, sortBy) => {
   const arr = [...articles]
-  if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date) || 0) - (parseInt(a.published_date) || 0))
-  if (sortBy === 'oldest') return arr.sort((a, b) => (parseInt(a.published_date) || 0) - (parseInt(b.published_date) || 0))
+  if (sortBy === 'newest') return arr.sort((a, b) => (parseInt(b.published_date)||0) - (parseInt(a.published_date)||0))
+  if (sortBy === 'oldest') return arr.sort((a, b) => (parseInt(a.published_date)||0) - (parseInt(b.published_date)||0))
   return arr
 }
 
@@ -272,13 +273,8 @@ const AbstractDisplay = memo(({ text, noAbstract, dark }) => {
         const colonIdx = section.indexOf(':')
         if (colonIdx > 0 && colonIdx < 30) {
           const label = section.slice(0, colonIdx)
-          const content = section.slice(colonIdx + 1).trim()
-          return (
-            <div key={i}>
-              <span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span>
-              <p className={`text-sm leading-relaxed mt-1 ${dark ? 'text-white/80' : 'text-black/80'}`}>{content}</p>
-            </div>
-          )
+          const content = section.slice(colonIdx+1).trim()
+          return <div key={i}><span className="text-xs font-semibold text-blue-400 uppercase tracking-wide">{label}</span><p className={`text-sm leading-relaxed mt-1 ${dark ? 'text-white/80' : 'text-black/80'}`}>{content}</p></div>
         }
         return <p key={i} className={`text-sm leading-relaxed ${dark ? 'text-white/80' : 'text-black/80'}`}>{section}</p>
       })}
@@ -287,16 +283,9 @@ const AbstractDisplay = memo(({ text, noAbstract, dark }) => {
 })
 
 const SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'BİLİMCE',
-  url: 'https://bilimce.vercel.app',
-  description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: 'https://bilimce.vercel.app/?q={search_term_string}',
-    'query-input': 'required name=search_term_string'
-  }
+  '@context': 'https://schema.org', '@type': 'WebSite', name: 'BİLİMCE',
+  url: 'https://bilimce.vercel.app', description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun.',
+  potentialAction: { '@type': 'SearchAction', target: 'https://bilimce.vercel.app/?q={search_term_string}', 'query-input': 'required name=search_term_string' }
 }
 
 function EmailForm({ dark, t }) {
@@ -306,7 +295,7 @@ function EmailForm({ dark, t }) {
   const handleSubmit = async () => {
     if (!email.trim() || !email.includes('@')) return
     setLoading(true)
-    try { await supabase.from('email_subscribers').upsert({ email: email.trim() }); setStatus('success'); setEmail('') } catch { setStatus('error') }
+    try { await supabase.from('email_subscribers').upsert({ email: email.trim() }); setStatus('success'); setEmail('') } catch {}
     setLoading(false)
   }
   return (
@@ -370,6 +359,8 @@ export default function Home() {
   const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
   const SEARCH_LIMIT = 10
   const TRANSLATE_LIMIT = 5
+  // Filtreler: sadece giriş yapmış ve premium olmayan kullanıcılara kapalı
+  const canUseFilters = !userLoaded || !user || isPremium
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang')
@@ -381,19 +372,26 @@ export default function Home() {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
       setUserLoaded(true)
-      if (data?.user) {
-        loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id)
-        checkNotifications(data.user.id); loadCollections(data.user.id); loadUsage(data.user.id)
-      }
+      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id); loadUsage(data.user.id) }
     })
     fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
     fetch('/api/daily').then(r => r.json()).then(async d => {
-      if (d.article) {
-        setDailyArticle(d.article)
-        const titleTr = await translateOne(d.article.title_en, savedLang || 'tr')
-        setDailyTitleTr(titleTr)
-      }
+      if (d.article) { setDailyArticle(d.article); const titleTr = await translateOne(d.article.title_en, savedLang || 'tr'); setDailyTitleTr(titleTr) }
     })
+
+    // Tarayıcı geri tuşu için history yönetimi
+    const handlePopState = (e) => {
+      if (e.state?.searched) {
+        setSearched(true)
+      } else {
+        setSearched(false)
+        setQuery('')
+        articlesRef.current = []
+        setArticles([])
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   const loadUsage = async (userId) => {
@@ -449,11 +447,16 @@ export default function Home() {
   const selectSuggestion = (s) => { setQuery(s); setShowSuggestions(false); setSuggestions([]); handleSearch(s) }
   const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
+  const goBack = () => {
+    setSearched(false); setQuery(''); articlesRef.current = []; setArticles([])
+    window.history.pushState({}, '', '/')
+  }
+
   const checkNotifications = async (userId) => {
     try {
       const { data: subs } = await supabase.from('topic_subscriptions').select('topic').eq('user_id', userId)
       if (!subs || subs.length === 0) return
-      const lastWeek = new Date(); lastWeek.setDate(lastWeek.getDate() - 7)
+      const lastWeek = new Date(); lastWeek.setDate(lastWeek.getDate()-7)
       const dateStr = lastWeek.toISOString().split('T')[0].replace(/-/g, '/')
       let total = 0
       for (const sub of subs) {
@@ -488,7 +491,7 @@ export default function Home() {
     for (let g = 0; g < updated.length; g += 5) {
       const group = updated.slice(g, g + 5)
       const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
-      translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
+      translated.forEach((title_tr, idx) => { if (title_tr) updated[g+idx] = { ...updated[g+idx], title_tr } })
       articlesRef.current = [...updated]; setArticles([...updated])
       await new Promise(r => setTimeout(r, 200))
     }
@@ -507,7 +510,7 @@ export default function Home() {
     try {
       if (isFav) { await supabase.from('favorites').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id); setFavorites(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n }) }
       else { await supabase.from('favorites').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, abstract_en: article.abstract_en, abstract_tr: article.abstract_tr, journal: article.journal, published_date: article.published_date, authors: article.authors }); setFavorites(prev => ({ ...prev, [article.pubmed_id]: true })) }
-    } catch (err) { console.error(err) }
+    } catch {}
     finally { setFavLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
 
@@ -518,7 +521,7 @@ export default function Home() {
     try {
       if (isIn) { await supabase.from('reading_list').delete().eq('user_id', user.id).eq('pubmed_id', article.pubmed_id); setReadingList(prev => { const n = { ...prev }; delete n[article.pubmed_id]; return n }) }
       else { await supabase.from('reading_list').insert({ user_id: user.id, pubmed_id: article.pubmed_id, title_en: article.title_en, title_tr: article.title_tr, journal: article.journal, published_date: article.published_date, authors: article.authors }); setReadingList(prev => ({ ...prev, [article.pubmed_id]: true })) }
-    } catch (err) { console.error(err) }
+    } catch {}
     finally { setReadLoading(prev => ({ ...prev, [article.pubmed_id]: false })) }
   }
 
@@ -530,10 +533,12 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    if (user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
+    if (userLoaded && user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
-    // Filtreler sadece premium veya giriş yapmamış kullanıcılar için
+    // History'e ekle
+    window.history.pushState({ searched: true, query: q }, '', `/?q=${encodeURIComponent(q)}`)
+    // Filtre kontrolü
     const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
     if (hasAdvancedFilters && userLoaded && user && !isPremium) { setLimitPopup('filters'); setLoading(false); return }
     const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
@@ -549,7 +554,7 @@ export default function Home() {
         for (let g = 0; g < updated.length; g += 5) {
           const group = updated.slice(g, g + 5)
           const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
-          translated.forEach((title_tr, idx) => { if (title_tr) updated[g + idx] = { ...updated[g + idx], title_tr } })
+          translated.forEach((title_tr, idx) => { if (title_tr) updated[g+idx] = { ...updated[g+idx], title_tr } })
           updateArticles([...updated]); await new Promise(r => setTimeout(r, 150))
         }
         setAutoTranslating(false)
@@ -560,14 +565,14 @@ export default function Home() {
   const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
     setActiveCategory(cat.id)
-    if (cat.id === 'all') { setQuery(''); updateArticles([]); setSearched(false); return }
+    if (cat.id === 'all') { goBack(); return }
     const q = CATEGORY_QUERIES[cat.id] || cat.id
     setQuery(q); await handleSearch(q)
   }
 
   const translateArticle = async (article, index) => {
     if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
-    if (user && !isPremium && translateCount >= TRANSLATE_LIMIT) { setLimitPopup('translate'); return }
+    if (userLoaded && user && !isPremium && translateCount >= TRANSLATE_LIMIT) { setLimitPopup('translate'); return }
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
@@ -576,7 +581,7 @@ export default function Home() {
       updated[index] = { ...updated[index], title_tr: data.title_tr, abstract_tr: data.abstract_tr }
       updateArticles(updated); setExpandedId(index)
       if (user) await incrementUsage('translate')
-    } catch (err) { console.error(err) }
+    } catch {}
     finally { setTranslating(prev => ({ ...prev, [index]: false })) }
   }
 
@@ -586,6 +591,7 @@ export default function Home() {
   const PERIOD_OPTIONS = [
     { id: 'allTime', label: t.allTime },
     { id: 'last1week', label: t.last1week },
+    { id: 'last1month', label: t.last1month },
     { id: 'last1year', label: t.last1year },
     { id: 'last5years', label: t.last5years },
     { id: 'last10years', label: t.last10years },
@@ -600,9 +606,6 @@ export default function Home() {
     { id: 'systematic-review', label: t.systematicReview },
     { id: 'case-report', label: t.caseReport },
   ]
-
-  // Filtreler sadece premium kullanıcılar veya giriş yapmamışlar için açık
-  const canUseFilters = !userLoaded || !user || isPremium
 
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
@@ -629,7 +632,7 @@ export default function Home() {
             <span className={`font-bold text-base tracking-tight ${text} whitespace-nowrap`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-1.5">
-            {user && !isPremium && <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">👑 Premium</a>}
+            {userLoaded && user && !isPremium && <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">👑 Premium</a>}
             {isPremium && <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold">👑 Premium</span>}
             <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition`}>{dark ? '🌤' : '🌑'}</button>
             <div className="relative" onClick={e => e.stopPropagation()}>
@@ -646,7 +649,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-            {user ? (
+            {userLoaded && user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition max-w-[140px]`}>
                   <span>👤</span><span className="truncate">{displayName}</span>
@@ -670,9 +673,9 @@ export default function Home() {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : userLoaded ? (
               <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
-            )}
+            ) : null}
           </div>
         </div>
       </header>
@@ -767,7 +770,7 @@ export default function Home() {
           </div>
         )}
 
-        {user && !isPremium && searched && (
+        {userLoaded && user && !isPremium && searched && (
           <div className="max-w-2xl mx-auto mb-4 flex items-center justify-between px-1">
             <div className="flex items-center gap-4 text-xs text-white/30">
               <span>🔍 {SEARCH_LIMIT - searchCount} {t.searchesLeft}</span>
@@ -907,7 +910,7 @@ export default function Home() {
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <button onClick={() => { setSearched(false); setQuery(''); updateArticles([]) }} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>
+                <button onClick={goBack} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>
                   {t.back}
                 </button>
                 <div>

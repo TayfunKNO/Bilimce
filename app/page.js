@@ -29,7 +29,7 @@ const UI_TEXT = {
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
-    filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
+    filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1week: 'Son 1 Hafta', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
     clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
@@ -42,7 +42,8 @@ const UI_TEXT = {
     searchLimit: 'Günlük arama limitine ulaştınız (10/10)', translateLimit: 'Günlük çeviri limitine ulaştınız (5/5)',
     premiumRequired: 'Bu özellik Premium üyelik gerektirir', goPremiun: '👑 Premium\'a Geç',
     searchesLeft: 'arama hakkın kaldı', translatesLeft: 'çeviri hakkın kaldı',
-    sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi',
+    sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi · Hakemli Bilimsel Dergi',
+    premiumFilters: 'Filtreler Premium özelliğidir',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
@@ -55,7 +56,7 @@ const UI_TEXT = {
     noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
     recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
-    filters: 'Filters', allTime: 'All Time', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
+    filters: 'Filters', allTime: 'All Time', last1week: 'Last 1 Week', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
     clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
@@ -68,7 +69,8 @@ const UI_TEXT = {
     searchLimit: 'Daily search limit reached (10/10)', translateLimit: 'Daily translation limit reached (5/5)',
     premiumRequired: 'This feature requires Premium', goPremiun: '👑 Go Premium',
     searchesLeft: 'searches left', translatesLeft: 'translations left',
-    sourceLabel: 'Source: PubMed · NIH National Library of Medicine',
+    sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed Journal',
+    premiumFilters: 'Filters are a Premium feature',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -81,7 +83,7 @@ const UI_TEXT = {
     noAbstract: 'Keine Zusammenfassung.', trending: 'Trending', readingList: 'Leseliste',
     recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel wählen',
     collections: 'Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
-    filters: 'Filter', allTime: 'Alle Zeit', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
+    filters: 'Filter', allTime: 'Alle Zeit', last1week: 'Letzte Woche', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
     allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
     clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
@@ -94,7 +96,8 @@ const UI_TEXT = {
     searchLimit: 'Tageslimit erreicht (10/10)', translateLimit: 'Übersetzungslimit erreicht (5/5)',
     premiumRequired: 'Premium erforderlich', goPremiun: '👑 Premium',
     searchesLeft: 'Suchen übrig', translatesLeft: 'Übersetzungen übrig',
-    sourceLabel: 'Quelle: PubMed · NIH',
+    sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
+    premiumFilters: 'Filter sind Premium',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -107,7 +110,7 @@ const UI_TEXT = {
     noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
     recentSearches: 'Récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2',
     collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →',
-    filters: 'Filtres', allTime: 'Tout', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
+    filters: 'Filtres', allTime: 'Tout', last1week: 'Dernière semaine', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
     allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
     clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
@@ -120,7 +123,8 @@ const UI_TEXT = {
     searchLimit: 'Limite atteinte (10/10)', translateLimit: 'Limite traduction (5/5)',
     premiumRequired: 'Premium requis', goPremiun: '👑 Premium',
     searchesLeft: 'recherches restantes', translatesLeft: 'traductions restantes',
-    sourceLabel: 'Source: PubMed · NIH',
+    sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
+    premiumFilters: 'Filtres sont Premium',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -133,7 +137,7 @@ const UI_TEXT = {
     noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
     recentSearches: 'Recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2',
     collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →',
-    filters: 'Filtros', allTime: 'Todo', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
+    filters: 'Filtros', allTime: 'Todo', last1week: 'Última semana', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
     clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
@@ -146,7 +150,8 @@ const UI_TEXT = {
     searchLimit: 'Límite alcanzado (10/10)', translateLimit: 'Límite traducción (5/5)',
     premiumRequired: 'Se requiere Premium', goPremiun: '👑 Premium',
     searchesLeft: 'búsquedas restantes', translatesLeft: 'traducciones restantes',
-    sourceLabel: 'Fuente: PubMed · NIH',
+    sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
+    premiumFilters: 'Filtros son Premium',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -159,7 +164,7 @@ const UI_TEXT = {
     noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
     recentSearches: 'أخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2',
     collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →',
-    filters: 'فلاتر', allTime: 'الكل', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
+    filters: 'فلاتر', allTime: 'الكل', last1week: 'آخر أسبوع', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
     clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
@@ -172,7 +177,8 @@ const UI_TEXT = {
     searchLimit: 'تم الوصول للحد (10/10)', translateLimit: 'تم الوصول لحد الترجمة (5/5)',
     premiumRequired: 'يتطلب Premium', goPremiun: '👑 Premium',
     searchesLeft: 'بحث متبقي', translatesLeft: 'ترجمة متبقية',
-    sourceLabel: 'المصدر: PubMed · NIH',
+    sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
+    premiumFilters: 'الفلاتر Premium',
   },
 }
 
@@ -228,6 +234,10 @@ const SUGGESTIONS_BASE = {
 
 const getDateFilter = (period) => {
   const now = new Date()
+  if (period === 'last1week') {
+    const d = new Date(); d.setDate(d.getDate() - 7)
+    return { minDate: d.toISOString().split('T')[0].replace(/-/g, '/'), maxDate: `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}` }
+  }
   if (period === 'last1year') return { minDate: `${now.getFullYear() - 1}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
   if (period === 'last5years') return { minDate: `${now.getFullYear() - 5}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
   if (period === 'last10years') return { minDate: `${now.getFullYear() - 10}/01/01`, maxDate: `${now.getFullYear()}/12/31` }
@@ -293,28 +303,18 @@ function EmailForm({ dark, t }) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(false)
-
   const handleSubmit = async () => {
     if (!email.trim() || !email.includes('@')) return
     setLoading(true)
-    try {
-      await supabase.from('email_subscribers').upsert({ email: email.trim() })
-      setStatus('success'); setEmail('')
-    } catch { setStatus('error') }
+    try { await supabase.from('email_subscribers').upsert({ email: email.trim() }); setStatus('success'); setEmail('') } catch { setStatus('error') }
     setLoading(false)
   }
-
   return (
     <div className="flex gap-2 max-w-sm mx-auto">
-      {status === 'success' ? (
-        <p className="text-green-400 text-sm font-medium w-full text-center py-3">{t.emailSuccess}</p>
-      ) : (
+      {status === 'success' ? <p className="text-green-400 text-sm font-medium w-full text-center py-3">{t.emailSuccess}</p> : (
         <>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder={t.emailPlaceholder}
-            className={`flex-1 ${dark ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} border rounded-xl px-4 py-2.5 placeholder-white/25 outline-none text-sm`} />
-          <button onClick={handleSubmit} disabled={loading || !email.trim()} className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
-            {loading ? '...' : t.emailBtn}
-          </button>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder={t.emailPlaceholder} className={`flex-1 ${dark ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} border rounded-xl px-4 py-2.5 placeholder-white/25 outline-none text-sm`} />
+          <button onClick={handleSubmit} disabled={loading || !email.trim()} className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">{loading ? '...' : t.emailBtn}</button>
         </>
       )}
     </div>
@@ -363,6 +363,7 @@ export default function Home() {
   const [searchCount, setSearchCount] = useState(0)
   const [translateCount, setTranslateCount] = useState(0)
   const [limitPopup, setLimitPopup] = useState(null)
+  const [userLoaded, setUserLoaded] = useState(false)
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
@@ -379,6 +380,7 @@ export default function Home() {
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
+      setUserLoaded(true)
       if (data?.user) {
         loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id)
         checkNotifications(data.user.id); loadCollections(data.user.id); loadUsage(data.user.id)
@@ -531,10 +533,11 @@ export default function Home() {
     if (user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
+    // Filtreler sadece premium veya giriş yapmamış kullanıcılar için
     const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
-    if (hasAdvancedFilters && !isPremium && user) { setLimitPopup('filters'); setLoading(false); return }
+    if (hasAdvancedFilters && userLoaded && user && !isPremium) { setLimitPopup('filters'); setLoading(false); return }
     const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
-    const resultLimit = isPremium ? 100 : 20
+    const resultLimit = (userLoaded && user && !isPremium) ? 20 : 100
     try {
       const results = await searchPubMed(q, resultLimit, activeFilters)
       const sorted = sortArticles(results, sortBy)
@@ -552,7 +555,7 @@ export default function Home() {
         setAutoTranslating(false)
       }
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
-  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType, user, isPremium, searchCount])
+  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType, user, isPremium, searchCount, userLoaded])
 
   const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
   const handleCategoryClick = async (cat) => {
@@ -582,6 +585,7 @@ export default function Home() {
 
   const PERIOD_OPTIONS = [
     { id: 'allTime', label: t.allTime },
+    { id: 'last1week', label: t.last1week },
     { id: 'last1year', label: t.last1year },
     { id: 'last5years', label: t.last5years },
     { id: 'last10years', label: t.last10years },
@@ -597,6 +601,9 @@ export default function Home() {
     { id: 'case-report', label: t.caseReport },
   ]
 
+  // Filtreler sadece premium kullanıcılar veya giriş yapmamışlar için açık
+  const canUseFilters = !userLoaded || !user || isPremium
+
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
@@ -606,7 +613,7 @@ export default function Home() {
           <div className="bg-[#1a1a2e] border border-yellow-500/30 rounded-2xl p-8 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
             <div className="text-4xl mb-4">👑</div>
             <h2 className="text-xl font-bold text-white mb-2">
-              {limitPopup === 'search' ? t.searchLimit : limitPopup === 'translate' ? t.translateLimit : t.premiumRequired}
+              {limitPopup === 'search' ? t.searchLimit : limitPopup === 'translate' ? t.translateLimit : limitPopup === 'filters' ? t.premiumFilters : t.premiumRequired}
             </h2>
             <p className="text-white/50 text-sm mb-6">Premium üyelik ile sınırsız kullanım yapabilirsiniz.</p>
             <a href="/premium" className="block w-full px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl text-sm font-bold text-black hover:opacity-90 transition mb-3">{t.goPremiun}</a>
@@ -622,13 +629,9 @@ export default function Home() {
             <span className={`font-bold text-base tracking-tight ${text} whitespace-nowrap`}>BİLİMCE</span>
           </div>
           <div className="flex items-center gap-1.5">
-            {user && !isPremium && (
-              <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">👑 Premium</a>
-            )}
+            {user && !isPremium && <a href="/premium" className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold hover:bg-yellow-500/20 transition">👑 Premium</a>}
             {isPremium && <span className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl text-xs font-semibold">👑 Premium</span>}
-            <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition`}>
-              {dark ? '🌤' : '🌑'}
-            </button>
+            <button onClick={toggleTheme} className={`w-8 h-8 flex items-center justify-center shrink-0 ${dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border rounded-lg text-sm transition`}>{dark ? '🌤' : '🌑'}</button>
             <div className="relative" onClick={e => e.stopPropagation()}>
               <button onClick={() => setShowLang(!showLang)} className={`flex items-center gap-1 px-2 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>
                 <span>{currentLang?.flag}</span><span className="hidden sm:block">{currentLang?.label}</span><span>▾</span>
@@ -711,9 +714,7 @@ export default function Home() {
                   {compareList.length === 1 && <div className="flex items-center px-2 py-1 bg-white/5 border border-white/10 border-dashed rounded-lg"><span className="text-white/30 text-xs">+1</span></div>}
                 </div>
               </div>
-              {compareList.length === 2 && (
-                <button onClick={goCompare} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition whitespace-nowrap shrink-0">{t.compareBtn}</button>
-              )}
+              {compareList.length === 2 && <button onClick={goCompare} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition whitespace-nowrap shrink-0">{t.compareBtn}</button>}
             </div>
           </div>
         </div>
@@ -762,9 +763,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">
-              {t.startSearch}
-            </button>
+            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">{t.startSearch}</button>
           </div>
         )}
 
@@ -783,10 +782,10 @@ export default function Home() {
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
               <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
               <button onClick={() => {
-                if (!isPremium && user && hasActiveFilters) { setLimitPopup('filters'); return }
+                if (userLoaded && user && !isPremium) { setLimitPopup('filters'); return }
                 setShowFilters(!showFilters)
               }} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
-                {!isPremium && user ? '👑' : '⚙️'} {hasActiveFilters ? '●' : t.filters}
+                {userLoaded && user && !isPremium ? '👑' : '⚙️'} {hasActiveFilters ? '●' : t.filters}
               </button>
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
                 {loading ? t.searching : t.search}
@@ -808,7 +807,7 @@ export default function Home() {
             )}
           </div>
 
-          {showFilters && (isPremium || !user) && (
+          {showFilters && canUseFilters && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
                 <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 Yayın Tarihi</p>
@@ -913,7 +912,7 @@ export default function Home() {
                 </button>
                 <div>
                   <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
-                  {!isPremium && user && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
+                  {userLoaded && user && !isPremium && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
                 </div>
               </div>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
@@ -948,7 +947,7 @@ export default function Home() {
                         <span className="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-1 rounded-lg">PUBMED</span>
                       </div>
                     </div>
-                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-2`}>
+                    <div className={`flex flex-wrap gap-2 text-xs ${textMuted} mb-1`}>
                       {article.journal && <span>{article.journal}</span>}
                       {article.published_date && <span>{article.published_date.slice(0,4)}</span>}
                       {article.authors && <span>{article.authors}</span>}
@@ -956,7 +955,7 @@ export default function Home() {
                         <span key={j} className="px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-lg">{pt}</span>
                       ))}
                     </div>
-                    <p className="text-xs text-white/20 mb-4">{t.sourceLabel}</p>
+                    <p className="text-xs text-white/20 mb-4">🔬 {t.sourceLabel}</p>
                     {expandedId === i && (
                       <div className={`mb-4 p-4 ${cardBg} rounded-xl border ${border}`}>
                         <AbstractDisplay text={article.abstract_tr || article.abstract_en} noAbstract={t.noAbstract} dark={dark} />

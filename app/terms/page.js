@@ -49,7 +49,8 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">6. Freemium Model</h2>
-            <p className="mb-2">Ücretsiz plan günlük 10 arama ve 5 çeviri hakkı içerir. Premium üyelik ek özellikler ve sınırsız kullanım sağlar. Fiyatlandırma değişiklik hakkı saklıdır.</p>
+            <p className="mb-2">BİLİMCE ücretsiz kullanılabilir. İleride eklenen premium özellikler için fiyatlandırma ayrıca duyurulacaktır.
+</p>
           </section>
 
           <section>
@@ -69,7 +70,8 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">10. İletişim</h2>
-            <p>Sorularınız için: <span className="text-blue-400">bilimce@proton.me</span></p>
+            <p>Sorularınız için: <span className="text-blue-400">bilimceapp@gmail.com
+/span></p>
           </section>
         </div>
       </main>

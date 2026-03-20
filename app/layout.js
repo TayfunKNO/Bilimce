@@ -3,10 +3,10 @@ import './globals.css'
 export const metadata = {
   metadataBase: new URL('https://bilimce.vercel.app'),
   title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-  description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun. PubMed makalelerini yapay zeka ile çevirin. Kanser, alzheimer, diyabet ve daha fazlası.',
-  keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet',
+  description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun. Kanser, alzheimer, diyabet ve daha fazlası.',
+  keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet, scientific research, pubmed turkish, science, medical research, wetenschappelijk onderzoek',
   authors: [{ name: 'BİLİMCE' }],
-  creator: 'BİLİMCE',
+  creator: 'TayfunKNO',
   publisher: 'BİLİMCE',
   manifest: '/manifest.json',
   appleWebApp: {
@@ -22,14 +22,14 @@ export const metadata = {
     locale: 'tr_TR',
     url: 'https://bilimce.vercel.app',
     title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-    description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun. PubMed makalelerini yapay zeka ile çevirin.',
+    description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
     siteName: 'BİLİMCE',
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'BİLİMCE' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-    description: 'Dünya genelindeki bilimsel araştırmaları Türkçe okuyun.',
+    description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
     images: ['/opengraph-image'],
   },
   alternates: {
@@ -37,12 +37,18 @@ export const metadata = {
   },
   icons: {
     icon: '/logo.svg',
-    apple: '/icon-192.png',
+    apple: [
+      { url: '/icon-192.png', sizes: '192x192' },
+      { url: '/icon-512.png', sizes: '512x512' },
+    ],
   },
 }
 
 export const viewport = {
   themeColor: '#0a0a0f',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({ children }) {
@@ -51,9 +57,13 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="BİLİMCE" />
+        <meta name="application-name" content="BİLİMCE" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <style>{`
           #splash {
             position: fixed;

@@ -68,7 +68,8 @@ export default function AuthPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <a href="/">
-            <img src="/icon-192.png" alt="BİLİMCE" className="w-16 h-16 rounded-2xl mx-auto mb-4 shadow-lg shadow-blue-500/20" />
+            <img src="/logo.svg" alt="BİLİMCE" className="w-16 h-16 mx-auto mb-4" />
+
           </a>
           <h1 className="text-2xl font-bold text-white tracking-tight">BİLİMCE</h1>
           <p className="text-white/40 text-sm mt-1">

@@ -70,8 +70,8 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">10. İletişim</h2>
-            <p>Sorularınız için: <span className="text-blue-400">bilimceapp@gmail.com
-/span></p>
+            <p>Sorularınız için: <span className="text-blue-400">bilimceapp@gmail.com</span></p>
+
           </section>
         </div>
       </main>

@@ -64,7 +64,8 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">8. İletişim</h2>
-            <p>Gizlilik ile ilgili sorularınız için: <span className="text-blue-400">bilimce@proton.me</span></p>
+            <p>Gizlilik ile ilgili sorularınız için: <span className="text-blue-400">bilimceapp@gmail.com
+</span></p>
           </section>
         </div>
       </main>

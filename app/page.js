@@ -218,7 +218,8 @@ const UI_TEXT = {
     source: 'Bilimsel Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Keşfet',
     heroSub: '35 milyondan fazla hakemli bilimsel makaleye anında erişin.',
-    heroSub2: 'PubMed verilerini 7 farklı dilde okuyun.',
+        heroSub2: 'PubMed verilerini 7 farklı dilde okuyun.',
+
 
 
    noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',

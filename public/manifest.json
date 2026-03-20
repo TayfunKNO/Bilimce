@@ -1,21 +1,29 @@
 {
-  "name": "Bilimce",
-  "short_name": "Bilimce",
-  "description": "Bilimsel arastirmalar Turkce",
+  "name": "BİLİMCE",
+  "short_name": "BİLİMCE",
+  "description": "Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini Türkçe ve 6 dilde okuyun.",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0f",
-  "theme_color": "#0a0a0f",
+  "theme_color": "#3b82f6",
+  "categories": ["education", "medical", "science"],
+  "lang": "tr",
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

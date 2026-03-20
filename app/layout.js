@@ -2,8 +2,8 @@ import './globals.css'
 
 export const metadata = {
   metadataBase: new URL('https://bilimce.vercel.app'),
-  title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-  description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun. Kanser, alzheimer, diyabet ve daha fazlası.',
+  title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku | Bilimsel Araştırma',
+  description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. PubMed verilerini yapay zeka ile Türkçe ve 6 farklı dilde okuyun. Kanser, alzheimer, diyabet araştırmaları.',
   keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet, scientific research, pubmed turkish, science, medical research, wetenschappelijk onderzoek',
   authors: [{ name: 'BİLİMCE' }],
   creator: 'TayfunKNO',
@@ -21,21 +21,17 @@ export const metadata = {
     type: 'website',
     locale: 'tr_TR',
     url: 'https://bilimce.vercel.app',
-    title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-    description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
+    title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
+    description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
     siteName: 'BİLİMCE',
-    images: [{ url: 'https://bilimce.vercel.app/og-image.png', width: 1200, height: 630, alt: 'BİLİMCE' }],
-
-
+    images: [{ url: 'https://bilimce.vercel.app/og-image.png', width: 1200, height: 630, alt: 'BİLİMCE - Bilimsel Araştırmalar' }],
   },
   twitter: {
-  card: 'summary_large_image',
-  title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-  description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
-  images: ['https://bilimce.vercel.app/og-image.png'],
-
-},
-
+    card: 'summary_large_image',
+    title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
+    description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
+    images: ['https://bilimce.vercel.app/og-image.png'],
+  },
   alternates: {
     canonical: 'https://bilimce.vercel.app',
   },

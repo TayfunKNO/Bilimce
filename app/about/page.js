@@ -71,7 +71,8 @@ export default function AboutPage() {
           <section className="bg-white/3 border border-white/5 rounded-2xl p-6">
             <h2 className="text-lg font-bold text-white mb-3">📬 İletişim</h2>
             <p className="mb-2">Öneri, şikayet veya iş birliği için:</p>
-            <p><span className="text-blue-400">bilimce@proton.me</span></p>
+            <p><span className="text-blue-400">bilimceapp@gmail.com
+</span></p>
           </section>
         </div>
       </main>

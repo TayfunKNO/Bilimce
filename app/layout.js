@@ -24,7 +24,8 @@ export const metadata = {
     title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
     description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
     siteName: 'BİLİMCE',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'BİLİMCE' }],
+    images: [{ url: 'https://bilimce.vercel.app/opengraph-image', width: 1200, height: 630, alt: 'BİLİMCE' }],
+
   },
   twitter: {
   card: 'summary_large_image',

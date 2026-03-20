@@ -17,6 +17,197 @@ const LANGUAGES = [
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
 ]
 
+const TOPIC_CATEGORIES = [
+  {
+    id: 'health', icon: '🏥', label: 'Sağlık & Tıp',
+    subcategories: [
+      { label: 'Kanser', topics: [
+        { slug: 'meme-kanseri', label: 'Meme Kanseri', en: 'breast cancer' },
+        { slug: 'akciger-kanseri', label: 'Akciğer Kanseri', en: 'lung cancer' },
+        { slug: 'kolon-kanseri', label: 'Kolon Kanseri', en: 'colon cancer' },
+        { slug: 'kanser-tedavisi', label: 'Kanser Tedavisi', en: 'cancer treatment' },
+        { slug: 'kanser-immunoterapi', label: 'İmmünoterapi', en: 'cancer immunotherapy' },
+      ]},
+      { label: 'Kalp & Damar', topics: [
+        { slug: 'kalp-hastaligi', label: 'Kalp Hastalığı', en: 'cardiovascular disease' },
+        { slug: 'hipertansiyon', label: 'Hipertansiyon', en: 'hypertension' },
+        { slug: 'inme', label: 'İnme', en: 'stroke' },
+        { slug: 'kalp-yetmezligi', label: 'Kalp Yetmezliği', en: 'heart failure' },
+      ]},
+      { label: 'Metabolik', topics: [
+        { slug: 'diyabet', label: 'Diyabet', en: 'diabetes' },
+        { slug: 'obezite', label: 'Obezite', en: 'obesity' },
+        { slug: 'tiroid', label: 'Tiroid', en: 'thyroid disease' },
+        { slug: 'metabolik-sendrom', label: 'Metabolik Sendrom', en: 'metabolic syndrome' },
+      ]},
+      { label: 'Enfeksiyon', topics: [
+        { slug: 'covid-19', label: 'COVID-19', en: 'covid-19' },
+        { slug: 'antibiyotik-direnci', label: 'Antibiyotik Direnci', en: 'antibiotic resistance' },
+        { slug: 'asi', label: 'Aşı', en: 'vaccine immunization' },
+        { slug: 'grip', label: 'Grip & İnfluenza', en: 'influenza' },
+      ]},
+    ]
+  },
+  {
+    id: 'neuro', icon: '🧠', label: 'Nöroloji & Psikoloji',
+    subcategories: [
+      { label: 'Nörodejeneratif', topics: [
+        { slug: 'alzheimer', label: 'Alzheimer', en: 'alzheimer disease' },
+        { slug: 'parkinson', label: 'Parkinson', en: 'parkinson disease' },
+        { slug: 'ms-hastaligi', label: 'Multiple Skleroz', en: 'multiple sclerosis' },
+        { slug: 'als', label: 'ALS', en: 'amyotrophic lateral sclerosis' },
+      ]},
+      { label: 'Ruh Sağlığı', topics: [
+        { slug: 'depresyon', label: 'Depresyon', en: 'depression' },
+        { slug: 'anksiyete', label: 'Anksiyete', en: 'anxiety disorder' },
+        { slug: 'bipolar', label: 'Bipolar Bozukluk', en: 'bipolar disorder' },
+        { slug: 'sizofren', label: 'Şizofreni', en: 'schizophrenia' },
+      ]},
+      { label: 'Beyin & Davranış', topics: [
+        { slug: 'uyku-bozuklugu', label: 'Uyku Bozukluğu', en: 'sleep disorder' },
+        { slug: 'bagimlilik', label: 'Bağımlılık', en: 'addiction substance use' },
+        { slug: 'otizm', label: 'Otizm', en: 'autism spectrum disorder' },
+        { slug: 'dikkat-eksikligi', label: 'ADHD', en: 'attention deficit disorder' },
+      ]},
+    ]
+  },
+  {
+    id: 'biology', icon: '🧬', label: 'Biyoloji & Genetik',
+    subcategories: [
+      { label: 'Genetik', topics: [
+        { slug: 'crispr', label: 'CRISPR Gen Düzenleme', en: 'CRISPR gene editing' },
+        { slug: 'gen-tedavisi', label: 'Gen Tedavisi', en: 'gene therapy' },
+        { slug: 'genomik', label: 'Genomik', en: 'genomics' },
+        { slug: 'epigenetik', label: 'Epigenetik', en: 'epigenetics' },
+      ]},
+      { label: 'Mikrobiyoloji', topics: [
+        { slug: 'mikrobiyom', label: 'Mikrobiyom', en: 'microbiome gut bacteria' },
+        { slug: 'probiyotik', label: 'Probiyotik', en: 'probiotic gut health' },
+        { slug: 'viroloji', label: 'Viroloji', en: 'virology virus' },
+        { slug: 'antibiyotik', label: 'Antibiyotik', en: 'antibiotic' },
+      ]},
+      { label: 'Hücre & Molekül', topics: [
+        { slug: 'kok-hucre', label: 'Kök Hücre', en: 'stem cell' },
+        { slug: 'protein-katlama', label: 'Protein Katlama', en: 'protein folding' },
+        { slug: 'mitokondri', label: 'Mitokondri', en: 'mitochondria' },
+        { slug: 'apoptoz', label: 'Apoptoz', en: 'apoptosis cell death' },
+      ]},
+    ]
+  },
+  {
+    id: 'technology', icon: '💻', label: 'Teknoloji & Yapay Zeka',
+    subcategories: [
+      { label: 'Yapay Zeka', topics: [
+        { slug: 'yapay-zeka-tip', label: 'AI ve Tıp', en: 'artificial intelligence medicine' },
+        { slug: 'derin-ogrenme', label: 'Derin Öğrenme', en: 'deep learning neural network' },
+        { slug: 'dogal-dil-isleme', label: 'NLP', en: 'natural language processing' },
+        { slug: 'makine-ogrenmesi', label: 'Makine Öğrenmesi', en: 'machine learning' },
+      ]},
+      { label: 'Biyoteknoloji', topics: [
+        { slug: 'nanoteknoloji', label: 'Nanoteknoloji', en: 'nanotechnology medicine' },
+        { slug: 'biyosensor', label: 'Biyosensör', en: 'biosensor' },
+        { slug: 'organ-chip', label: 'Organ-on-Chip', en: 'organ on chip' },
+        { slug: '3d-biyoyazici', label: '3D Biyoyazıcı', en: '3D bioprinting' },
+      ]},
+      { label: 'Robotik & Cerrahi', topics: [
+        { slug: 'robotik-cerrahi', label: 'Robotik Cerrahi', en: 'robotic surgery' },
+        { slug: 'telesaglik', label: 'Telesağlık', en: 'telemedicine telehealth' },
+        { slug: 'giyilebilir', label: 'Giyilebilir Teknoloji', en: 'wearable health technology' },
+      ]},
+    ]
+  },
+  {
+    id: 'sports', icon: '💪', label: 'Spor & Beslenme',
+    subcategories: [
+      { label: 'Performans', topics: [
+        { slug: 'kreatin', label: 'Kreatin', en: 'creatine supplementation' },
+        { slug: 'spor-performans', label: 'Spor Performansı', en: 'athletic performance' },
+        { slug: 'kas-hipertrofisi', label: 'Kas Hipertrofisi', en: 'muscle hypertrophy' },
+        { slug: 'dayaniklilik', label: 'Dayanıklılık', en: 'endurance exercise' },
+      ]},
+      { label: 'Beslenme', topics: [
+        { slug: 'aralıklı-oruc', label: 'Aralıklı Oruç', en: 'intermittent fasting' },
+        { slug: 'omega-3', label: 'Omega-3', en: 'omega 3 fatty acids' },
+        { slug: 'vitamin-d', label: 'Vitamin D', en: 'vitamin D deficiency' },
+        { slug: 'magnezyum', label: 'Magnezyum', en: 'magnesium supplementation' },
+      ]},
+      { label: 'Yaralanma & İyileşme', topics: [
+        { slug: 'spor-yaralanmasi', label: 'Spor Yaralanması', en: 'sports injury' },
+        { slug: 'fizik-tedavi', label: 'Fizik Tedavi', en: 'physical therapy rehabilitation' },
+        { slug: 'antrenman-toparlanma', label: 'Toparlanma', en: 'exercise recovery' },
+      ]},
+    ]
+  },
+  {
+    id: 'environment', icon: '🌍', label: 'Çevre & İklim',
+    subcategories: [
+      { label: 'İklim', topics: [
+        { slug: 'iklim-degisikligi', label: 'İklim Değişikliği', en: 'climate change' },
+        { slug: 'karbondioksit', label: 'Karbon Emisyonu', en: 'carbon dioxide emissions' },
+        { slug: 'yenilenebilir-enerji', label: 'Yenilenebilir Enerji', en: 'renewable energy solar' },
+      ]},
+      { label: 'Kirlilik', topics: [
+        { slug: 'hava-kirliligi', label: 'Hava Kirliliği', en: 'air pollution health' },
+        { slug: 'plastik-kirlilik', label: 'Plastik Kirliliği', en: 'microplastic pollution' },
+        { slug: 'su-kirliligi', label: 'Su Kirliliği', en: 'water pollution' },
+      ]},
+      { label: 'Ekosistem', topics: [
+        { slug: 'biodiversity', label: 'Biyoçeşitlilik', en: 'biodiversity conservation' },
+        { slug: 'orman-yanginlari', label: 'Orman Yangınları', en: 'wildfire forest fire' },
+        { slug: 'okyanuslar', label: 'Okyanuslar', en: 'ocean acidification coral reef' },
+      ]},
+    ]
+  },
+  {
+    id: 'physics', icon: '⚛️', label: 'Fizik & Kimya',
+    subcategories: [
+      { label: 'Fizik', topics: [
+        { slug: 'kuantum-fizik', label: 'Kuantum Fizik', en: 'quantum physics' },
+        { slug: 'kuantum-bilgisayar', label: 'Kuantum Bilgisayar', en: 'quantum computing' },
+        { slug: 'nükleer-fizik', label: 'Nükleer Fizik', en: 'nuclear physics' },
+        { slug: 'madde-fizigi', label: 'Yoğun Madde', en: 'condensed matter physics' },
+      ]},
+      { label: 'Kimya', topics: [
+        { slug: 'organik-kimya', label: 'Organik Kimya', en: 'organic chemistry synthesis' },
+        { slug: 'ilaç-kimyasi', label: 'İlaç Kimyası', en: 'medicinal chemistry drug' },
+        { slug: 'malzeme-bilimi', label: 'Malzeme Bilimi', en: 'materials science' },
+        { slug: 'katalizor', label: 'Katalizör', en: 'catalysis chemical reaction' },
+      ]},
+    ]
+  },
+  {
+    id: 'astronomy', icon: '🔭', label: 'Astronomi & Uzay',
+    subcategories: [
+      { label: 'Uzay', topics: [
+        { slug: 'kara-delik', label: 'Kara Delik', en: 'black hole' },
+        { slug: 'extrasolar-gezegen', label: 'Eksogezegenler', en: 'exoplanet' },
+        { slug: 'kari-madde', label: 'Karanlık Madde', en: 'dark matter' },
+        { slug: 'evrenin-genisleme', label: 'Evrenin Genişlemesi', en: 'universe expansion dark energy' },
+      ]},
+      { label: 'Uzay Tıbbı', topics: [
+        { slug: 'uzay-saglik', label: 'Uzay ve Sağlık', en: 'space medicine astronaut health' },
+        { slug: 'mars-arastirma', label: 'Mars Araştırması', en: 'mars exploration' },
+      ]},
+    ]
+  },
+  {
+    id: 'aging', icon: '⏳', label: 'Yaşlanma & Uzun Ömür',
+    subcategories: [
+      { label: 'Yaşlanma', topics: [
+        { slug: 'yaslanma-biyoloji', label: 'Yaşlanma Biyolojisi', en: 'aging biology longevity' },
+        { slug: 'telomer', label: 'Telomer', en: 'telomere aging' },
+        { slug: 'senolik', label: 'Senolitik', en: 'senolytic aging' },
+        { slug: 'otofarji', label: 'Otofaji', en: 'autophagy' },
+      ]},
+      { label: 'Uzun Ömür', topics: [
+        { slug: 'kalori-kisitlama', label: 'Kalori Kısıtlama', en: 'caloric restriction longevity' },
+        { slug: 'nad-plus', label: 'NAD+', en: 'NAD+ aging' },
+        { slug: 'sirutuin', label: 'Sirtuinler', en: 'sirtuin longevity' },
+      ]},
+    ]
+  },
+]
+
 const UI_TEXT = {
   tr: {
     search: 'Ara', searching: 'Aranıyor...', placeholder: 'Örn: kreatin, alzheimer, kanser tedavisi...',
@@ -24,16 +215,15 @@ const UI_TEXT = {
     popular: 'Popüler aramalar', newest: 'En Yeni', oldest: 'En Eski',
     translateRead: 'Özeti Çevir ve Oku', read: 'Özeti Oku', close: 'Kapat', translatingBtn: 'Çevriliyor...',
     source: 'Bilimsel Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
-    subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Türkçe Keşfet',
-    heroSub: 'Dünya genelindeki milyonlarca bilimsel araştırmaya anında erişin.',
+    subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Keşfet',
+    heroSub: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin.',
     noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
-    recentSearches: 'Son Aramalar', compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
+    compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
     filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1week: 'Son 1 Hafta', last1month: 'Son 1 Ay', last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
-    randomized: 'Randomize Çalışma', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
-    clearFilters: 'Filtreleri Temizle', invite: 'Davet Et', topics: 'Popüler Konular',
-    features: ['Türkçe Çeviri', 'Akıllı Arama', 'Makale Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
+    randomized: 'Randomize', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
+    clearFilters: 'Temizle', invite: 'Davet Et', topics: 'Araştırma Alanları',
     startSearch: 'Aramaya Başla →', back: '← Geri',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['PubMed Makalesi', 'Dil Desteği', ''],
@@ -51,213 +241,73 @@ const UI_TEXT = {
     feedbackBtn: 'Gönder',
     feedbackSuccess: '✓ Teşekkürler! Geri bildiriminiz alındı.',
     feedbackLabel: 'Uygulamamızı geliştirmemize yardım edin',
+    exploreTopics: 'Tüm Araştırma Alanlarını Keşfet',
+    features: ['Türkçe Çeviri', 'Akıllı Arama', 'Karşılaştırma', 'Atıf Sayısı', 'Topluluk', 'Koleksiyonlar'],
   },
   en: {
-    search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer treatment...',
-    found: 'research found', translating: 'Translating titles...', noResult: 'No results found',
+    search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer...',
+    found: 'research found', translating: 'Translating...', noResult: 'No results found',
     popular: 'Popular searches', newest: 'Newest', oldest: 'Oldest',
-    translateRead: 'Translate & Read Abstract', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
+    translateRead: 'Translate & Read', read: 'Read Abstract', close: 'Close', translatingBtn: 'Translating...',
     source: 'Scientific Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
-    heroSub: 'Access millions of scientific research instantly.',
-    noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
-    recentSearches: 'Recent Searches', compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
-    collections: 'My Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
-    filters: 'Filters', allTime: 'All Time', last1week: 'Last 1 Week', last1month: 'Last 1 Month', last1year: 'Last 1 Year', last5years: 'Last 5 Years', last10years: 'Last 10 Years',
+    heroSub: 'Access 35M+ scientific research instantly.',
+    noAbstract: 'No abstract available.', trending: 'Trending', readingList: 'Reading List',
+    compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles',
+    collections: 'Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
+    filters: 'Filters', allTime: 'All Time', last1week: 'Last Week', last1month: 'Last Month', last1year: 'Last Year', last5years: '5 Years', last10years: '10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
-    randomized: 'Randomized Trial', systematicReview: 'Systematic Review', caseReport: 'Case Report',
-    clearFilters: 'Clear Filters', invite: 'Invite', topics: 'Popular Topics',
-    features: ['Auto Translation', 'Smart Search', 'Article Comparison', 'Citation Count', 'Community', 'Collections'],
+    randomized: 'Randomized', systematicReview: 'Systematic Review', caseReport: 'Case Report',
+    clearFilters: 'Clear', invite: 'Invite', topics: 'Research Areas',
     startSearch: 'Start Searching →', back: '← Back',
     stats: ['35M+', '6', 'Freemium'],
     statsLabel: ['PubMed Articles', 'Languages', ''],
     emailPlaceholder: 'your@email.com', emailBtn: 'Subscribe', emailSuccess: '✓ Subscribed!',
-    emailTitle: '📬 Stay updated', emailSub: 'Get weekly science digest and new features',
-    searchLimit: 'Daily search limit reached (10/10)', translateLimit: 'Daily translation limit reached (5/5)',
-    premiumRequired: 'This feature requires Premium', goPremiun: '👑 Go Premium',
+    emailTitle: '📬 Stay updated', emailSub: 'Weekly science digest and new features',
+    searchLimit: 'Daily limit reached (10/10)', translateLimit: 'Translation limit reached (5/5)',
+    premiumRequired: 'Premium required', goPremiun: '👑 Go Premium',
     searchesLeft: 'searches left', translatesLeft: 'translations left',
-    sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed Journal',
-    premiumFilters: 'Filters are a Premium feature',
+    sourceLabel: 'Source: PubMed · NIH · Peer-reviewed Journal',
+    premiumFilters: 'Filters are Premium',
     loginRequired: 'Sign in to use this feature',
     loginBtn: 'Sign In / Register',
     feedbackTitle: 'Feedback',
-    feedbackPlaceholder: 'Write your suggestion or question...',
+    feedbackPlaceholder: 'Write your suggestion...',
     feedbackBtn: 'Send',
-    feedbackSuccess: '✓ Thank you! Your feedback has been received.',
-    feedbackLabel: 'Help us improve the app',
+    feedbackSuccess: '✓ Thank you!',
+    feedbackLabel: 'Help us improve',
+    exploreTopics: 'Explore All Research Areas',
+    features: ['Auto Translation', 'Smart Search', 'Comparison', 'Citations', 'Community', 'Collections'],
   },
-  de: {
-    search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
-    found: 'Studien gefunden', translating: 'Übersetzen...', noResult: 'Keine Ergebnisse',
-    popular: 'Beliebte Suchen', newest: 'Neueste', oldest: 'Älteste',
-    translateRead: 'Übersetzen & Lesen', read: 'Lesen', close: 'Schließen', translatingBtn: 'Übersetzen...',
-    source: 'Wissenschaftliche Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden',
-    subtitle: 'Wissenschaft', hero: 'Wissenschaft entdecken',
-    heroSub: 'Millionen wissenschaftlicher Artikel sofort abrufen.',
-    noAbstract: 'Keine Zusammenfassung.', trending: 'Trending', readingList: 'Leseliste',
-    recentSearches: 'Letzte Suchen', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel wählen',
-    collections: 'Sammlungen', community: 'Gemeinschaft', dailyArticle: 'Artikel des Tages', readMore: 'Weiterlesen →',
-    filters: 'Filter', allTime: 'Alle Zeit', last1week: 'Letzte Woche', last1month: 'Letzter Monat', last1year: 'Letztes Jahr', last5years: 'Letzte 5 Jahre', last10years: 'Letzte 10 Jahre',
-    allTypes: 'Alle', clinicalTrial: 'Klinische Studie', review: 'Übersicht', metaAnalysis: 'Meta-Analyse',
-    randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
-    clearFilters: 'Filter löschen', invite: 'Einladen', topics: 'Beliebte Themen',
-    features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'],
-    startSearch: 'Suchen →', back: '← Zurück',
-    stats: ['35M+', '6', 'Freemium'],
-    statsLabel: ['Artikel', 'Sprachen', ''],
-    emailPlaceholder: 'ihre@email.de', emailBtn: 'Abonnieren', emailSuccess: '✓ Abonniert!',
-    emailTitle: '📬 Auf dem Laufenden bleiben', emailSub: 'Wöchentliche Wissenschaftszusammenfassung',
-    searchLimit: 'Tageslimit erreicht (10/10)', translateLimit: 'Übersetzungslimit erreicht (5/5)',
-    premiumRequired: 'Premium erforderlich', goPremiun: '👑 Premium',
-    searchesLeft: 'Suchen übrig', translatesLeft: 'Übersetzungen übrig',
-    sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
-    premiumFilters: 'Filter sind Premium',
-    loginRequired: 'Anmelden erforderlich',
-    loginBtn: 'Anmelden / Registrieren',
-    feedbackTitle: 'Feedback',
-    feedbackPlaceholder: 'Schreiben Sie Ihren Vorschlag...',
-    feedbackBtn: 'Senden',
-    feedbackSuccess: '✓ Danke! Feedback erhalten.',
-    feedbackLabel: 'Helfen Sie uns, die App zu verbessern',
-  },
-  fr: {
-    search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
-    found: 'études trouvées', translating: 'Traduction...', noResult: 'Aucun résultat',
-    popular: 'Populaires', newest: 'Plus récent', oldest: 'Plus ancien',
-    translateRead: 'Traduire et lire', read: 'Lire', close: 'Fermer', translatingBtn: 'Traduction...',
-    source: 'Source Scientifique', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion',
-    subtitle: 'Science', hero: 'Découvrir la science',
-    heroSub: 'Accédez instantanément à des millions de recherches.',
-    noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste de lecture',
-    recentSearches: 'Récentes', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2',
-    collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →',
-    filters: 'Filtres', allTime: 'Tout', last1week: 'Dernière semaine', last1month: 'Dernier mois', last1year: 'Dernière année', last5years: '5 ans', last10years: '10 ans',
-    allTypes: 'Tous', clinicalTrial: 'Essai clinique', review: 'Revue', metaAnalysis: 'Méta-analyse',
-    randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
-    clearFilters: 'Effacer', invite: 'Inviter', topics: 'Sujets Populaires',
-    features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'],
-    startSearch: 'Rechercher →', back: '← Retour',
-    stats: ['35M+', '6', 'Freemium'],
-    statsLabel: ['Articles', 'Langues', ''],
-    emailPlaceholder: 'votre@email.fr', emailBtn: "S'abonner", emailSuccess: '✓ Abonné!',
-    emailTitle: '📬 Restez informé', emailSub: 'Résumé scientifique hebdomadaire',
-    searchLimit: 'Limite atteinte (10/10)', translateLimit: 'Limite traduction (5/5)',
-    premiumRequired: 'Premium requis', goPremiun: '👑 Premium',
-    searchesLeft: 'recherches restantes', translatesLeft: 'traductions restantes',
-    sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
-    premiumFilters: 'Filtres sont Premium',
-    loginRequired: 'Connexion requise',
-    loginBtn: 'Se connecter / S\'inscrire',
-    feedbackTitle: 'Retour d\'information',
-    feedbackPlaceholder: 'Écrivez votre suggestion...',
-    feedbackBtn: 'Envoyer',
-    feedbackSuccess: '✓ Merci! Commentaire reçu.',
-    feedbackLabel: 'Aidez-nous à améliorer l\'application',
-  },
-  es: {
-    search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
-    found: 'estudios', translating: 'Traduciendo...', noResult: 'Sin resultados',
-    popular: 'Populares', newest: 'Más reciente', oldest: 'Más antiguo',
-    translateRead: 'Traducir y leer', read: 'Leer', close: 'Cerrar', translatingBtn: 'Traduciendo...',
-    source: 'Fuente Científica', favorites: 'Favoritos', profile: 'Perfil', logout: 'Salir', login: 'Entrar',
-    subtitle: 'Ciencia', hero: 'Descubrir la ciencia',
-    heroSub: 'Accede a millones de investigaciones al instante.',
-    noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
-    recentSearches: 'Recientes', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2',
-    collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →',
-    filters: 'Filtros', allTime: 'Todo', last1week: 'Última semana', last1month: 'Último mes', last1year: 'Último año', last5years: '5 años', last10years: '10 años',
-    allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Metaanálisis',
-    randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
-    clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Temas Populares',
-    features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'],
-    startSearch: 'Buscar →', back: '← Volver',
-    stats: ['35M+', '6', 'Freemium'],
-    statsLabel: ['Artículos', 'Idiomas', ''],
-    emailPlaceholder: 'tu@email.com', emailBtn: 'Suscribirse', emailSuccess: '✓ Suscrito!',
-    emailTitle: '📬 Mantente informado', emailSub: 'Resumen semanal de ciencia',
-    searchLimit: 'Límite alcanzado (10/10)', translateLimit: 'Límite traducción (5/5)',
-    premiumRequired: 'Se requiere Premium', goPremiun: '👑 Premium',
-    searchesLeft: 'búsquedas restantes', translatesLeft: 'traducciones restantes',
-    sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
-    premiumFilters: 'Filtros son Premium',
-    loginRequired: 'Inicia sesión para usar esta función',
-    loginBtn: 'Iniciar sesión / Registrarse',
-    feedbackTitle: 'Comentarios',
-    feedbackPlaceholder: 'Escribe tu sugerencia...',
-    feedbackBtn: 'Enviar',
-    feedbackSuccess: '✓ ¡Gracias! Comentario recibido.',
-    feedbackLabel: 'Ayúdanos a mejorar la aplicación',
-  },
-  ar: {
-    search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
-    found: 'دراسة', translating: 'ترجمة...', noResult: 'لا نتائج',
-    popular: 'شائع', newest: 'الأحدث', oldest: 'الأقدم',
-    translateRead: 'ترجمة وقراءة', read: 'قراءة', close: 'إغلاق', translatingBtn: 'ترجمة...',
-    source: 'المصدر العلمي', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول',
-    subtitle: 'العلوم', hero: 'اكتشف العلم',
-    heroSub: 'الوصول الفوري إلى ملايين الأبحاث العلمية.',
-    noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
-    recentSearches: 'أخيرة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2',
-    collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →',
-    filters: 'فلاتر', allTime: 'الكل', last1week: 'آخر أسبوع', last1month: 'آخر شهر', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
-    allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
-    randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
-    clearFilters: 'مسح', invite: 'دعوة', topics: 'المواضيع الشائعة',
-    features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'],
-    startSearch: 'ابدأ البحث →', back: '← رجوع',
-    stats: ['35M+', '6', 'Freemium'],
-    statsLabel: ['مقال', 'لغات', ''],
-    emailPlaceholder: 'بريدك@email.com', emailBtn: 'اشترك', emailSuccess: '✓ تم الاشتراك!',
-    emailTitle: '📬 ابق على اطلاع', emailSub: 'ملخص علمي أسبوعي',
-    searchLimit: 'تم الوصول للحد (10/10)', translateLimit: 'تم الوصول لحد الترجمة (5/5)',
-    premiumRequired: 'يتطلب Premium', goPremiun: '👑 Premium',
-    searchesLeft: 'بحث متبقي', translatesLeft: 'ترجمة متبقية',
-    sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
-    premiumFilters: 'الفلاتر Premium',
-    loginRequired: 'سجل الدخول لاستخدام هذه الميزة',
-    loginBtn: 'تسجيل الدخول / التسجيل',
-    feedbackTitle: 'تعليقات',
-    feedbackPlaceholder: 'اكتب اقتراحك...',
-    feedbackBtn: 'إرسال',
-    feedbackSuccess: '✓ شكراً! تم استلام تعليقك.',
-    feedbackLabel: 'ساعدنا في تحسين التطبيق',
-  },
+  de: { search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...', found: 'Studien', translating: 'Übersetzen...', noResult: 'Keine Ergebnisse', popular: 'Beliebt', newest: 'Neueste', oldest: 'Älteste', translateRead: 'Übersetzen & Lesen', read: 'Lesen', close: 'Schließen', translatingBtn: 'Übersetzen...', source: 'Quelle', favorites: 'Favoriten', profile: 'Profil', logout: 'Abmelden', login: 'Anmelden', subtitle: 'Wissenschaft', hero: 'Wissenschaft entdecken', heroSub: 'Millionen Artikel sofort abrufen.', noAbstract: 'Kein Abstract.', trending: 'Trending', readingList: 'Leseliste', compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 wählen', collections: 'Sammlungen', community: 'Community', dailyArticle: 'Artikel des Tages', readMore: 'Mehr →', filters: 'Filter', allTime: 'Alle', last1week: 'Letzte Woche', last1month: 'Letzter Monat', last1year: 'Letztes Jahr', last5years: '5 Jahre', last10years: '10 Jahre', allTypes: 'Alle', clinicalTrial: 'Klinisch', review: 'Übersicht', metaAnalysis: 'Meta', randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fall', clearFilters: 'Löschen', invite: 'Einladen', topics: 'Forschungsgebiete', startSearch: 'Suchen →', back: '← Zurück', stats: ['35M+', '6', 'Freemium'], statsLabel: ['Artikel', 'Sprachen', ''], emailPlaceholder: 'ihre@email.de', emailBtn: 'Abonnieren', emailSuccess: '✓ Abonniert!', emailTitle: '📬 Neuigkeiten', emailSub: 'Wöchentliche Zusammenfassung', searchLimit: 'Limit erreicht', translateLimit: 'Limit erreicht', premiumRequired: 'Premium', goPremiun: '👑 Premium', searchesLeft: 'übrig', translatesLeft: 'übrig', sourceLabel: 'Quelle: PubMed · NIH', premiumFilters: 'Filter Premium', loginRequired: 'Anmelden', loginBtn: 'Anmelden', feedbackTitle: 'Feedback', feedbackPlaceholder: 'Vorschlag...', feedbackBtn: 'Senden', feedbackSuccess: '✓ Danke!', feedbackLabel: 'App verbessern', exploreTopics: 'Alle Gebiete', features: ['Übersetzung', 'Suche', 'Vergleich', 'Zitate', 'Community', 'Sammlungen'] },
+  fr: { search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...', found: 'études', translating: 'Traduction...', noResult: 'Aucun résultat', popular: 'Populaires', newest: 'Récent', oldest: 'Ancien', translateRead: 'Traduire', read: 'Lire', close: 'Fermer', translatingBtn: 'Traduction...', source: 'Source', favorites: 'Favoris', profile: 'Profil', logout: 'Déconnexion', login: 'Connexion', subtitle: 'Science', hero: 'Découvrir la science', heroSub: 'Millions de recherches instantanément.', noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste', compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2', collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →', filters: 'Filtres', allTime: 'Tout', last1week: 'Semaine', last1month: 'Mois', last1year: 'Année', last5years: '5 ans', last10years: '10 ans', allTypes: 'Tous', clinicalTrial: 'Essai', review: 'Revue', metaAnalysis: 'Méta', randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas', clearFilters: 'Effacer', invite: 'Inviter', topics: 'Domaines', startSearch: 'Rechercher →', back: '← Retour', stats: ['35M+', '6', 'Freemium'], statsLabel: ['Articles', 'Langues', ''], emailPlaceholder: 'email@example.fr', emailBtn: "S'abonner", emailSuccess: '✓ Abonné!', emailTitle: '📬 Restez informé', emailSub: 'Résumé hebdomadaire', searchLimit: 'Limite atteinte', translateLimit: 'Limite atteinte', premiumRequired: 'Premium', goPremiun: '👑 Premium', searchesLeft: 'restantes', translatesLeft: 'restantes', sourceLabel: 'Source: PubMed · NIH', premiumFilters: 'Filtres Premium', loginRequired: 'Connexion', loginBtn: 'Se connecter', feedbackTitle: 'Retour', feedbackPlaceholder: 'Suggestion...', feedbackBtn: 'Envoyer', feedbackSuccess: '✓ Merci!', feedbackLabel: 'Améliorer', exploreTopics: 'Explorer', features: ['Traduction', 'Recherche', 'Comparaison', 'Citations', 'Communauté', 'Collections'] },
+  es: { search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...', found: 'estudios', translating: 'Traduciendo...', noResult: 'Sin resultados', popular: 'Populares', newest: 'Reciente', oldest: 'Antiguo', translateRead: 'Traducir', read: 'Leer', close: 'Cerrar', translatingBtn: 'Traduciendo...', source: 'Fuente', favorites: 'Favoritos', profile: 'Perfil', logout: 'Salir', login: 'Entrar', subtitle: 'Ciencia', hero: 'Descubrir la ciencia', heroSub: 'Millones de investigaciones instantáneamente.', noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista', compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2', collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →', filters: 'Filtros', allTime: 'Todo', last1week: 'Semana', last1month: 'Mes', last1year: 'Año', last5years: '5 años', last10years: '10 años', allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Meta', randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso', clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Áreas', startSearch: 'Buscar →', back: '← Volver', stats: ['35M+', '6', 'Freemium'], statsLabel: ['Artículos', 'Idiomas', ''], emailPlaceholder: 'email@ejemplo.com', emailBtn: 'Suscribirse', emailSuccess: '✓ Suscrito!', emailTitle: '📬 Novedades', emailSub: 'Resumen semanal', searchLimit: 'Límite alcanzado', translateLimit: 'Límite alcanzado', premiumRequired: 'Premium', goPremiun: '👑 Premium', searchesLeft: 'restantes', translatesLeft: 'restantes', sourceLabel: 'Fuente: PubMed · NIH', premiumFilters: 'Filtros Premium', loginRequired: 'Iniciar sesión', loginBtn: 'Iniciar sesión', feedbackTitle: 'Comentarios', feedbackPlaceholder: 'Sugerencia...', feedbackBtn: 'Enviar', feedbackSuccess: '✓ Gracias!', feedbackLabel: 'Mejorar app', exploreTopics: 'Explorar', features: ['Traducción', 'Búsqueda', 'Comparación', 'Citas', 'Comunidad', 'Colecciones'] },
+  ar: { search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...', found: 'دراسة', translating: 'ترجمة...', noResult: 'لا نتائج', popular: 'شائع', newest: 'الأحدث', oldest: 'الأقدم', translateRead: 'ترجمة', read: 'قراءة', close: 'إغلاق', translatingBtn: 'ترجمة...', source: 'المصدر', favorites: 'المفضلة', profile: 'الملف', logout: 'خروج', login: 'دخول', subtitle: 'العلوم', hero: 'اكتشف العلم', heroSub: 'ملايين الأبحاث فوراً.', noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة', compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2', collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →', filters: 'فلاتر', allTime: 'الكل', last1week: 'أسبوع', last1month: 'شهر', last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات', allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل', randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة', clearFilters: 'مسح', invite: 'دعوة', topics: 'مجالات البحث', startSearch: 'ابدأ البحث →', back: '← رجوع', stats: ['35M+', '6', 'Freemium'], statsLabel: ['مقال', 'لغات', ''], emailPlaceholder: 'بريدك@email.com', emailBtn: 'اشترك', emailSuccess: '✓ تم!', emailTitle: '📬 ابق على اطلاع', emailSub: 'ملخص أسبوعي', searchLimit: 'تم الوصول للحد', translateLimit: 'تم الوصول للحد', premiumRequired: 'Premium', goPremiun: '👑 Premium', searchesLeft: 'متبقي', translatesLeft: 'متبقي', sourceLabel: 'المصدر: PubMed · NIH', premiumFilters: 'الفلاتر Premium', loginRequired: 'سجل الدخول', loginBtn: 'تسجيل الدخول', feedbackTitle: 'تعليقات', feedbackPlaceholder: 'اقتراح...', feedbackBtn: 'إرسال', feedbackSuccess: '✓ شكراً!', feedbackLabel: 'تحسين التطبيق', exploreTopics: 'استكشاف', features: ['ترجمة', 'بحث', 'مقارنة', 'اقتباسات', 'مجتمع', 'مجموعات'] },
 }
 
 const FEATURE_ICONS = ['🌐', '🔍', '⚖️', '📊', '💬', '📚']
 
-const POPULAR_TOPICS = [
-  { slug: 'kanser', icon: '🎗️', label: 'Kanser' },
-  { slug: 'alzheimer', icon: '🧠', label: 'Alzheimer' },
-  { slug: 'diyabet', icon: '💉', label: 'Diyabet' },
-  { slug: 'depresyon', icon: '🧘', label: 'Depresyon' },
-  { slug: 'kalp', icon: '❤️', label: 'Kalp' },
-  { slug: 'covid', icon: '🦠', label: 'COVID-19' },
-  { slug: 'obezite', icon: '⚖️', label: 'Obezite' },
-  { slug: 'yapay-zeka', icon: '🤖', label: 'Yapay Zeka' },
-  { slug: 'hipertansiyon', icon: '🩺', label: 'Hipertansiyon' },
-  { slug: 'kanser-tedavisi', icon: '💊', label: 'Kanser Tedavisi' },
-]
-
-const CATEGORIES = [
+const SEARCH_CATEGORIES = [
   { id: 'all', icon: '🔬' },
-  { id: 'medicine', icon: '🩺' },
+  { id: 'medicine', icon: '🏥' },
   { id: 'biology', icon: '🧬' },
-  { id: 'physics', icon: '⚛️' },
-  { id: 'chemistry', icon: '🧪' },
-  { id: 'psychology', icon: '🧠' },
-  { id: 'environment', icon: '🌍' },
+  { id: 'neuro', icon: '🧠' },
   { id: 'technology', icon: '💻' },
+  { id: 'sports', icon: '💪' },
+  { id: 'environment', icon: '🌍' },
+  { id: 'physics', icon: '⚛️' },
+  { id: 'astronomy', icon: '🔭' },
 ]
 
 const CATEGORY_QUERIES = {
-  medicine: 'clinical trial treatment',
+  medicine: 'clinical trial treatment disease',
   biology: 'molecular biology genetics',
-  physics: 'quantum physics',
-  chemistry: 'organic chemistry synthesis',
-  psychology: 'cognitive psychology behavior',
-  environment: 'climate change environment',
+  neuro: 'neuroscience brain',
   technology: 'artificial intelligence machine learning',
+  sports: 'exercise nutrition sports',
+  environment: 'climate change environment',
+  physics: 'quantum physics',
+  astronomy: 'astronomy astrophysics',
 }
 
 const POPULAR_SEARCHES = {
@@ -270,8 +320,8 @@ const POPULAR_SEARCHES = {
 }
 
 const SUGGESTIONS_BASE = {
-  tr: ['kanser', 'alzheimer', 'depresyon', 'diyabet', 'hipertansiyon', 'kalp hastalığı', 'obezite', 'covid', 'grip', 'antibiyotik', 'vitamin d', 'omega 3', 'probiyotik', 'kreatin', 'magnezyum', 'demir eksikliği', 'tiroid', 'gut hastalığı', 'migren', 'astım'],
-  en: ['cancer', 'alzheimer', 'depression', 'diabetes', 'hypertension', 'heart disease', 'obesity', 'covid', 'influenza', 'antibiotic', 'vitamin d', 'omega 3', 'probiotic', 'creatine', 'magnesium', 'iron deficiency', 'thyroid', 'gout', 'migraine', 'asthma'],
+  tr: ['kanser', 'alzheimer', 'depresyon', 'diyabet', 'hipertansiyon', 'kalp hastalığı', 'obezite', 'covid', 'grip', 'antibiyotik', 'vitamin d', 'omega 3', 'probiyotik', 'kreatin', 'magnezyum', 'demir eksikliği', 'tiroid', 'gut hastalığı', 'migren', 'astım', 'parkinson', 'ms hastalığı', 'crispr', 'yapay zeka', 'nanoteknoloji'],
+  en: ['cancer', 'alzheimer', 'depression', 'diabetes', 'hypertension', 'heart disease', 'obesity', 'covid', 'influenza', 'antibiotic', 'vitamin d', 'omega 3', 'probiotic', 'creatine', 'magnesium', 'iron deficiency', 'thyroid', 'gout', 'migraine', 'asthma', 'parkinson', 'crispr', 'artificial intelligence'],
 }
 
 const getDateFilter = (period) => {
@@ -396,6 +446,65 @@ function FeedbackForm({ dark, t }) {
   )
 }
 
+function TopicExplorer({ dark, t, onSearch }) {
+  const [expandedCategory, setExpandedCategory] = useState(null)
+
+  const bg = dark ? 'bg-white/3' : 'bg-black/3'
+  const border = dark ? 'border-white/5' : 'border-black/10'
+  const text = dark ? 'text-white' : 'text-black'
+  const textMuted = dark ? 'text-white/50' : 'text-black/50'
+
+  return (
+    <div className="mb-12">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className={`text-lg font-bold ${text}`}>🗺️ {t.topics}</h2>
+      </div>
+      <div className="grid gap-3">
+        {TOPIC_CATEGORIES.map(cat => (
+          <div key={cat.id} className={`${bg} border ${expandedCategory === cat.id ? 'border-blue-500/30' : border} rounded-2xl overflow-hidden transition-all`}>
+            <button
+              onClick={() => setExpandedCategory(expandedCategory === cat.id ? null : cat.id)}
+              className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/3 transition"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{cat.icon}</span>
+                <span className={`font-semibold ${text}`}>{cat.label}</span>
+                <span className={`text-xs ${textMuted}`}>
+                  {cat.subcategories.reduce((acc, sub) => acc + sub.topics.length, 0)} konu
+                </span>
+              </div>
+              <span className={`text-xs ${textMuted} transition-transform ${expandedCategory === cat.id ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+
+            {expandedCategory === cat.id && (
+              <div className="px-5 pb-5 border-t border-white/5">
+                <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                  {cat.subcategories.map((sub, si) => (
+                    <div key={si}>
+                      <p className={`text-xs font-bold ${textMuted} uppercase tracking-wide mb-2`}>{sub.label}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {sub.topics.map(topic => (
+                          <button
+                            key={topic.slug}
+                            onClick={() => onSearch(topic.en, topic.label)}
+                            className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/70 hover:bg-blue-500/20 hover:border-blue-500/30 hover:text-blue-300' : 'bg-black/5 border-black/10 text-black/70 hover:bg-blue-500/10'} border rounded-xl text-xs transition`}
+                          >
+                            {topic.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
@@ -439,6 +548,7 @@ export default function Home() {
   const [translateCount, setTranslateCount] = useState(0)
   const [limitPopup, setLimitPopup] = useState(null)
   const [userLoaded, setUserLoaded] = useState(false)
+  const [searchLabel, setSearchLabel] = useState('')
   const inputRef = useRef(null)
 
   const t = UI_TEXT[lang]
@@ -465,7 +575,7 @@ export default function Home() {
     })
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
-      else { setSearched(false); setQuery(''); articlesRef.current = []; setArticles([]) }
+      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]) }
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
@@ -525,7 +635,7 @@ export default function Home() {
   const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
   const goBack = () => {
-    setSearched(false); setQuery(''); articlesRef.current = []; setArticles([])
+    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([])
     window.history.pushState({}, '', '/')
   }
 
@@ -607,17 +717,18 @@ export default function Home() {
   const shareWhatsApp = (article) => { window.open(`https://wa.me/?text=${encodeURIComponent(`*${article.title_tr || article.title_en}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank') }
   const updateArticles = (arr) => { articlesRef.current = arr; setArticles([...arr]) }
 
-  const handleSearch = useCallback(async (searchQuery, customFilters) => {
+  const handleSearch = useCallback(async (searchQuery, label) => {
     const q = searchQuery || query
     if (!q.trim()) return
     if (userLoaded && !user) { setLimitPopup('login'); return }
     if (userLoaded && user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
+    if (label) setSearchLabel(label)
     saveRecentSearch(q)
     window.history.pushState({ searched: true, query: q }, '', `/?q=${encodeURIComponent(q)}`)
     const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
     if (hasAdvancedFilters && !isPremium) { setLimitPopup('filters'); setLoading(false); return }
-    const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
+    const activeFilters = { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
     const resultLimit = isPremium ? 100 : 20
     try {
       const results = await searchPubMed(q, resultLimit, activeFilters)
@@ -826,51 +937,42 @@ export default function Home() {
 
       <main className="max-w-5xl mx-auto px-4 py-12" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         {!searched && (
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-6">
-              <span>🔬</span><span>35M+ PubMed Makalesi</span>
-              <span className="w-1 h-1 bg-blue-400 rounded-full"></span><span>Freemium</span>
+          <>
+            {/* Hero */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-6">
+                <span>🔬</span><span>35M+ PubMed Makalesi</span>
+                <span className="w-1 h-1 bg-blue-400 rounded-full"></span><span>Freemium</span>
+              </div>
+              <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
+              <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed mb-8`}>{t.heroSub}</p>
+              <div className="flex justify-center gap-8 mb-10">
+                {t.stats.map((stat, i) => (
+                  <div key={i} className="text-center">
+                    <div className={`text-2xl font-bold ${text}`}>{stat}</div>
+                    <div className={`text-xs ${textMuted}`}>{t.statsLabel[i]}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
+                {t.features.map((feature, i) => (
+                  <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center`}>
+                    <div className="text-2xl mb-1">{FEATURE_ICONS[i]}</div>
+                    <div className={`text-xs ${textMuted} leading-tight`}>{feature}</div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">{t.startSearch}</button>
             </div>
-            <h1 className="text-5xl sm:text-6xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">{t.hero}</h1>
-            <p className={`${textMuted} text-lg max-w-xl mx-auto leading-relaxed mb-8`}>{t.heroSub}</p>
-            <div className="flex justify-center gap-8 mb-10">
-              {t.stats.map((stat, i) => (
-                <div key={i} className="text-center">
-                  <div className={`text-2xl font-bold ${text}`}>{stat}</div>
-                  <div className={`text-xs ${textMuted}`}>{t.statsLabel[i]}</div>
-                </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-2xl mx-auto mb-8">
-              {t.features.map((feature, i) => (
-                <div key={i} className={`${cardBg} border ${border} rounded-xl p-3 text-center`}>
-                  <div className="text-2xl mb-1">{FEATURE_ICONS[i]}</div>
-                  <div className={`text-xs ${textMuted} leading-tight`}>{feature}</div>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => inputRef.current?.focus()} className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/25">{t.startSearch}</button>
-          </div>
+          </>
         )}
 
-        {userLoaded && user && !isPremium && searched && (
-          <div className="max-w-2xl mx-auto mb-4 flex items-center justify-between px-1">
-            <div className="flex items-center gap-4 text-xs text-white/30">
-              <span>🔍 {SEARCH_LIMIT - searchCount} {t.searchesLeft}</span>
-              <span>📝 {TRANSLATE_LIMIT - translateCount} {t.translatesLeft}</span>
-            </div>
-            <a href="/premium" className="text-xs text-yellow-400/60 hover:text-yellow-400 transition">👑 Premium →</a>
-          </div>
-        )}
-
-        <div className="mb-4">
+        {/* Arama kutusu */}
+        <div className="mb-6">
           <div className="relative max-w-2xl mx-auto" onClick={e => e.stopPropagation()}>
             <div className={`relative flex gap-3 ${inputBg} border rounded-2xl p-2`}>
               <input ref={inputRef} type="text" value={query} onChange={handleQueryChange} onKeyDown={e => { if (e.key === 'Enter') handleSearch(); if (e.key === 'Escape') setShowSuggestions(false) }} onFocus={() => { if (query) setShowSuggestions(true) }} placeholder={t.placeholder} className={`flex-1 bg-transparent px-4 py-3 ${text} outline-none text-sm`} />
-              <button onClick={() => {
-                if (!isPremium) { setLimitPopup('filters'); return }
-                setShowFilters(!showFilters)
-              }} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
+              <button onClick={() => { if (!isPremium) { setLimitPopup('filters'); return }; setShowFilters(!showFilters) }} className={`px-3 py-2 border rounded-xl text-xs transition ${hasActiveFilters ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : dark ? 'bg-white/5 border-white/10 text-white/40 hover:text-white' : 'bg-black/5 border-black/10 text-black/40 hover:text-black'}`}>
                 {!isPremium ? '👑' : '⚙️'} {hasActiveFilters ? '●' : t.filters}
               </button>
               <button onClick={() => handleSearch()} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
@@ -915,69 +1017,85 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              {hasActiveFilters && (
-                <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">✕ {t.clearFilters}</button>
-              )}
+              {hasActiveFilters && <button onClick={() => { setFilterPeriod('allTime'); setFilterType('') }} className="text-xs text-red-400/60 hover:text-red-400 transition">✕ {t.clearFilters}</button>}
             </div>
           )}
         </div>
 
+        {/* Kategori butonları */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
-          {CATEGORIES.map(cat => (
+          {SEARCH_CATEGORIES.map(cat => (
             <button key={cat.id} onClick={() => handleCategoryClick(cat)} className={`px-4 py-2 rounded-xl text-lg whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-blue-500/20 border border-blue-500/40' : `${dark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-black/5 border-black/5 hover:bg-black/10'} border`}`}>
               {cat.icon}
             </button>
           ))}
         </div>
 
-        {!searched && dailyArticle && (
-          <div className="mb-8">
-            <p className={`${textMuted} text-sm font-medium mb-3`}>⭐ {t.dailyArticle}</p>
-            <a href={`/article/${dailyArticle.pubmed_id}`} className="block bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-5 hover:border-blue-500/40 transition-all group">
-              <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">{dailyTitleTr || dailyArticle.title_en}</p>
-              <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3">
-                {dailyArticle.journal && <span>{dailyArticle.journal}</span>}
-                {dailyArticle.published_date && <span>{dailyArticle.published_date.slice(0,4)}</span>}
-                {dailyArticle.authors && <span>{dailyArticle.authors}</span>}
-              </div>
-              <span className="text-xs text-blue-400 group-hover:text-blue-300 transition">{t.readMore}</span>
-            </a>
+        {/* Limit göstergesi */}
+        {userLoaded && user && !isPremium && searched && (
+          <div className="max-w-2xl mx-auto mb-4 flex items-center justify-between px-1">
+            <div className="flex items-center gap-4 text-xs text-white/30">
+              <span>🔍 {SEARCH_LIMIT - searchCount} {t.searchesLeft}</span>
+              <span>📝 {TRANSLATE_LIMIT - translateCount} {t.translatesLeft}</span>
+            </div>
+            <a href="/premium" className="text-xs text-yellow-400/60 hover:text-yellow-400 transition">👑 Premium →</a>
           </div>
         )}
 
+        {/* Ana sayfa içerikleri */}
         {!searched && (
-          <div className="mb-10">
-            <p className={`${textMuted} text-sm font-medium mb-4`}>🏷️ {t.topics}</p>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-              {POPULAR_TOPICS.map(topic => (
-                <a key={topic.slug} href={`/topic/${topic.slug}`} className={`${cardBg} border ${border} rounded-xl p-4 text-center hover:border-blue-500/20 transition-all group`}>
-                  <div className="text-2xl mb-2">{topic.icon}</div>
-                  <div className={`text-xs font-medium ${text} group-hover:text-blue-400 transition`}>{topic.label}</div>
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {!searched && trending.length > 0 && (
-          <div className="mb-10">
-            <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {trending.map((item, i) => (
-                <button key={i} onClick={() => { setQuery(item.query || item.topic); handleSearch(item.query || item.topic) }} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
-                  <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
-                    <span className="text-xs text-white/30">Bu hafta</span>
+          <>
+            {/* Günün araştırması */}
+            {dailyArticle && (
+              <div className="mb-8">
+                <p className={`${textMuted} text-sm font-medium mb-3`}>⭐ {t.dailyArticle}</p>
+                <a href={`/article/${dailyArticle.pubmed_id}`} className="block bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-5 hover:border-blue-500/40 transition-all group">
+                  <p className="font-semibold text-white leading-snug mb-2 group-hover:text-blue-300 transition">{dailyTitleTr || dailyArticle.title_en}</p>
+                  <div className="flex flex-wrap gap-3 text-xs text-white/40 mb-3">
+                    {dailyArticle.journal && <span>{dailyArticle.journal}</span>}
+                    {dailyArticle.published_date && <span>{dailyArticle.published_date.slice(0,4)}</span>}
                   </div>
-                  <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
-                  <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
-                </button>
-              ))}
+                  <span className="text-xs text-blue-400 group-hover:text-blue-300 transition">{t.readMore}</span>
+                </a>
+              </div>
+            )}
+
+            {/* Trending */}
+            {trending.length > 0 && (
+              <div className="mb-10">
+                <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {trending.map((item, i) => (
+                    <button key={i} onClick={() => handleSearch(item.query || item.topic)} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
+                      <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
+                        <span className="text-xs text-white/30">Bu hafta</span>
+                      </div>
+                      <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
+                      <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Araştırma alanları explorer */}
+            <TopicExplorer dark={dark} t={t} onSearch={(enQuery, label) => { setQuery(enQuery); handleSearch(enQuery, label) }} />
+
+            {/* Popüler aramalar */}
+            <div className="mt-4 text-center">
+              <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
+                  <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-sm transition`}>{s}</button>
+                ))}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
+        {/* Arama sonuçları */}
         {loading && (
           <div className="grid gap-4">
             {[1,2,3].map(i => (
@@ -995,6 +1113,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <button onClick={goBack} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>{t.back}</button>
                 <div>
+                  {searchLabel && <p className={`text-xs ${textMuted} mb-0.5`}>{searchLabel}</p>}
                   <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
                   {userLoaded && user && !isPremium && <p className="text-xs text-yellow-400/50 mt-0.5">Max 20 · <a href="/premium" className="hover:text-yellow-400 transition">Premium'da 100 →</a></p>}
                 </div>
@@ -1074,17 +1193,6 @@ export default function Home() {
             <p>{t.noResult}</p>
           </div>
         )}
-
-        {!searched && (
-          <div className="mt-8 text-center">
-            <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {(POPULAR_SEARCHES[lang] || POPULAR_SEARCHES.tr).map(s => (
-                <button key={s} onClick={() => { setQuery(s); handleSearch(s) }} className={`px-4 py-2 ${dark ? 'bg-white/5 border-white/5 text-white/40 hover:text-white/70' : 'bg-black/5 border-black/5 text-black/40 hover:text-black/70'} border rounded-xl text-sm transition`}>{s}</button>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
 
       <footer className={`border-t ${border} py-12 mt-20`}>
@@ -1097,13 +1205,12 @@ export default function Home() {
           <div className={`text-center ${textMuted} text-xs border-t ${border} pt-6`}>
             <p className="mb-3">BİLİMCE - PubMed - {t.subtitle}</p>
             <div className="flex justify-center gap-6 flex-wrap">
-  <a href="/about" className="hover:text-white transition">Hakkında</a>
-  <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
-  <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
-  <a href="/premium" className="hover:text-white transition">Premium</a>
-  <a href="/community" className="hover:text-white transition">Topluluk</a>
-</div>
-
+              <a href="/about" className="hover:text-white transition">Hakkında</a>
+              <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
+              <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
+              <a href="/premium" className="hover:text-white transition">Premium</a>
+              <a href="/community" className="hover:text-white transition">Topluluk</a>
+            </div>
           </div>
         </div>
       </footer>

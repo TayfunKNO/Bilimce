@@ -27,11 +27,12 @@ export const metadata = {
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'BİLİMCE' }],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
-    description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
-    images: ['/opengraph-image'],
-  },
+  card: 'summary_large_image',
+  title: 'BİLİMCE - Bilimsel Araştırmalar Türkçe',
+  description: 'Dünya genelindeki 35M+ bilimsel araştırmaya anında erişin. PubMed makalelerini 7 farklı dilde okuyun.',
+  images: ['https://bilimce.vercel.app/opengraph-image'],
+},
+
   alternates: {
     canonical: 'https://bilimce.vercel.app',
   },

@@ -249,7 +249,8 @@ const UI_TEXT = {
     source: 'Scientific Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Instant access to 35M+ peer-reviewed scientific articles.',
-    heroSub2: 'heroSub2: 'Read PubMed research in 7 languages.',
+        heroSub2: 'Read PubMed research in 7 languages.',
+
 ,
     noAbstract: 'No abstract available.', trending: 'Trending', readingList: 'Reading List',
     compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles',

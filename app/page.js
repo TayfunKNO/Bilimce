@@ -357,7 +357,6 @@ function FeedbackForm({ dark, t }) {
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(false)
   const [show, setShow] = useState(false)
-
   const handleSubmit = async () => {
     if (!feedback.trim()) return
     setLoading(true)
@@ -368,7 +367,6 @@ function FeedbackForm({ dark, t }) {
     } catch {}
     setLoading(false)
   }
-
   return (
     <div className="fixed bottom-6 right-6 z-40">
       {show ? (
@@ -447,7 +445,6 @@ export default function Home() {
   const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
   const SEARCH_LIMIT = 10
   const TRANSLATE_LIMIT = 5
-  // Filtreler sadece premium kullanıcılara açık
   const canUseFilters = userLoaded && isPremium
 
   useEffect(() => {
@@ -613,22 +610,15 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, customFilters) => {
     const q = searchQuery || query
     if (!q.trim()) return
-
-    // Giriş yapmamış kullanıcılar giriş yapmalı
     if (userLoaded && !user) { setLimitPopup('login'); return }
-    // Free kullanıcı limit kontrolü
     if (userLoaded && user && !isPremium && searchCount >= SEARCH_LIMIT) { setLimitPopup('search'); return }
-
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     saveRecentSearch(q)
     window.history.pushState({ searched: true, query: q }, '', `/?q=${encodeURIComponent(q)}`)
-
     const hasAdvancedFilters = filterPeriod !== 'allTime' || filterType !== ''
     if (hasAdvancedFilters && !isPremium) { setLimitPopup('filters'); setLoading(false); return }
-
     const activeFilters = customFilters || { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
     const resultLimit = isPremium ? 100 : 20
-
     try {
       const results = await searchPubMed(q, resultLimit, activeFilters)
       const sorted = sortArticles(results, sortBy)
@@ -1105,7 +1095,13 @@ export default function Home() {
             <EmailForm dark={dark} t={t} />
           </div>
           <div className={`text-center ${textMuted} text-xs border-t ${border} pt-6`}>
-            BİLİMCE - PubMed - {t.subtitle}
+            <p className="mb-3">BİLİMCE - PubMed - {t.subtitle}</p>
+            <div className="flex justify-center gap-6 flex-wrap">
+              <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
+              <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
+              <a href="/premium" className="hover:text-white transition">Premium</a>
+              <a href="/community" className="hover:text-white transition">Topluluk</a>
+            </div>
           </div>
         </div>
       </footer>

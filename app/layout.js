@@ -24,13 +24,13 @@ export const metadata = {
     title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
     description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
     siteName: 'BİLİMCE',
-    images: [{ url: 'https://bilimce.vercel.app/og-image.png', width: 1200, height: 630, alt: 'BİLİMCE - Bilimsel Araştırmalar' }],
+    images: [{ url: 'https://bilimce.vercel.app/img8548.png', width: 1200, height: 630, alt: 'BİLİMCE - Bilimsel Araştırmalar' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
     description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
-    images: ['https://bilimce.vercel.app/og-image.png'],
+    images: ['https://bilimce.vercel.app/img8548.png'],
   },
   alternates: {
     canonical: 'https://bilimce.vercel.app',

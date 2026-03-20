@@ -218,11 +218,8 @@ const UI_TEXT = {
     source: 'Bilimsel Kaynak', favorites: 'Favorilerim', profile: 'Profilim', logout: 'Çıkış Yap', login: 'Giriş Yap',
     subtitle: 'Bilimsel araştırmalar', hero: 'Bilimi Keşfet',
     heroSub: '35 milyondan fazla hakemli bilimsel makaleye anında erişin.',
-        heroSub2: 'PubMed verilerini 7 farklı dilde okuyun.',
-
-
-
-   noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
+    heroSub2: 'PubMed verilerini 7 farklı dilde okuyun.',
+    noAbstract: 'Özet mevcut değil.', trending: 'Bu Hafta Trend', readingList: 'Okuma Listem',
     compare: 'Karşılaştır', compareBtn: 'Karşılaştır →', compareSelect: 'Karşılaştırmak için 2 makale seç',
     collections: 'Koleksiyonlarım', community: 'Topluluk', dailyArticle: 'Günün Araştırması', readMore: 'Devamını Oku →',
     filters: 'Filtreler', allTime: 'Tüm Zamanlar', last1week: 'Son 1 Hafta', last1month: 'Son 1 Ay',
@@ -249,9 +246,7 @@ const UI_TEXT = {
     source: 'Scientific Source', favorites: 'Favorites', profile: 'Profile', logout: 'Sign Out', login: 'Sign In',
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Instant access to 35M+ peer-reviewed scientific articles.',
-        heroSub2: 'Read PubMed research in 7 languages.',
-
-,
+    heroSub2: 'Read PubMed research in 7 languages.',
     noAbstract: 'No abstract available.', trending: 'Trending', readingList: 'Reading List',
     compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles',
     collections: 'Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
@@ -993,7 +988,6 @@ export default function Home() {
       )}
 
       <main className="max-w-5xl mx-auto px-4 py-10" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-
         {!searched && (
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-6">

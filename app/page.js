@@ -1094,7 +1094,8 @@ export default function Home() {
               <div className="mb-10">
                 <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {trending.map((item, i) => (
+                  {trending.slice(0, 3).map((item, i) => (
+
                     <button key={i} onClick={() => handleSearch(item.query || item.topic)} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
                       <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
                       <div className="flex items-center gap-2 mb-2">

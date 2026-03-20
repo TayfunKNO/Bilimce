@@ -1097,11 +1097,13 @@ export default function Home() {
           <div className={`text-center ${textMuted} text-xs border-t ${border} pt-6`}>
             <p className="mb-3">BİLİMCE - PubMed - {t.subtitle}</p>
             <div className="flex justify-center gap-6 flex-wrap">
-              <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
-              <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
-              <a href="/premium" className="hover:text-white transition">Premium</a>
-              <a href="/community" className="hover:text-white transition">Topluluk</a>
-            </div>
+  <a href="/about" className="hover:text-white transition">Hakkında</a>
+  <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
+  <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
+  <a href="/premium" className="hover:text-white transition">Premium</a>
+  <a href="/community" className="hover:text-white transition">Topluluk</a>
+</div>
+
           </div>
         </div>
       </footer>

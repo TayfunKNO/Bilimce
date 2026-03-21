@@ -790,7 +790,7 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, label) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    if (userLoaded && !user) { setLimitPopup('login'); return }
+    
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
     if (label) setSearchLabel(label)
     saveRecentSearch(q)

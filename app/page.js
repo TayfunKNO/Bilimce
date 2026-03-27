@@ -1195,7 +1195,8 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && !searchError && searched && articles.length === 0 && !autoTranslating && !loadingMore && (
+        
+      {!loading && !searchError && searched && articles.length === 0 && !autoTranslating && !loadingMore && totalCount === 0 && (
 
 
           <div className={compareList.length > 0 ? 'pb-28' : ''}>

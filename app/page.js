@@ -621,6 +621,7 @@ export default function Home() {
   const [page, setPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const [searchError, setSearchError] = useState(false)
+  const [searching, setSearching] = useState(false) // yeni state — arama + çeviri süreci
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
@@ -679,7 +680,7 @@ export default function Home() {
     }).catch(() => {})
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
-      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setSearchError(false) }
+      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setSearchError(false); setSearching(false) }
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
@@ -719,7 +720,8 @@ export default function Home() {
   const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
   const goBack = () => {
-    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setPage(1); setSearchError(false)
+    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([])
+    setHasMore(false); setPage(1); setSearchError(false); setSearching(false)
     window.history.pushState({}, '', '/')
   }
 
@@ -769,8 +771,8 @@ export default function Home() {
     setAutoTranslating(false)
   }
 
-  const translateBatch = async (articles, targetLang) => {
-    const updated = [...articles]
+  const translateBatch = async (arts, targetLang) => {
+    const updated = [...arts]
     for (let g = 0; g < updated.length; g += 5) {
       const group = updated.slice(g, g + 5)
       const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
@@ -815,8 +817,16 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, label) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null)
-    setArticles([]); setHasMore(false); setPage(1); setTotalCount(0); setSearchError(false)
+    setShowSuggestions(false)
+    setLoading(true)
+    setSearching(true) // arama başladı
+    setSearched(true)
+    setExpandedId(null)
+    setArticles([])
+    setHasMore(false)
+    setPage(1)
+    setTotalCount(0)
+    setSearchError(false)
     articlesRef.current = []
     currentQueryRef.current = q
     if (label) setSearchLabel(label)
@@ -847,6 +857,8 @@ export default function Home() {
       setLoading(false)
       setAutoTranslating(false)
       setSearchError(true)
+    } finally {
+      setSearching(false) // arama bitti
     }
   }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
 
@@ -1172,19 +1184,21 @@ export default function Home() {
           </>
         )}
 
-        {loading && (
+        {/* Yükleniyor skeleton */}
+        {searching && (
           <div className="grid gap-4">
             {[1,2,3].map(i => (
               <div key={i} className={`${cardBg} border ${border} rounded-2xl p-6 animate-pulse`}>
                 <div className={`h-4 ${dark ? 'bg-white/10' : 'bg-black/10'} rounded w-3/4 mb-3`}></div>
-                <div className={`h-3 ${dark ? 'bg-white/5' : 'bg-black/5'} rounded w-full`}></div>
+                <div className={`h-3 ${dark ? 'bg-white/5' : 'bg-black/5'} rounded w-full mb-2`}></div>
+                <div className={`h-3 ${dark ? 'bg-white/5' : 'bg-black/5'} rounded w-2/3`}></div>
               </div>
             ))}
           </div>
         )}
 
         {/* Hata mesajı */}
-        {!loading && searchError && (
+        {!searching && searchError && (
           <div className="text-center py-16">
             <div className="text-5xl mb-4">⚡</div>
             <h3 className={`text-lg font-bold ${text} mb-2`}>{t.errorTitle}</h3>
@@ -1195,10 +1209,8 @@ export default function Home() {
           </div>
         )}
 
-        
-      {!loading && !searchError && searched && articles.length === 0 && !autoTranslating && !loadingMore && totalCount === 0 && (
-
-
+        {/* Sonuçlar */}
+        {!searching && !searchError && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -1287,7 +1299,8 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && !searchError && searched && articles.length === 0 && (
+        {/* Gerçek sonuç yok */}
+        {!searching && !searchError && searched && articles.length === 0 && (
           <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>
             <p>{t.noResult}</p>

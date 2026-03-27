@@ -18,9 +18,155 @@ const LANGUAGES = [
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
 ]
 
+// Kategori başlıkları çokdilli
+const CATEGORY_LABELS = {
+  health: { tr: 'Sağlık & Tıp', en: 'Health & Medicine', nl: 'Gezondheid & Geneeskunde', de: 'Gesundheit & Medizin', fr: 'Santé & Médecine', es: 'Salud & Medicina', ar: 'الصحة والطب' },
+  neuro: { tr: 'Nöroloji & Psikoloji', en: 'Neurology & Psychology', nl: 'Neurologie & Psychologie', de: 'Neurologie & Psychologie', fr: 'Neurologie & Psychologie', es: 'Neurología & Psicología', ar: 'علم الأعصاب وعلم النفس' },
+  biology: { tr: 'Biyoloji & Genetik', en: 'Biology & Genetics', nl: 'Biologie & Genetica', de: 'Biologie & Genetik', fr: 'Biologie & Génétique', es: 'Biología & Genética', ar: 'الأحياء والجينات' },
+  technology: { tr: 'Teknoloji & Yapay Zeka', en: 'Technology & AI', nl: 'Technologie & AI', de: 'Technologie & KI', fr: 'Technologie & IA', es: 'Tecnología & IA', ar: 'التكنولوجيا والذكاء الاصطناعي' },
+  sports: { tr: 'Spor & Beslenme', en: 'Sports & Nutrition', nl: 'Sport & Voeding', de: 'Sport & Ernährung', fr: 'Sport & Nutrition', es: 'Deporte & Nutrición', ar: 'الرياضة والتغذية' },
+  environment: { tr: 'Çevre & İklim', en: 'Environment & Climate', nl: 'Milieu & Klimaat', de: 'Umwelt & Klima', fr: 'Environnement & Climat', es: 'Medio Ambiente & Clima', ar: 'البيئة والمناخ' },
+  physics: { tr: 'Fizik & Kimya', en: 'Physics & Chemistry', nl: 'Fysica & Chemie', de: 'Physik & Chemie', fr: 'Physique & Chimie', es: 'Física & Química', ar: 'الفيزياء والكيمياء' },
+  astronomy: { tr: 'Astronomi & Uzay', en: 'Astronomy & Space', nl: 'Astronomie & Ruimte', de: 'Astronomie & Weltraum', fr: 'Astronomie & Espace', es: 'Astronomía & Espacio', ar: 'الفلك والفضاء' },
+  aging: { tr: 'Yaşlanma & Uzun Ömür', en: 'Aging & Longevity', nl: 'Veroudering & Levensduur', de: 'Alterung & Langlebigkeit', fr: 'Vieillissement & Longévité', es: 'Envejecimiento & Longevidad', ar: 'الشيخوخة وطول العمر' },
+}
+
+const SUBCATEGORY_LABELS = {
+  // Health
+  'Kanser': { en: 'Cancer', nl: 'Kanker', de: 'Krebs', fr: 'Cancer', es: 'Cáncer', ar: 'السرطان' },
+  'Kalp & Damar': { en: 'Heart & Vascular', nl: 'Hart & Vaatziekten', de: 'Herz & Gefäße', fr: 'Cœur & Vasculaire', es: 'Corazón & Vascular', ar: 'القلب والأوعية' },
+  'Metabolik': { en: 'Metabolic', nl: 'Metabolisch', de: 'Stoffwechsel', fr: 'Métabolique', es: 'Metabólico', ar: 'الأيض' },
+  'Enfeksiyon': { en: 'Infection', nl: 'Infectie', de: 'Infektion', fr: 'Infection', es: 'Infección', ar: 'العدوى' },
+  // Neuro
+  'Nörodejeneratif': { en: 'Neurodegenerative', nl: 'Neurodegeneratief', de: 'Neurodegenerativ', fr: 'Neurodégénératif', es: 'Neurodegenerativo', ar: 'التنكس العصبي' },
+  'Ruh Sağlığı': { en: 'Mental Health', nl: 'Geestelijke Gezondheid', de: 'Psychische Gesundheit', fr: 'Santé Mentale', es: 'Salud Mental', ar: 'الصحة النفسية' },
+  'Beyin & Davranış': { en: 'Brain & Behavior', nl: 'Hersenen & Gedrag', de: 'Gehirn & Verhalten', fr: 'Cerveau & Comportement', es: 'Cerebro & Comportamiento', ar: 'الدماغ والسلوك' },
+  // Biology
+  'Genetik': { en: 'Genetics', nl: 'Genetica', de: 'Genetik', fr: 'Génétique', es: 'Genética', ar: 'الجينات' },
+  'Mikrobiyoloji': { en: 'Microbiology', nl: 'Microbiologie', de: 'Mikrobiologie', fr: 'Microbiologie', es: 'Microbiología', ar: 'علم الأحياء الدقيقة' },
+  'Hücre & Molekül': { en: 'Cell & Molecule', nl: 'Cel & Molecuul', de: 'Zelle & Molekül', fr: 'Cellule & Molécule', es: 'Célula & Molécula', ar: 'الخلية والجزيء' },
+  // Technology
+  'Yapay Zeka': { en: 'Artificial Intelligence', nl: 'Kunstmatige Intelligentie', de: 'Künstliche Intelligenz', fr: 'Intelligence Artificielle', es: 'Inteligencia Artificial', ar: 'الذكاء الاصطناعي' },
+  'Biyoteknoloji': { en: 'Biotechnology', nl: 'Biotechnologie', de: 'Biotechnologie', fr: 'Biotechnologie', es: 'Biotecnología', ar: 'التكنولوجيا الحيوية' },
+  'Robotik & Cerrahi': { en: 'Robotics & Surgery', nl: 'Robotica & Chirurgie', de: 'Robotik & Chirurgie', fr: 'Robotique & Chirurgie', es: 'Robótica & Cirugía', ar: 'الروبوتات والجراحة' },
+  // Sports
+  'Performans': { en: 'Performance', nl: 'Prestatie', de: 'Leistung', fr: 'Performance', es: 'Rendimiento', ar: 'الأداء' },
+  'Beslenme': { en: 'Nutrition', nl: 'Voeding', de: 'Ernährung', fr: 'Nutrition', es: 'Nutrición', ar: 'التغذية' },
+  'Yaralanma & İyileşme': { en: 'Injury & Recovery', nl: 'Blessure & Herstel', de: 'Verletzung & Erholung', fr: 'Blessure & Récupération', es: 'Lesión & Recuperación', ar: 'الإصابة والتعافي' },
+  // Environment
+  'İklim': { en: 'Climate', nl: 'Klimaat', de: 'Klima', fr: 'Climat', es: 'Clima', ar: 'المناخ' },
+  'Kirlilik': { en: 'Pollution', nl: 'Vervuiling', de: 'Verschmutzung', fr: 'Pollution', es: 'Contaminación', ar: 'التلوث' },
+  'Ekosistem': { en: 'Ecosystem', nl: 'Ecosysteem', de: 'Ökosystem', fr: 'Écosystème', es: 'Ecosistema', ar: 'النظام البيئي' },
+  // Physics
+  'Fizik': { en: 'Physics', nl: 'Fysica', de: 'Physik', fr: 'Physique', es: 'Física', ar: 'الفيزياء' },
+  'Kimya': { en: 'Chemistry', nl: 'Chemie', de: 'Chemie', fr: 'Chimie', es: 'Química', ar: 'الكيمياء' },
+  // Astronomy
+  'Uzay': { en: 'Space', nl: 'Ruimte', de: 'Weltraum', fr: 'Espace', es: 'Espacio', ar: 'الفضاء' },
+  'Uzay Tıbbı': { en: 'Space Medicine', nl: 'Ruimtegeneeskunde', de: 'Raumfahrtmedizin', fr: 'Médecine Spatiale', es: 'Medicina Espacial', ar: 'طب الفضاء' },
+  // Aging
+  'Yaşlanma Biyolojisi': { en: 'Aging Biology', nl: 'Verouderingsbiologie', de: 'Alterungsbiologie', fr: 'Biologie du Vieillissement', es: 'Biología del Envejecimiento', ar: 'بيولوجيا الشيخوخة' },
+  'Uzun Ömür': { en: 'Longevity', nl: 'Levensduur', de: 'Langlebigkeit', fr: 'Longévité', es: 'Longevidad', ar: 'طول العمر' },
+}
+
+const TOPIC_LABELS = {
+  'Meme Kanseri': { en: 'Breast Cancer', nl: 'Borstkanker', de: 'Brustkrebs', fr: 'Cancer du sein', es: 'Cáncer de mama', ar: 'سرطان الثدي' },
+  'Akciğer Kanseri': { en: 'Lung Cancer', nl: 'Longkanker', de: 'Lungenkrebs', fr: 'Cancer du poumon', es: 'Cáncer de pulmón', ar: 'سرطان الرئة' },
+  'Kolon Kanseri': { en: 'Colon Cancer', nl: 'Dikkedarmkanker', de: 'Darmkrebs', fr: 'Cancer du côlon', es: 'Cáncer de colon', ar: 'سرطان القولون' },
+  'Kanser Tedavisi': { en: 'Cancer Treatment', nl: 'Kankerbehandeling', de: 'Krebsbehandlung', fr: 'Traitement du cancer', es: 'Tratamiento del cáncer', ar: 'علاج السرطان' },
+  'İmmünoterapi': { en: 'Immunotherapy', nl: 'Immunotherapie', de: 'Immuntherapie', fr: 'Immunothérapie', es: 'Inmunoterapia', ar: 'العلاج المناعي' },
+  'Kalp Hastalığı': { en: 'Heart Disease', nl: 'Hartziekte', de: 'Herzerkrankung', fr: 'Maladie cardiaque', es: 'Enfermedad cardíaca', ar: 'أمراض القلب' },
+  'Hipertansiyon': { en: 'Hypertension', nl: 'Hoge bloeddruk', de: 'Hypertonie', fr: 'Hypertension', es: 'Hipertensión', ar: 'ارتفاع ضغط الدم' },
+  'İnme': { en: 'Stroke', nl: 'Beroerte', de: 'Schlaganfall', fr: 'AVC', es: 'Ictus', ar: 'السكتة الدماغية' },
+  'Kalp Yetmezliği': { en: 'Heart Failure', nl: 'Hartfalen', de: 'Herzinsuffizienz', fr: 'Insuffisance cardiaque', es: 'Insuficiencia cardíaca', ar: 'فشل القلب' },
+  'Diyabet': { en: 'Diabetes', nl: 'Diabetes', de: 'Diabetes', fr: 'Diabète', es: 'Diabetes', ar: 'السكري' },
+  'Obezite': { en: 'Obesity', nl: 'Obesitas', de: 'Fettleibigkeit', fr: 'Obésité', es: 'Obesidad', ar: 'السمنة' },
+  'Tiroid': { en: 'Thyroid', nl: 'Schildklier', de: 'Schilddrüse', fr: 'Thyroïde', es: 'Tiroides', ar: 'الغدة الدرقية' },
+  'Metabolik Sendrom': { en: 'Metabolic Syndrome', nl: 'Metabool syndroom', de: 'Metabolisches Syndrom', fr: 'Syndrome métabolique', es: 'Síndrome metabólico', ar: 'متلازمة التمثيل الغذائي' },
+  'COVID-19': { en: 'COVID-19', nl: 'COVID-19', de: 'COVID-19', fr: 'COVID-19', es: 'COVID-19', ar: 'كوفيد-19' },
+  'Antibiyotik Direnci': { en: 'Antibiotic Resistance', nl: 'Antibioticumresistentie', de: 'Antibiotikaresistenz', fr: 'Résistance aux antibiotiques', es: 'Resistencia antibiótica', ar: 'مقاومة المضادات الحيوية' },
+  'Aşı': { en: 'Vaccine', nl: 'Vaccin', de: 'Impfstoff', fr: 'Vaccin', es: 'Vacuna', ar: 'اللقاح' },
+  'Grip & İnfluenza': { en: 'Influenza', nl: 'Griep', de: 'Grippe', fr: 'Grippe', es: 'Gripe', ar: 'الإنفلونزا' },
+  'Alzheimer': { en: 'Alzheimer', nl: 'Alzheimer', de: 'Alzheimer', fr: 'Alzheimer', es: 'Alzheimer', ar: 'الزهايمر' },
+  'Parkinson': { en: 'Parkinson', nl: 'Parkinson', de: 'Parkinson', fr: 'Parkinson', es: 'Parkinson', ar: 'باركنسون' },
+  'Multiple Skleroz': { en: 'Multiple Sclerosis', nl: 'Multiple Sclerose', de: 'Multiple Sklerose', fr: 'Sclérose en plaques', es: 'Esclerosis múltiple', ar: 'التصلب المتعدد' },
+  'ALS': { en: 'ALS', nl: 'ALS', de: 'ALS', fr: 'SLA', es: 'ELA', ar: 'التصلب الجانبي الضموري' },
+  'Depresyon': { en: 'Depression', nl: 'Depressie', de: 'Depression', fr: 'Dépression', es: 'Depresión', ar: 'الاكتئاب' },
+  'Anksiyete': { en: 'Anxiety', nl: 'Angststoornis', de: 'Angststörung', fr: 'Anxiété', es: 'Ansiedad', ar: 'القلق' },
+  'Bipolar Bozukluk': { en: 'Bipolar Disorder', nl: 'Bipolaire stoornis', de: 'Bipolare Störung', fr: 'Trouble bipolaire', es: 'Trastorno bipolar', ar: 'الاضطراب ثنائي القطب' },
+  'Şizofreni': { en: 'Schizophrenia', nl: 'Schizofrenie', de: 'Schizophrenie', fr: 'Schizophrénie', es: 'Esquizofrenia', ar: 'الفصام' },
+  'Uyku Bozukluğu': { en: 'Sleep Disorder', nl: 'Slaapstoornis', de: 'Schlafstörung', fr: 'Trouble du sommeil', es: 'Trastorno del sueño', ar: 'اضطراب النوم' },
+  'Bağımlılık': { en: 'Addiction', nl: 'Verslaving', de: 'Sucht', fr: 'Dépendance', es: 'Adicción', ar: 'الإدمان' },
+  'Otizm': { en: 'Autism', nl: 'Autisme', de: 'Autismus', fr: 'Autisme', es: 'Autismo', ar: 'التوحد' },
+  'ADHD': { en: 'ADHD', nl: 'ADHD', de: 'ADHS', fr: 'TDAH', es: 'TDAH', ar: 'اضطراب فرط الحركة' },
+  'CRISPR Gen Düzenleme': { en: 'CRISPR Gene Editing', nl: 'CRISPR Genbewerking', de: 'CRISPR Genbearbeitung', fr: 'CRISPR Édition génique', es: 'Edición genética CRISPR', ar: 'تحرير الجينات كريسبر' },
+  'Gen Tedavisi': { en: 'Gene Therapy', nl: 'Gentherapie', de: 'Gentherapie', fr: 'Thérapie génique', es: 'Terapia génica', ar: 'العلاج الجيني' },
+  'Genomik': { en: 'Genomics', nl: 'Genomica', de: 'Genomik', fr: 'Génomique', es: 'Genómica', ar: 'علم الجينوم' },
+  'Epigenetik': { en: 'Epigenetics', nl: 'Epigenetica', de: 'Epigenetik', fr: 'Épigénétique', es: 'Epigenética', ar: 'علم التخلق' },
+  'Mikrobiyom': { en: 'Microbiome', nl: 'Microbioom', de: 'Mikrobiom', fr: 'Microbiome', es: 'Microbioma', ar: 'الميكروبيوم' },
+  'Probiyotik': { en: 'Probiotic', nl: 'Probiotica', de: 'Probiotika', fr: 'Probiotique', es: 'Probiótico', ar: 'البروبيوتيك' },
+  'Viroloji': { en: 'Virology', nl: 'Virologie', de: 'Virologie', fr: 'Virologie', es: 'Virología', ar: 'علم الفيروسات' },
+  'Antibiyotik': { en: 'Antibiotic', nl: 'Antibioticum', de: 'Antibiotikum', fr: 'Antibiotique', es: 'Antibiótico', ar: 'المضاد الحيوي' },
+  'Kök Hücre': { en: 'Stem Cell', nl: 'Stamcel', de: 'Stammzelle', fr: 'Cellule souche', es: 'Célula madre', ar: 'الخلية الجذعية' },
+  'Protein Katlama': { en: 'Protein Folding', nl: 'Eiwitvouwing', de: 'Proteinfaltung', fr: 'Repliement des protéines', es: 'Plegamiento de proteínas', ar: 'طي البروتين' },
+  'Mitokondri': { en: 'Mitochondria', nl: 'Mitochondriën', de: 'Mitochondrien', fr: 'Mitochondries', es: 'Mitocondrias', ar: 'الميتوكوندريا' },
+  'Apoptoz': { en: 'Apoptosis', nl: 'Apoptose', de: 'Apoptose', fr: 'Apoptose', es: 'Apoptosis', ar: 'الاستماتة' },
+  'AI ve Tıp': { en: 'AI & Medicine', nl: 'AI & Geneeskunde', de: 'KI & Medizin', fr: 'IA & Médecine', es: 'IA & Medicina', ar: 'الذكاء الاصطناعي والطب' },
+  'Derin Öğrenme': { en: 'Deep Learning', nl: 'Diep leren', de: 'Tiefes Lernen', fr: 'Apprentissage profond', es: 'Aprendizaje profundo', ar: 'التعلم العميق' },
+  'NLP': { en: 'NLP', nl: 'NLP', de: 'NLP', fr: 'TAL', es: 'PLN', ar: 'معالجة اللغة الطبيعية' },
+  'Makine Öğrenmesi': { en: 'Machine Learning', nl: 'Machinaal leren', de: 'Maschinelles Lernen', fr: 'Apprentissage automatique', es: 'Aprendizaje automático', ar: 'تعلم الآلة' },
+  'Nanoteknoloji': { en: 'Nanotechnology', nl: 'Nanotechnologie', de: 'Nanotechnologie', fr: 'Nanotechnologie', es: 'Nanotecnología', ar: 'تقنية النانو' },
+  'Biyosensör': { en: 'Biosensor', nl: 'Biosensor', de: 'Biosensor', fr: 'Biocapteur', es: 'Biosensor', ar: 'المستشعر الحيوي' },
+  'Organ-on-Chip': { en: 'Organ-on-Chip', nl: 'Orgaan-op-chip', de: 'Organ-auf-Chip', fr: 'Organe-sur-puce', es: 'Órgano en chip', ar: 'عضو على شريحة' },
+  '3D Biyoyazıcı': { en: '3D Bioprinting', nl: '3D Bioprinten', de: '3D Biodruck', fr: 'Bioimpression 3D', es: 'Bioimpresión 3D', ar: 'الطباعة الحيوية ثلاثية الأبعاد' },
+  'Robotik Cerrahi': { en: 'Robotic Surgery', nl: 'Robotchirurgie', de: 'Roboterchirurgie', fr: 'Chirurgie robotique', es: 'Cirugía robótica', ar: 'الجراحة الروبوتية' },
+  'Telesağlık': { en: 'Telehealth', nl: 'Telegeneeskunde', de: 'Telemedizin', fr: 'Télésanté', es: 'Telesalud', ar: 'الصحة عن بُعد' },
+  'Giyilebilir Teknoloji': { en: 'Wearable Technology', nl: 'Draagbare technologie', de: 'Wearable-Technologie', fr: 'Technologie portable', es: 'Tecnología ponible', ar: 'التقنية القابلة للارتداء' },
+  'Kreatin': { en: 'Creatine', nl: 'Creatine', de: 'Kreatin', fr: 'Créatine', es: 'Creatina', ar: 'الكرياتين' },
+  'Spor Performansı': { en: 'Athletic Performance', nl: 'Sportprestaties', de: 'Sportliche Leistung', fr: 'Performance sportive', es: 'Rendimiento atlético', ar: 'الأداء الرياضي' },
+  'Kas Hipertrofisi': { en: 'Muscle Hypertrophy', nl: 'Spierhypertrofie', de: 'Muskelhypertrophie', fr: 'Hypertrophie musculaire', es: 'Hipertrofia muscular', ar: 'تضخم العضلات' },
+  'Dayanıklılık': { en: 'Endurance', nl: 'Uithoudingsvermogen', de: 'Ausdauer', fr: 'Endurance', es: 'Resistencia', ar: 'التحمل' },
+  'Aralıklı Oruç': { en: 'Intermittent Fasting', nl: 'Intermitterend vasten', de: 'Intervallfasten', fr: 'Jeûne intermittent', es: 'Ayuno intermitente', ar: 'الصيام المتقطع' },
+  'Omega-3': { en: 'Omega-3', nl: 'Omega-3', de: 'Omega-3', fr: 'Oméga-3', es: 'Omega-3', ar: 'أوميغا-3' },
+  'Vitamin D': { en: 'Vitamin D', nl: 'Vitamine D', de: 'Vitamin D', fr: 'Vitamine D', es: 'Vitamina D', ar: 'فيتامين د' },
+  'Magnezyum': { en: 'Magnesium', nl: 'Magnesium', de: 'Magnesium', fr: 'Magnésium', es: 'Magnesio', ar: 'المغنيسيوم' },
+  'Spor Yaralanması': { en: 'Sports Injury', nl: 'Sportblessure', de: 'Sportverletzung', fr: 'Blessure sportive', es: 'Lesión deportiva', ar: 'الإصابة الرياضية' },
+  'Fizik Tedavi': { en: 'Physical Therapy', nl: 'Fysiotherapie', de: 'Physiotherapie', fr: 'Kinésithérapie', es: 'Fisioterapia', ar: 'العلاج الطبيعي' },
+  'Toparlanma': { en: 'Recovery', nl: 'Herstel', de: 'Erholung', fr: 'Récupération', es: 'Recuperación', ar: 'التعافي' },
+  'İklim Değişikliği': { en: 'Climate Change', nl: 'Klimaatverandering', de: 'Klimawandel', fr: 'Changement climatique', es: 'Cambio climático', ar: 'تغير المناخ' },
+  'Karbon Emisyonu': { en: 'Carbon Emission', nl: 'Koolstofemissie', de: 'Kohlenstoffemission', fr: 'Émission de carbone', es: 'Emisión de carbono', ar: 'انبعاثات الكربون' },
+  'Yenilenebilir Enerji': { en: 'Renewable Energy', nl: 'Hernieuwbare energie', de: 'Erneuerbare Energie', fr: 'Énergie renouvelable', es: 'Energía renovable', ar: 'الطاقة المتجددة' },
+  'Hava Kirliliği': { en: 'Air Pollution', nl: 'Luchtvervuiling', de: 'Luftverschmutzung', fr: 'Pollution atmosphérique', es: 'Contaminación del aire', ar: 'تلوث الهواء' },
+  'Plastik Kirliliği': { en: 'Plastic Pollution', nl: 'Plasticvervuiling', de: 'Plastikverschmutzung', fr: 'Pollution plastique', es: 'Contaminación plástica', ar: 'تلوث البلاستيك' },
+  'Su Kirliliği': { en: 'Water Pollution', nl: 'Watervervuiling', de: 'Wasserverschmutzung', fr: 'Pollution de l\'eau', es: 'Contaminación del agua', ar: 'تلوث المياه' },
+  'Biyoçeşitlilik': { en: 'Biodiversity', nl: 'Biodiversiteit', de: 'Biodiversität', fr: 'Biodiversité', es: 'Biodiversidad', ar: 'التنوع البيولوجي' },
+  'Orman Yangınları': { en: 'Wildfires', nl: 'Bosbranden', de: 'Waldbrände', fr: 'Incendies de forêt', es: 'Incendios forestales', ar: 'حرائق الغابات' },
+  'Okyanuslar': { en: 'Oceans', nl: 'Oceanen', de: 'Ozeane', fr: 'Océans', es: 'Océanos', ar: 'المحيطات' },
+  'Kuantum Fizik': { en: 'Quantum Physics', nl: 'Kwantumfysica', de: 'Quantenphysik', fr: 'Physique quantique', es: 'Física cuántica', ar: 'فيزياء الكم' },
+  'Kuantum Bilgisayar': { en: 'Quantum Computing', nl: 'Kwantumcomputing', de: 'Quantencomputing', fr: 'Informatique quantique', es: 'Computación cuántica', ar: 'الحوسبة الكمومية' },
+  'Nükleer Fizik': { en: 'Nuclear Physics', nl: 'Kernfysica', de: 'Kernphysik', fr: 'Physique nucléaire', es: 'Física nuclear', ar: 'الفيزياء النووية' },
+  'Yoğun Madde': { en: 'Condensed Matter', nl: 'Gecondenseerde materie', de: 'Kondensierte Materie', fr: 'Matière condensée', es: 'Materia condensada', ar: 'المادة المكثفة' },
+  'Organik Kimya': { en: 'Organic Chemistry', nl: 'Organische chemie', de: 'Organische Chemie', fr: 'Chimie organique', es: 'Química orgánica', ar: 'الكيمياء العضوية' },
+  'İlaç Kimyası': { en: 'Medicinal Chemistry', nl: 'Medicinale chemie', de: 'Medizinische Chemie', fr: 'Chimie médicinale', es: 'Química medicinal', ar: 'الكيمياء الدوائية' },
+  'Malzeme Bilimi': { en: 'Materials Science', nl: 'Materiaalkunde', de: 'Materialwissenschaft', fr: 'Science des matériaux', es: 'Ciencia de materiales', ar: 'علم المواد' },
+  'Katalizör': { en: 'Catalyst', nl: 'Katalysator', de: 'Katalysator', fr: 'Catalyseur', es: 'Catalizador', ar: 'المحفز' },
+  'Kara Delik': { en: 'Black Hole', nl: 'Zwart gat', de: 'Schwarzes Loch', fr: 'Trou noir', es: 'Agujero negro', ar: 'الثقب الأسود' },
+  'Eksogezegenler': { en: 'Exoplanets', nl: 'Exoplaneten', de: 'Exoplaneten', fr: 'Exoplanètes', es: 'Exoplanetas', ar: 'الكواكب خارج المجموعة الشمسية' },
+  'Karanlık Madde': { en: 'Dark Matter', nl: 'Donkere materie', de: 'Dunkle Materie', fr: 'Matière noire', es: 'Materia oscura', ar: 'المادة المظلمة' },
+  'Evrenin Genişlemesi': { en: 'Universe Expansion', nl: 'Uitdijend heelal', de: 'Ausdehnung des Universums', fr: 'Expansion de l\'univers', es: 'Expansión del universo', ar: 'تمدد الكون' },
+  'Uzay ve Sağlık': { en: 'Space & Health', nl: 'Ruimte & Gezondheid', de: 'Weltraum & Gesundheit', fr: 'Espace & Santé', es: 'Espacio & Salud', ar: 'الفضاء والصحة' },
+  'Mars Araştırması': { en: 'Mars Exploration', nl: 'Marsverkenning', de: 'Marserkundung', fr: 'Exploration de Mars', es: 'Exploración de Marte', ar: 'استكشاف المريخ' },
+  'Yaşlanma Biyolojisi': { en: 'Aging Biology', nl: 'Verouderingsbiologie', de: 'Alterungsbiologie', fr: 'Biologie du vieillissement', es: 'Biología del envejecimiento', ar: 'بيولوجيا الشيخوخة' },
+  'Telomer': { en: 'Telomere', nl: 'Telomeer', de: 'Telomer', fr: 'Télomère', es: 'Telómero', ar: 'التيلومير' },
+  'Senolitik': { en: 'Senolytic', nl: 'Senolytisch', de: 'Senolytisch', fr: 'Sénolytique', es: 'Senolítico', ar: 'العلاج الخلوي الشيخوخي' },
+  'Otofaji': { en: 'Autophagy', nl: 'Autofagie', de: 'Autophagie', fr: 'Autophagie', es: 'Autofagia', ar: 'الالتهام الذاتي' },
+  'Kalori Kısıtlama': { en: 'Caloric Restriction', nl: 'Caloriebeperking', de: 'Kalorienreduktion', fr: 'Restriction calorique', es: 'Restricción calórica', ar: 'تقييد السعرات الحرارية' },
+  'NAD+': { en: 'NAD+', nl: 'NAD+', de: 'NAD+', fr: 'NAD+', es: 'NAD+', ar: 'NAD+' },
+  'Sirtuinler': { en: 'Sirtuins', nl: 'Sirtuïnen', de: 'Sirtuine', fr: 'Sirtuines', es: 'Sirtuinas', ar: 'السيرتوين' },
+}
+
 const TOPIC_CATEGORIES = [
   {
-    id: 'health', icon: '🏥', label: 'Sağlık & Tıp',
+    id: 'health', icon: '🏥',
     subcategories: [
       { label: 'Kanser', topics: [
         { slug: 'meme-kanseri', label: 'Meme Kanseri', en: 'breast cancer' },
@@ -50,7 +196,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'neuro', icon: '🧠', label: 'Nöroloji & Psikoloji',
+    id: 'neuro', icon: '🧠',
     subcategories: [
       { label: 'Nörodejeneratif', topics: [
         { slug: 'alzheimer', label: 'Alzheimer', en: 'alzheimer disease' },
@@ -73,7 +219,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'biology', icon: '🧬', label: 'Biyoloji & Genetik',
+    id: 'biology', icon: '🧬',
     subcategories: [
       { label: 'Genetik', topics: [
         { slug: 'crispr', label: 'CRISPR Gen Düzenleme', en: 'CRISPR gene editing' },
@@ -96,7 +242,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'technology', icon: '💻', label: 'Teknoloji & Yapay Zeka',
+    id: 'technology', icon: '💻',
     subcategories: [
       { label: 'Yapay Zeka', topics: [
         { slug: 'yapay-zeka-tip', label: 'AI ve Tıp', en: 'artificial intelligence medicine' },
@@ -118,7 +264,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'sports', icon: '💪', label: 'Spor & Beslenme',
+    id: 'sports', icon: '💪',
     subcategories: [
       { label: 'Performans', topics: [
         { slug: 'kreatin', label: 'Kreatin', en: 'creatine supplementation' },
@@ -140,7 +286,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'environment', icon: '🌍', label: 'Çevre & İklim',
+    id: 'environment', icon: '🌍',
     subcategories: [
       { label: 'İklim', topics: [
         { slug: 'iklim-degisikligi', label: 'İklim Değişikliği', en: 'climate change' },
@@ -160,7 +306,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'physics', icon: '⚛️', label: 'Fizik & Kimya',
+    id: 'physics', icon: '⚛️',
     subcategories: [
       { label: 'Fizik', topics: [
         { slug: 'kuantum-fizik', label: 'Kuantum Fizik', en: 'quantum physics' },
@@ -177,7 +323,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'astronomy', icon: '🔭', label: 'Astronomi & Uzay',
+    id: 'astronomy', icon: '🔭',
     subcategories: [
       { label: 'Uzay', topics: [
         { slug: 'kara-delik', label: 'Kara Delik', en: 'black hole' },
@@ -192,7 +338,7 @@ const TOPIC_CATEGORIES = [
     ]
   },
   {
-    id: 'aging', icon: '⏳', label: 'Yaşlanma & Uzun Ömür',
+    id: 'aging', icon: '⏳',
     subcategories: [
       { label: 'Yaşlanma Biyolojisi', topics: [
         { slug: 'yaslanma-biyoloji', label: 'Yaşlanma Biyolojisi', en: 'aging biology longevity' },
@@ -231,7 +377,7 @@ const UI_TEXT = {
     last1year: 'Son 1 Yıl', last5years: 'Son 5 Yıl', last10years: 'Son 10 Yıl',
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
-    clearFilters: 'Temizle', invite: 'Davet Et', topics: 'Araştırma Alanları',
+    clearFilters: 'Temizle', invite: 'Davet Et', topics: 'Araştırma Alanları', topicsCount: 'konu',
     stats: ['35M+', '9', '7'], statsLabel: ['Makale', 'Alan', 'Dil'],
     emailPlaceholder: 'email@adresin.com', emailBtn: 'Abone Ol', emailSuccess: '✓ Abone oldunuz!',
     emailTitle: '📬 Yeni özelliklerden haberdar ol', emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
@@ -242,6 +388,7 @@ const UI_TEXT = {
     back: '← Geri', sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi · Hakemli Bilimsel Dergi',
     loadMore: 'Daha Fazla Yükle', loadingMore: 'Yükleniyor...',
     errorTitle: 'Bağlantı hatası', errorMsg: 'Sonuçlar yüklenemedi. Lütfen tekrar deneyin.', errorBtn: 'Tekrar Dene',
+    newArticles: 'yeni makale',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer...',
@@ -252,14 +399,14 @@ const UI_TEXT = {
     subtitle: 'Scientific research', hero: 'Discover Science',
     heroSub: 'Instant access to 35M+ peer-reviewed scientific articles.',
     heroSub2: 'Read PubMed research in 7 languages.',
-    noAbstract: 'No abstract available.', trending: 'Trending', readingList: 'Reading List',
-    compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles',
+    noAbstract: 'No abstract available.', trending: 'Trending This Week', readingList: 'Reading List',
+    compare: 'Compare', compareBtn: 'Compare →', compareSelect: 'Select 2 articles to compare',
     collections: 'Collections', community: 'Community', dailyArticle: 'Article of the Day', readMore: 'Read More →',
     filters: 'Filters', allTime: 'All Time', last1week: 'Last Week', last1month: 'Last Month',
     last1year: 'Last Year', last5years: '5 Years', last10years: '10 Years',
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized', systematicReview: 'Systematic Review', caseReport: 'Case Report',
-    clearFilters: 'Clear', invite: 'Invite', topics: 'Research Areas',
+    clearFilters: 'Clear', invite: 'Invite', topics: 'Research Areas', topicsCount: 'topics',
     stats: ['35M+', '9', '7'], statsLabel: ['Articles', 'Fields', 'Languages'],
     emailPlaceholder: 'your@email.com', emailBtn: 'Subscribe', emailSuccess: '✓ Subscribed!',
     emailTitle: '📬 Stay updated', emailSub: 'Weekly science digest and new features',
@@ -269,6 +416,7 @@ const UI_TEXT = {
     back: '← Back', sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed',
     loadMore: 'Load More', loadingMore: 'Loading...',
     errorTitle: 'Connection error', errorMsg: 'Could not load results. Please try again.', errorBtn: 'Try Again',
+    newArticles: 'new articles',
   },
   nl: {
     search: 'Zoeken', searching: 'Zoeken...', placeholder: 'Bijv: creatine, alzheimer...',
@@ -279,14 +427,14 @@ const UI_TEXT = {
     subtitle: 'Wetenschappelijk onderzoek', hero: 'Ontdek Wetenschap',
     heroSub: 'Direct toegang tot 35M+ wetenschappelijke artikelen.',
     heroSub2: 'Lees PubMed onderzoek in 7 talen.',
-    noAbstract: 'Geen samenvatting.', trending: 'Trending', readingList: 'Leeslijst',
+    noAbstract: 'Geen samenvatting.', trending: 'Trending Deze Week', readingList: 'Leeslijst',
     compare: 'Vergelijken', compareBtn: 'Vergelijken →', compareSelect: '2 artikelen selecteren',
     collections: 'Collecties', community: 'Gemeenschap', dailyArticle: 'Artikel van de Dag', readMore: 'Meer lezen →',
     filters: 'Filters', allTime: 'Alle tijd', last1week: 'Laatste week', last1month: 'Laatste maand',
     last1year: 'Laatste jaar', last5years: '5 jaar', last10years: '10 jaar',
     allTypes: 'Alle types', clinicalTrial: 'Klinische studie', review: 'Overzicht', metaAnalysis: 'Meta-analyse',
     randomized: 'Gerandomiseerd', systematicReview: 'Systematisch', caseReport: 'Casusrapport',
-    clearFilters: 'Wissen', invite: 'Uitnodigen', topics: 'Onderzoeksgebieden',
+    clearFilters: 'Wissen', invite: 'Uitnodigen', topics: 'Onderzoeksgebieden', topicsCount: 'onderwerpen',
     stats: ['35M+', '9', '7'], statsLabel: ['Artikelen', 'Gebieden', 'Talen'],
     emailPlaceholder: 'uw@email.nl', emailBtn: 'Abonneren', emailSuccess: '✓ Geabonneerd!',
     emailTitle: '📬 Blijf op de hoogte', emailSub: 'Wekelijks wetenschapsoverzicht',
@@ -296,6 +444,7 @@ const UI_TEXT = {
     back: '← Terug', sourceLabel: 'Bron: PubMed · NIH · Peer-reviewed',
     loadMore: 'Meer laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindingsfout', errorMsg: 'Resultaten konden niet worden geladen.', errorBtn: 'Opnieuw proberen',
+    newArticles: 'nieuwe artikelen',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -306,14 +455,14 @@ const UI_TEXT = {
     subtitle: 'Wissenschaft', hero: 'Wissenschaft entdecken',
     heroSub: 'Sofortiger Zugang zu 35M+ wissenschaftlichen Artikeln.',
     heroSub2: 'PubMed-Forschung in 7 Sprachen lesen.',
-    noAbstract: 'Kein Abstract.', trending: 'Trending', readingList: 'Leseliste',
+    noAbstract: 'Kein Abstract.', trending: 'Trend Diese Woche', readingList: 'Leseliste',
     compare: 'Vergleichen', compareBtn: 'Vergleichen →', compareSelect: '2 Artikel wählen',
     collections: 'Sammlungen', community: 'Community', dailyArticle: 'Artikel des Tages', readMore: 'Mehr →',
     filters: 'Filter', allTime: 'Alle Zeit', last1week: 'Letzte Woche', last1month: 'Letzter Monat',
     last1year: 'Letztes Jahr', last5years: '5 Jahre', last10years: '10 Jahre',
     allTypes: 'Alle', clinicalTrial: 'Klinisch', review: 'Übersicht', metaAnalysis: 'Meta',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
-    clearFilters: 'Löschen', invite: 'Einladen', topics: 'Forschungsgebiete',
+    clearFilters: 'Löschen', invite: 'Einladen', topics: 'Forschungsgebiete', topicsCount: 'Themen',
     stats: ['35M+', '9', '7'], statsLabel: ['Artikel', 'Gebiete', 'Sprachen'],
     emailPlaceholder: 'ihre@email.de', emailBtn: 'Abonnieren', emailSuccess: '✓ Abonniert!',
     emailTitle: '📬 Neuigkeiten', emailSub: 'Wöchentliche Zusammenfassung',
@@ -323,6 +472,7 @@ const UI_TEXT = {
     back: '← Zurück', sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
     loadMore: 'Mehr laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindungsfehler', errorMsg: 'Ergebnisse konnten nicht geladen werden.', errorBtn: 'Erneut versuchen',
+    newArticles: 'neue Artikel',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -333,14 +483,14 @@ const UI_TEXT = {
     subtitle: 'Science', hero: 'Découvrir la science',
     heroSub: 'Accès instantané à 35M+ articles scientifiques.',
     heroSub2: 'Lisez la recherche PubMed en 7 langues.',
-    noAbstract: 'Aucun résumé.', trending: 'Tendances', readingList: 'Liste',
-    compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2',
+    noAbstract: 'Aucun résumé.', trending: 'Tendances Cette Semaine', readingList: 'Liste',
+    compare: 'Comparer', compareBtn: 'Comparer →', compareSelect: 'Sélectionner 2 articles',
     collections: 'Collections', community: 'Communauté', dailyArticle: 'Article du Jour', readMore: 'Lire →',
     filters: 'Filtres', allTime: 'Tout', last1week: 'Semaine', last1month: 'Mois',
     last1year: 'Année', last5years: '5 ans', last10years: '10 ans',
     allTypes: 'Tous', clinicalTrial: 'Essai', review: 'Revue', metaAnalysis: 'Méta',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
-    clearFilters: 'Effacer', invite: 'Inviter', topics: 'Domaines',
+    clearFilters: 'Effacer', invite: 'Inviter', topics: 'Domaines', topicsCount: 'sujets',
     stats: ['35M+', '9', '7'], statsLabel: ['Articles', 'Domaines', 'Langues'],
     emailPlaceholder: 'email@example.fr', emailBtn: "S'abonner", emailSuccess: '✓ Abonné!',
     emailTitle: '📬 Restez informé', emailSub: 'Résumé hebdomadaire',
@@ -350,6 +500,7 @@ const UI_TEXT = {
     back: '← Retour', sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
     loadMore: 'Charger plus', loadingMore: 'Chargement...',
     errorTitle: 'Erreur de connexion', errorMsg: 'Impossible de charger les résultats.', errorBtn: 'Réessayer',
+    newArticles: 'nouveaux articles',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -360,14 +511,14 @@ const UI_TEXT = {
     subtitle: 'Ciencia', hero: 'Descubrir la ciencia',
     heroSub: 'Acceso instantáneo a 35M+ artículos científicos.',
     heroSub2: 'Lee investigación PubMed en 7 idiomas.',
-    noAbstract: 'Sin resumen.', trending: 'Tendencias', readingList: 'Lista',
-    compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2',
+    noAbstract: 'Sin resumen.', trending: 'Tendencias Esta Semana', readingList: 'Lista',
+    compare: 'Comparar', compareBtn: 'Comparar →', compareSelect: 'Seleccionar 2 artículos',
     collections: 'Colecciones', community: 'Comunidad', dailyArticle: 'Artículo del Día', readMore: 'Leer →',
     filters: 'Filtros', allTime: 'Todo', last1week: 'Semana', last1month: 'Mes',
     last1year: 'Año', last5years: '5 años', last10years: '10 años',
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Meta',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
-    clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Áreas',
+    clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Áreas de investigación', topicsCount: 'temas',
     stats: ['35M+', '9', '7'], statsLabel: ['Artículos', 'Áreas', 'Idiomas'],
     emailPlaceholder: 'email@ejemplo.com', emailBtn: 'Suscribirse', emailSuccess: '✓ Suscrito!',
     emailTitle: '📬 Novedades', emailSub: 'Resumen semanal',
@@ -377,6 +528,7 @@ const UI_TEXT = {
     back: '← Volver', sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
     loadMore: 'Cargar más', loadingMore: 'Cargando...',
     errorTitle: 'Error de conexión', errorMsg: 'No se pudieron cargar los resultados.', errorBtn: 'Intentar de nuevo',
+    newArticles: 'nuevos artículos',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -387,14 +539,14 @@ const UI_TEXT = {
     subtitle: 'العلوم', hero: 'اكتشف العلم',
     heroSub: 'وصول فوري إلى أكثر من 35 مليون مقال علمي.',
     heroSub2: 'اقرأ أبحاث PubMed بـ 7 لغات.',
-    noAbstract: 'لا ملخص.', trending: 'رائج', readingList: 'قائمة',
-    compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر 2',
+    noAbstract: 'لا ملخص.', trending: 'رائج هذا الأسبوع', readingList: 'قائمة',
+    compare: 'مقارنة', compareBtn: 'مقارنة →', compareSelect: 'اختر مقالتين للمقارنة',
     collections: 'مجموعات', community: 'مجتمع', dailyArticle: 'بحث اليوم', readMore: 'المزيد →',
     filters: 'فلاتر', allTime: 'الكل', last1week: 'أسبوع', last1month: 'شهر',
     last1year: 'سنة', last5years: '5 سنوات', last10years: '10 سنوات',
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
-    clearFilters: 'مسح', invite: 'دعوة', topics: 'مجالات البحث',
+    clearFilters: 'مسح', invite: 'دعوة', topics: 'مجالات البحث', topicsCount: 'موضوع',
     stats: ['35M+', '9', '7'], statsLabel: ['مقال', 'مجال', 'لغة'],
     emailPlaceholder: 'بريدك@email.com', emailBtn: 'اشترك', emailSuccess: '✓ تم!',
     emailTitle: '📬 ابق على اطلاع', emailSub: 'ملخص أسبوعي',
@@ -404,6 +556,7 @@ const UI_TEXT = {
     back: '← رجوع', sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
     loadMore: 'تحميل المزيد', loadingMore: 'جاري التحميل...',
     errorTitle: 'خطأ في الاتصال', errorMsg: 'تعذر تحميل النتائج.', errorBtn: 'حاول مجدداً',
+    newArticles: 'مقالات جديدة',
   },
 }
 
@@ -565,46 +718,54 @@ function FeedbackForm({ dark, t }) {
   )
 }
 
-function TopicExplorer({ dark, t, onSearch }) {
+function TopicExplorer({ dark, t, lang, onSearch }) {
   const [expandedCategory, setExpandedCategory] = useState(null)
   const bg = dark ? 'bg-white/3' : 'bg-black/3'
   const border = dark ? 'border-white/5' : 'border-black/10'
   const text = dark ? 'text-white' : 'text-black'
   const textMuted = dark ? 'text-white/50' : 'text-black/50'
+
+  const getCatLabel = (id) => CATEGORY_LABELS[id]?.[lang] || CATEGORY_LABELS[id]?.en || id
+  const getSubLabel = (label) => SUBCATEGORY_LABELS[label]?.[lang] || SUBCATEGORY_LABELS[label]?.en || label
+  const getTopicLabel = (label) => TOPIC_LABELS[label]?.[lang] || TOPIC_LABELS[label]?.en || label
+
   return (
     <div className="mb-12">
       <h2 className={`text-lg font-bold ${text} mb-6`}>🗺️ {t.topics}</h2>
       <div className="grid gap-3">
-        {TOPIC_CATEGORIES.map(cat => (
-          <div key={cat.id} className={`${bg} border ${expandedCategory === cat.id ? 'border-blue-500/30' : border} rounded-2xl overflow-hidden transition-all`}>
-            <button onClick={() => setExpandedCategory(expandedCategory === cat.id ? null : cat.id)} className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/3 transition">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{cat.icon}</span>
-                <span className={`font-semibold ${text}`}>{cat.label}</span>
-                <span className={`text-xs ${textMuted}`}>{cat.subcategories.reduce((acc, sub) => acc + sub.topics.length, 0)} konu</span>
-              </div>
-              <span className={`text-xs ${textMuted} transition-transform ${expandedCategory === cat.id ? 'rotate-180' : ''}`}>▼</span>
-            </button>
-            {expandedCategory === cat.id && (
-              <div className="px-5 pb-5 border-t border-white/5">
-                <div className="grid sm:grid-cols-2 gap-4 mt-4">
-                  {cat.subcategories.map((sub, si) => (
-                    <div key={si}>
-                      <p className={`text-xs font-bold ${textMuted} uppercase tracking-wide mb-2`}>{sub.label}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {sub.topics.map(topic => (
-                          <button key={topic.slug} onClick={() => onSearch(topic.en, topic.label)} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/70 hover:bg-blue-500/20 hover:border-blue-500/30 hover:text-blue-300' : 'bg-black/5 border-black/10 text-black/70 hover:bg-blue-500/10'} border rounded-xl text-xs transition`}>
-                            {topic.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+        {TOPIC_CATEGORIES.map(cat => {
+          const totalTopics = cat.subcategories.reduce((acc, sub) => acc + sub.topics.length, 0)
+          return (
+            <div key={cat.id} className={`${bg} border ${expandedCategory === cat.id ? 'border-blue-500/30' : border} rounded-2xl overflow-hidden transition-all`}>
+              <button onClick={() => setExpandedCategory(expandedCategory === cat.id ? null : cat.id)} className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/3 transition">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{cat.icon}</span>
+                  <span className={`font-semibold ${text}`}>{getCatLabel(cat.id)}</span>
+                  <span className={`text-xs ${textMuted}`}>{totalTopics} {t.topicsCount}</span>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+                <span className={`text-xs ${textMuted} transition-transform ${expandedCategory === cat.id ? 'rotate-180' : ''}`}>▼</span>
+              </button>
+              {expandedCategory === cat.id && (
+                <div className="px-5 pb-5 border-t border-white/5">
+                  <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                    {cat.subcategories.map((sub, si) => (
+                      <div key={si}>
+                        <p className={`text-xs font-bold ${textMuted} uppercase tracking-wide mb-2`}>{getSubLabel(sub.label)}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {sub.topics.map(topic => (
+                            <button key={topic.slug} onClick={() => onSearch(topic.en, getTopicLabel(topic.label))} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/70 hover:bg-blue-500/20 hover:border-blue-500/30 hover:text-blue-300' : 'bg-black/5 border-black/10 text-black/70 hover:bg-blue-500/10'} border rounded-xl text-xs transition`}>
+                              {getTopicLabel(topic.label)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -621,7 +782,7 @@ export default function Home() {
   const [page, setPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const [searchError, setSearchError] = useState(false)
-  const [searching, setSearching] = useState(false) // yeni state — arama + çeviri süreci
+  const [searching, setSearching] = useState(false)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
@@ -818,15 +979,8 @@ export default function Home() {
     const q = searchQuery || query
     if (!q.trim()) return
     setShowSuggestions(false)
-    setLoading(true)
-    setSearching(true) // arama başladı
-    setSearched(true)
-    setExpandedId(null)
-    setArticles([])
-    setHasMore(false)
-    setPage(1)
-    setTotalCount(0)
-    setSearchError(false)
+    setLoading(true); setSearching(true); setSearched(true); setExpandedId(null)
+    setArticles([]); setHasMore(false); setPage(1); setTotalCount(0); setSearchError(false)
     articlesRef.current = []
     currentQueryRef.current = q
     if (label) setSearchLabel(label)
@@ -837,29 +991,20 @@ export default function Home() {
     try {
       const results = await searchPubMed(q, 20, activeFilters)
       const sorted = sortArticles(results, sortBy)
-      setLoading(false)
-      saveSearchHistory(q)
+      setLoading(false); saveSearchHistory(q)
       const count = results[0]?._totalCount || results.length
-      setTotalCount(count)
-      setHasMore(count > 20)
+      setTotalCount(count); setHasMore(count > 20)
       if (lang !== 'en') {
         setAutoTranslating(true)
         const translated = await translateBatch(sorted, lang)
-        articlesRef.current = translated
-        setArticles(translated)
+        articlesRef.current = translated; setArticles(translated)
         setAutoTranslating(false)
       } else {
-        articlesRef.current = sorted
-        setArticles(sorted)
+        articlesRef.current = sorted; setArticles(sorted)
       }
     } catch (err) {
-      console.error(err)
-      setLoading(false)
-      setAutoTranslating(false)
-      setSearchError(true)
-    } finally {
-      setSearching(false) // arama bitti
-    }
+      console.error(err); setLoading(false); setAutoTranslating(false); setSearchError(true)
+    } finally { setSearching(false) }
   }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
 
   const handleLoadMore = async () => {
@@ -872,12 +1017,8 @@ export default function Home() {
         let toAdd = newArticles
         if (lang !== 'en') { toAdd = await translateBatch(newArticles, lang) }
         const combined = [...articlesRef.current, ...toAdd]
-        articlesRef.current = combined
-        setArticles(combined)
-        setHasMore(moreAvailable)
-      } else {
-        setHasMore(false)
-      }
+        articlesRef.current = combined; setArticles(combined); setHasMore(moreAvailable)
+      } else { setHasMore(false) }
       setPage(nextPage)
     } catch (err) { console.error(err) }
     setLoadingMore(false)
@@ -886,8 +1027,7 @@ export default function Home() {
   const handleSortChange = (newSort) => {
     setSortBy(newSort); setShowSort(false)
     const sorted = sortArticles(articlesRef.current, newSort)
-    articlesRef.current = sorted
-    setArticles(sorted)
+    articlesRef.current = sorted; setArticles(sorted)
   }
 
   const handleCategoryClick = async (cat) => {
@@ -914,21 +1054,15 @@ export default function Home() {
   const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
 
   const PERIOD_OPTIONS = [
-    { id: 'allTime', label: t.allTime },
-    { id: 'last1week', label: t.last1week },
-    { id: 'last1month', label: t.last1month },
-    { id: 'last1year', label: t.last1year },
-    { id: 'last5years', label: t.last5years },
-    { id: 'last10years', label: t.last10years },
+    { id: 'allTime', label: t.allTime }, { id: 'last1week', label: t.last1week },
+    { id: 'last1month', label: t.last1month }, { id: 'last1year', label: t.last1year },
+    { id: 'last5years', label: t.last5years }, { id: 'last10years', label: t.last10years },
   ]
 
   const TYPE_OPTIONS = [
-    { id: '', label: t.allTypes },
-    { id: 'clinical-trial', label: t.clinicalTrial },
-    { id: 'review', label: t.review },
-    { id: 'meta-analysis', label: t.metaAnalysis },
-    { id: 'randomized', label: t.randomized },
-    { id: 'systematic-review', label: t.systematicReview },
+    { id: '', label: t.allTypes }, { id: 'clinical-trial', label: t.clinicalTrial },
+    { id: 'review', label: t.review }, { id: 'meta-analysis', label: t.metaAnalysis },
+    { id: 'randomized', label: t.randomized }, { id: 'systematic-review', label: t.systematicReview },
     { id: 'case-report', label: t.caseReport },
   ]
 
@@ -1104,7 +1238,7 @@ export default function Home() {
           {showFilters && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 Yayın Tarihi</p>
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 {t.last1year}</p>
                 <div className="flex flex-wrap gap-2">
                   {PERIOD_OPTIONS.map(opt => (
                     <button key={opt.id} onClick={() => setFilterPeriod(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterPeriod === opt.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
@@ -1114,7 +1248,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 Makale Türü</p>
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 {t.allTypes}</p>
                 <div className="flex flex-wrap gap-2">
                   {TYPE_OPTIONS.map(opt => (
                     <button key={opt.id} onClick={() => setFilterType(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterType === opt.id ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
@@ -1164,14 +1298,14 @@ export default function Home() {
                         <span className="text-xs text-white/30">{TRENDING_WEEK[lang] || 'This week'}</span>
                       </div>
                       <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
-                      <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
+                      <p className="text-xs text-blue-400/60">{item.count}+ {t.newArticles}</p>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            <TopicExplorer dark={dark} t={t} onSearch={(enQuery, label) => { setQuery(enQuery); handleSearch(enQuery, label) }} />
+            <TopicExplorer dark={dark} t={t} lang={lang} onSearch={(enQuery, label) => { setQuery(enQuery); handleSearch(enQuery, label) }} />
 
             <div className="mt-4 text-center">
               <p className={`${textMuted} text-sm mb-4`}>{t.popular}</p>
@@ -1184,7 +1318,6 @@ export default function Home() {
           </>
         )}
 
-        {/* Yükleniyor skeleton */}
         {searching && (
           <div className="grid gap-4">
             {[1,2,3].map(i => (
@@ -1197,7 +1330,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Hata mesajı */}
         {!searching && searchError && (
           <div className="text-center py-16">
             <div className="text-5xl mb-4">⚡</div>
@@ -1209,7 +1341,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Sonuçlar */}
         {!searching && !searchError && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
@@ -1217,9 +1348,7 @@ export default function Home() {
                 <button onClick={goBack} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>{t.back}</button>
                 <div>
                   {searchLabel && <p className={`text-xs ${textMuted} mb-0.5`}>{searchLabel}</p>}
-                  <p className={`${textMuted} text-sm`}>
-                    {articles.length} / {totalCount > 0 ? `${totalCount.toLocaleString()}+` : articles.length} {t.found}
-                  </p>
+                  <p className={`${textMuted} text-sm`}>{articles.length} / {totalCount > 0 ? `${totalCount.toLocaleString()}+` : articles.length} {t.found}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
@@ -1299,7 +1428,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Gerçek sonuç yok */}
         {!searching && !searchError && searched && articles.length === 0 && (
           <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>

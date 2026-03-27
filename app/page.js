@@ -1195,7 +1195,8 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && !searchError && !autoTranslating && searched && articles.length === 0 && (
+        {!loading && !searchError && searched && articles.length === 0 && !autoTranslating && !loadingMore && (
+
 
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">

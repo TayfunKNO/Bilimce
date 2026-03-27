@@ -7,16 +7,172 @@ const supabase = createClient(
   'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
 )
 
-const CATEGORIES = [
-  { id: 'genel', label: 'Genel', icon: '💬' },
-  { id: 'kanser', label: 'Kanser', icon: '🎗️' },
-  { id: 'nöroloji', label: 'Nöroloji', icon: '🧠' },
-  { id: 'beslenme', label: 'Beslenme', icon: '🥗' },
-  { id: 'spor', label: 'Spor & Fitness', icon: '💪' },
-  { id: 'kardiyoloji', label: 'Kardiyoloji', icon: '❤️' },
-  { id: 'psikoloji', label: 'Psikoloji', icon: '🧘' },
-  { id: 'ilaç', label: 'İlaç & Tedavi', icon: '💊' },
-]
+const CATEGORIES = {
+  tr: [
+    { id: 'genel', label: 'Genel', icon: '💬' },
+    { id: 'kanser', label: 'Kanser', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Nöroloji', icon: '🧠' },
+    { id: 'beslenme', label: 'Beslenme', icon: '🥗' },
+    { id: 'spor', label: 'Spor & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Kardiyoloji', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psikoloji', icon: '🧘' },
+    { id: 'ilaç', label: 'İlaç & Tedavi', icon: '💊' },
+  ],
+  en: [
+    { id: 'genel', label: 'General', icon: '💬' },
+    { id: 'kanser', label: 'Cancer', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Neurology', icon: '🧠' },
+    { id: 'beslenme', label: 'Nutrition', icon: '🥗' },
+    { id: 'spor', label: 'Sports & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Cardiology', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psychology', icon: '🧘' },
+    { id: 'ilaç', label: 'Medicine & Treatment', icon: '💊' },
+  ],
+  nl: [
+    { id: 'genel', label: 'Algemeen', icon: '💬' },
+    { id: 'kanser', label: 'Kanker', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Neurologie', icon: '🧠' },
+    { id: 'beslenme', label: 'Voeding', icon: '🥗' },
+    { id: 'spor', label: 'Sport & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Cardiologie', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psychologie', icon: '🧘' },
+    { id: 'ilaç', label: 'Geneeskunde', icon: '💊' },
+  ],
+  de: [
+    { id: 'genel', label: 'Allgemein', icon: '💬' },
+    { id: 'kanser', label: 'Krebs', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Neurologie', icon: '🧠' },
+    { id: 'beslenme', label: 'Ernährung', icon: '🥗' },
+    { id: 'spor', label: 'Sport & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Kardiologie', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psychologie', icon: '🧘' },
+    { id: 'ilaç', label: 'Medizin & Behandlung', icon: '💊' },
+  ],
+  fr: [
+    { id: 'genel', label: 'Général', icon: '💬' },
+    { id: 'kanser', label: 'Cancer', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Neurologie', icon: '🧠' },
+    { id: 'beslenme', label: 'Nutrition', icon: '🥗' },
+    { id: 'spor', label: 'Sport & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Cardiologie', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psychologie', icon: '🧘' },
+    { id: 'ilaç', label: 'Médecine & Traitement', icon: '💊' },
+  ],
+  es: [
+    { id: 'genel', label: 'General', icon: '💬' },
+    { id: 'kanser', label: 'Cáncer', icon: '🎗️' },
+    { id: 'nöroloji', label: 'Neurología', icon: '🧠' },
+    { id: 'beslenme', label: 'Nutrición', icon: '🥗' },
+    { id: 'spor', label: 'Deporte & Fitness', icon: '💪' },
+    { id: 'kardiyoloji', label: 'Cardiología', icon: '❤️' },
+    { id: 'psikoloji', label: 'Psicología', icon: '🧘' },
+    { id: 'ilaç', label: 'Medicina & Tratamiento', icon: '💊' },
+  ],
+  ar: [
+    { id: 'genel', label: 'عام', icon: '💬' },
+    { id: 'kanser', label: 'السرطان', icon: '🎗️' },
+    { id: 'nöroloji', label: 'علم الأعصاب', icon: '🧠' },
+    { id: 'beslenme', label: 'التغذية', icon: '🥗' },
+    { id: 'spor', label: 'الرياضة', icon: '💪' },
+    { id: 'kardiyoloji', label: 'أمراض القلب', icon: '❤️' },
+    { id: 'psikoloji', label: 'علم النفس', icon: '🧘' },
+    { id: 'ilaç', label: 'الطب والعلاج', icon: '💊' },
+  ],
+}
+
+const UI = {
+  tr: {
+    home: 'Ana Sayfa', newPost: '+ Yeni Gönderi', login: 'Giriş Yap',
+    title: '🌐 Topluluk', subtitle: 'Bilim meraklılarıyla tartış, soru sor, paylaş',
+    newPostTitle: 'Yeni Gönderi', titlePlaceholder: 'Başlık...',
+    contentPlaceholder: 'Ne düşünüyorsun? Bir araştırma paylaş, soru sor...',
+    submitting: 'Gönderiliyor...', share: 'Paylaş', cancel: 'İptal',
+    all: 'Tümü', noPosts: 'Henüz gönderi yok', noPostsSub: 'İlk gönderiyi sen yap!',
+    reply: '💬 Yanıtla', back: '← Gönderiler',
+    replies: '💬 Yanıtlar', repliesLoading: 'Yükleniyor...',
+    replyPlaceholder: 'Yanıtını yaz...', replyBtn: 'Yanıtla',
+    loginToReply: 'Yanıtlamak için giriş yapın', loginBtn: 'Giriş Yap',
+    dateLocale: 'tr-TR',
+  },
+  en: {
+    home: 'Home', newPost: '+ New Post', login: 'Sign In',
+    title: '🌐 Community', subtitle: 'Discuss, ask questions, share with science enthusiasts',
+    newPostTitle: 'New Post', titlePlaceholder: 'Title...',
+    contentPlaceholder: 'What do you think? Share a study, ask a question...',
+    submitting: 'Posting...', share: 'Post', cancel: 'Cancel',
+    all: 'All', noPosts: 'No posts yet', noPostsSub: 'Be the first to post!',
+    reply: '💬 Reply', back: '← Posts',
+    replies: '💬 Replies', repliesLoading: 'Loading...',
+    replyPlaceholder: 'Write your reply...', replyBtn: 'Reply',
+    loginToReply: 'Sign in to reply', loginBtn: 'Sign In',
+    dateLocale: 'en-GB',
+  },
+  nl: {
+    home: 'Startpagina', newPost: '+ Nieuw bericht', login: 'Inloggen',
+    title: '🌐 Gemeenschap', subtitle: 'Discussieer, stel vragen, deel met wetenschapsliefhebbers',
+    newPostTitle: 'Nieuw bericht', titlePlaceholder: 'Titel...',
+    contentPlaceholder: 'Wat denk je? Deel een studie, stel een vraag...',
+    submitting: 'Plaatsen...', share: 'Plaatsen', cancel: 'Annuleren',
+    all: 'Alles', noPosts: 'Nog geen berichten', noPostsSub: 'Wees de eerste!',
+    reply: '💬 Reageren', back: '← Berichten',
+    replies: '💬 Reacties', repliesLoading: 'Laden...',
+    replyPlaceholder: 'Schrijf je reactie...', replyBtn: 'Reageren',
+    loginToReply: 'Log in om te reageren', loginBtn: 'Inloggen',
+    dateLocale: 'nl-NL',
+  },
+  de: {
+    home: 'Startseite', newPost: '+ Neuer Beitrag', login: 'Anmelden',
+    title: '🌐 Community', subtitle: 'Diskutiere, frage, teile mit Wissenschaftsbegeisterten',
+    newPostTitle: 'Neuer Beitrag', titlePlaceholder: 'Titel...',
+    contentPlaceholder: 'Was denkst du? Teile eine Studie, stelle eine Frage...',
+    submitting: 'Wird gepostet...', share: 'Posten', cancel: 'Abbrechen',
+    all: 'Alle', noPosts: 'Noch keine Beiträge', noPostsSub: 'Sei der Erste!',
+    reply: '💬 Antworten', back: '← Beiträge',
+    replies: '💬 Antworten', repliesLoading: 'Laden...',
+    replyPlaceholder: 'Schreibe deine Antwort...', replyBtn: 'Antworten',
+    loginToReply: 'Melde dich an um zu antworten', loginBtn: 'Anmelden',
+    dateLocale: 'de-DE',
+  },
+  fr: {
+    home: 'Accueil', newPost: '+ Nouveau post', login: 'Connexion',
+    title: '🌐 Communauté', subtitle: 'Discutez, posez des questions, partagez avec des passionnés de science',
+    newPostTitle: 'Nouveau post', titlePlaceholder: 'Titre...',
+    contentPlaceholder: 'Que pensez-vous? Partagez une étude, posez une question...',
+    submitting: 'Publication...', share: 'Publier', cancel: 'Annuler',
+    all: 'Tout', noPosts: 'Pas encore de posts', noPostsSub: 'Soyez le premier!',
+    reply: '💬 Répondre', back: '← Posts',
+    replies: '💬 Réponses', repliesLoading: 'Chargement...',
+    replyPlaceholder: 'Écrivez votre réponse...', replyBtn: 'Répondre',
+    loginToReply: 'Connectez-vous pour répondre', loginBtn: 'Connexion',
+    dateLocale: 'fr-FR',
+  },
+  es: {
+    home: 'Inicio', newPost: '+ Nueva publicación', login: 'Iniciar sesión',
+    title: '🌐 Comunidad', subtitle: 'Discute, pregunta, comparte con entusiastas de la ciencia',
+    newPostTitle: 'Nueva publicación', titlePlaceholder: 'Título...',
+    contentPlaceholder: '¿Qué piensas? Comparte un estudio, haz una pregunta...',
+    submitting: 'Publicando...', share: 'Publicar', cancel: 'Cancelar',
+    all: 'Todo', noPosts: 'Aún no hay publicaciones', noPostsSub: '¡Sé el primero!',
+    reply: '💬 Responder', back: '← Publicaciones',
+    replies: '💬 Respuestas', repliesLoading: 'Cargando...',
+    replyPlaceholder: 'Escribe tu respuesta...', replyBtn: 'Responder',
+    loginToReply: 'Inicia sesión para responder', loginBtn: 'Iniciar sesión',
+    dateLocale: 'es-ES',
+  },
+  ar: {
+    home: 'الرئيسية', newPost: '+ منشور جديد', login: 'تسجيل الدخول',
+    title: '🌐 المجتمع', subtitle: 'ناقش واسأل وشارك مع عشاق العلوم',
+    newPostTitle: 'منشور جديد', titlePlaceholder: 'العنوان...',
+    contentPlaceholder: 'ما رأيك؟ شارك دراسة، اطرح سؤالاً...',
+    submitting: 'جاري النشر...', share: 'نشر', cancel: 'إلغاء',
+    all: 'الكل', noPosts: 'لا توجد منشورات بعد', noPostsSub: 'كن أول من ينشر!',
+    reply: '💬 رد', back: '← المنشورات',
+    replies: '💬 الردود', repliesLoading: 'جاري التحميل...',
+    replyPlaceholder: 'اكتب ردك...', replyBtn: 'رد',
+    loginToReply: 'سجل الدخول للرد', loginBtn: 'تسجيل الدخول',
+    dateLocale: 'ar-SA',
+  },
+}
 
 export default function CommunityPage() {
   const [user, setUser] = useState(null)
@@ -35,14 +191,20 @@ export default function CommunityPage() {
   const [newCategory, setNewCategory] = useState('genel')
   const [submittingPost, setSubmittingPost] = useState(false)
   const [userLikes, setUserLikes] = useState({})
+  const [lang, setLang] = useState('tr')
 
   useEffect(() => {
+    const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
+    setLang(savedLang)
     supabase.auth.getUser().then(({ data }) => {
       setUser(data?.user || null)
       if (data?.user) { loadUsername(data.user.id); loadUserLikes(data.user.id) }
     })
     loadPosts()
   }, [])
+
+  const t = UI[lang] || UI.tr
+  const categories = CATEGORIES[lang] || CATEGORIES.tr
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
@@ -96,8 +258,6 @@ export default function CommunityPage() {
       setNewReply('')
       const { data } = await supabase.from('community_replies').select('*').eq('post_id', selectedPost.id).order('created_at', { ascending: true })
       setReplies(data || [])
-      // Güncelle reply sayısı
-      await supabase.from('community_posts').update({ likes: selectedPost.likes }).eq('id', selectedPost.id)
     }
     setSubmittingReply(false)
   }
@@ -137,7 +297,7 @@ export default function CommunityPage() {
     loadPosts(cat === 'all' ? null : cat)
   }
 
-  const getCategoryInfo = (id) => CATEGORIES.find(c => c.id === id) || { label: id, icon: '💬' }
+  const getCategoryInfo = (id) => categories.find(c => c.id === id) || { label: id, icon: '💬' }
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -150,30 +310,29 @@ export default function CommunityPage() {
           <div className="flex items-center gap-2">
             {user ? (
               <button onClick={() => setShowNewPost(!showNewPost)} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition">
-                + Yeni Gönderi
+                {t.newPost}
               </button>
             ) : (
-              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Giriş Yap</a>
+              <a href="/auth" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">{t.login}</a>
             )}
-            <a href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">{t.home}</a>
           </div>
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">🌐 Topluluk</h1>
-          <p className="text-white/40 text-sm">Bilim meraklılarıyla tartış, soru sor, paylaş</p>
+          <h1 className="text-2xl font-bold text-white mb-1">{t.title}</h1>
+          <p className="text-white/40 text-sm">{t.subtitle}</p>
         </div>
 
-        {/* Yeni gönderi formu */}
         {showNewPost && user && (
           <div className="bg-white/3 border border-white/10 rounded-2xl p-6 mb-6">
-            <h2 className="text-sm font-semibold text-white/60 mb-4">Yeni Gönderi</h2>
-            <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Başlık..." className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm mb-3" />
-            <textarea value={newContent} onChange={e => setNewContent(e.target.value)} placeholder="Ne düşünüyorsun? Bir araştırma paylaş, soru sor..." rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm resize-none mb-3" />
+            <h2 className="text-sm font-semibold text-white/60 mb-4">{t.newPostTitle}</h2>
+            <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder={t.titlePlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm mb-3" />
+            <textarea value={newContent} onChange={e => setNewContent(e.target.value)} placeholder={t.contentPlaceholder} rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm resize-none mb-3" />
             <div className="flex flex-wrap gap-2 mb-4">
-              {CATEGORIES.map(cat => (
+              {categories.map(cat => (
                 <button key={cat.id} onClick={() => setNewCategory(cat.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${newCategory === cat.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : 'bg-white/5 border border-white/10 text-white/50 hover:text-white'}`}>
                   {cat.icon} {cat.label}
                 </button>
@@ -181,21 +340,20 @@ export default function CommunityPage() {
             </div>
             <div className="flex gap-3">
               <button onClick={submitPost} disabled={submittingPost || !newTitle.trim() || !newContent.trim()} className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
-                {submittingPost ? 'Gönderiliyor...' : 'Paylaş'}
+                {submittingPost ? t.submitting : t.share}
               </button>
-              <button onClick={() => setShowNewPost(false)} className="px-6 py-2.5 bg-white/5 border border-white/10 text-white/50 rounded-xl text-sm hover:text-white transition">İptal</button>
+              <button onClick={() => setShowNewPost(false)} className="px-6 py-2.5 bg-white/5 border border-white/10 text-white/50 rounded-xl text-sm hover:text-white transition">{t.cancel}</button>
             </div>
           </div>
         )}
 
         <div className="flex gap-4">
-          {/* Sol — kategoriler */}
           <div className="hidden sm:block w-44 shrink-0">
             <div className="bg-white/3 border border-white/5 rounded-2xl p-3">
               <button onClick={() => handleCategoryChange('all')} className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs transition mb-1 ${activeCategory === 'all' ? 'bg-blue-500/20 text-blue-300' : 'text-white/50 hover:text-white hover:bg-white/5'}`}>
-                <span>🌐</span><span>Tümü</span>
+                <span>🌐</span><span>{t.all}</span>
               </button>
-              {CATEGORIES.map(cat => (
+              {categories.map(cat => (
                 <button key={cat.id} onClick={() => handleCategoryChange(cat.id)} className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs transition mb-1 ${activeCategory === cat.id ? 'bg-blue-500/20 text-blue-300' : 'text-white/50 hover:text-white hover:bg-white/5'}`}>
                   <span>{cat.icon}</span><span>{cat.label}</span>
                 </button>
@@ -203,12 +361,10 @@ export default function CommunityPage() {
             </div>
           </div>
 
-          {/* Sağ — gönderiler veya gönderi detayı */}
           <div className="flex-1 min-w-0">
-            {/* Mobil kategori */}
             <div className="flex gap-2 overflow-x-auto pb-2 mb-4 sm:hidden">
-              <button onClick={() => handleCategoryChange('all')} className={`px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition ${activeCategory === 'all' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-white/5 border border-white/5 text-white/50'}`}>🌐 Tümü</button>
-              {CATEGORIES.map(cat => (
+              <button onClick={() => handleCategoryChange('all')} className={`px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition ${activeCategory === 'all' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-white/5 border border-white/5 text-white/50'}`}>🌐 {t.all}</button>
+              {categories.map(cat => (
                 <button key={cat.id} onClick={() => handleCategoryChange(cat.id)} className={`px-3 py-1.5 rounded-xl text-xs whitespace-nowrap transition ${activeCategory === cat.id ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-white/5 border border-white/5 text-white/50'}`}>{cat.icon} {cat.label}</button>
               ))}
             </div>
@@ -228,8 +384,8 @@ export default function CommunityPage() {
                 {!loading && posts.length === 0 && (
                   <div className="text-center py-20 text-white/30">
                     <div className="text-5xl mb-4">💬</div>
-                    <p>Henüz gönderi yok</p>
-                    <p className="text-xs mt-2">İlk gönderiyi sen yap!</p>
+                    <p>{t.noPosts}</p>
+                    <p className="text-xs mt-2">{t.noPostsSub}</p>
                   </div>
                 )}
                 {!loading && posts.length > 0 && (
@@ -255,12 +411,10 @@ export default function CommunityPage() {
                           <div className="flex items-center justify-between mt-3">
                             <div className="flex items-center gap-3 text-xs text-white/30">
                               <span>👤 {post.username}</span>
-                              <span>{new Date(post.created_at).toLocaleDateString('tr-TR')}</span>
+                              <span>{new Date(post.created_at).toLocaleDateString(t.dateLocale)}</span>
                             </div>
                             <div className="flex items-center gap-3">
-                              <button onClick={() => openPost(post)} className="text-xs text-white/30 hover:text-white/60 transition">
-                                💬 Yanıtla
-                              </button>
+                              <button onClick={() => openPost(post)} className="text-xs text-white/30 hover:text-white/60 transition">{t.reply}</button>
                               <button onClick={() => toggleLike(post)} className={`flex items-center gap-1 text-xs transition ${userLikes[post.id] ? 'text-red-400' : 'text-white/30 hover:text-white/60'}`}>
                                 {userLikes[post.id] ? '❤️' : '🤍'} {post.likes}
                               </button>
@@ -274,9 +428,7 @@ export default function CommunityPage() {
               </>
             ) : (
               <div>
-                <button onClick={() => setSelectedPost(null)} className="text-white/40 hover:text-white transition text-sm mb-4 block">← Gönderiler</button>
-                
-                {/* Gönderi detayı */}
+                <button onClick={() => setSelectedPost(null)} className="text-white/40 hover:text-white transition text-sm mb-4 block">{t.back}</button>
                 <div className="bg-white/3 border border-white/10 rounded-2xl p-6 mb-4">
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex-1">
@@ -295,7 +447,7 @@ export default function CommunityPage() {
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
                     <div className="flex items-center gap-3 text-xs text-white/30">
                       <span>👤 {selectedPost.username}</span>
-                      <span>{new Date(selectedPost.created_at).toLocaleDateString('tr-TR')}</span>
+                      <span>{new Date(selectedPost.created_at).toLocaleDateString(t.dateLocale)}</span>
                     </div>
                     <button onClick={() => toggleLike(selectedPost)} className={`flex items-center gap-1 text-sm transition ${userLikes[selectedPost.id] ? 'text-red-400' : 'text-white/30 hover:text-white/60'}`}>
                       {userLikes[selectedPost.id] ? '❤️' : '🤍'} {selectedPost.likes}
@@ -303,11 +455,8 @@ export default function CommunityPage() {
                   </div>
                 </div>
 
-                {/* Yanıtlar */}
-                <h3 className="text-sm font-semibold text-white/50 mb-3">💬 Yanıtlar ({replies.length})</h3>
-                
-                {repliesLoading && <div className="text-white/30 text-sm py-4">Yükleniyor...</div>}
-                
+                <h3 className="text-sm font-semibold text-white/50 mb-3">{t.replies} ({replies.length})</h3>
+                {repliesLoading && <div className="text-white/30 text-sm py-4">{t.repliesLoading}</div>}
                 {!repliesLoading && replies.length > 0 && (
                   <div className="flex flex-col gap-3 mb-4">
                     {replies.map(reply => (
@@ -315,7 +464,7 @@ export default function CommunityPage() {
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-blue-400 text-xs font-semibold">👤 {reply.username}</span>
                           <div className="flex items-center gap-3">
-                            <span className="text-white/25 text-xs">{new Date(reply.created_at).toLocaleDateString('tr-TR')}</span>
+                            <span className="text-white/25 text-xs">{new Date(reply.created_at).toLocaleDateString(t.dateLocale)}</span>
                             {user && user.id === reply.user_id && (
                               <button onClick={() => deleteReply(reply.id)} className="text-white/25 hover:text-red-400 transition text-xs">✕</button>
                             )}
@@ -329,15 +478,15 @@ export default function CommunityPage() {
 
                 {user ? (
                   <div>
-                    <textarea value={newReply} onChange={e => setNewReply(e.target.value)} placeholder="Yanıtını yaz..." rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm resize-none mb-3" />
+                    <textarea value={newReply} onChange={e => setNewReply(e.target.value)} placeholder={t.replyPlaceholder} rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm resize-none mb-3" />
                     <button onClick={submitReply} disabled={submittingReply || !newReply.trim()} className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
-                      {submittingReply ? 'Gönderiliyor...' : 'Yanıtla'}
+                      {submittingReply ? t.submitting : t.replyBtn}
                     </button>
                   </div>
                 ) : (
                   <div className="p-4 bg-white/3 border border-white/5 rounded-xl text-center">
-                    <p className="text-white/40 text-sm mb-3">Yanıtlamak için giriş yapın</p>
-                    <a href="/auth" className="px-6 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">Giriş Yap</a>
+                    <p className="text-white/40 text-sm mb-3">{t.loginToReply}</p>
+                    <a href="/auth" className="px-6 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">{t.loginBtn}</a>
                   </div>
                 )}
               </div>

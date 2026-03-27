@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback, useRef, useEffect, memo } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { searchPubMed } from '../lib/pubmed'
+import { searchPubMed, searchPubMedPage } from '../lib/pubmed'
 
 const supabase = createClient(
   'https://xlnnopufkjaqxjsmhtot.supabase.co',
@@ -231,12 +231,12 @@ const UI_TEXT = {
     statsLabel: ['Makale', 'Alan', 'Dil'],
     emailPlaceholder: 'email@adresin.com', emailBtn: 'Abone Ol', emailSuccess: '✓ Abone oldunuz!',
     emailTitle: '📬 Yeni özelliklerden haberdar ol', emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
-    loginRequired: 'Bu özelliği kullanmak için giriş yapın',
-    loginBtn: 'Giriş Yap / Kayıt Ol',
+    loginRequired: 'Bu özelliği kullanmak için giriş yapın', loginBtn: 'Giriş Yap / Kayıt Ol',
     feedbackTitle: 'Geri Bildirim', feedbackPlaceholder: 'Önerinizi veya sorunuzu yazın...',
     feedbackBtn: 'Gönder', feedbackSuccess: '✓ Teşekkürler! Geri bildiriminiz alındı.',
     feedbackLabel: 'Uygulamamızı geliştirmemize yardım edin',
     back: '← Geri', sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi · Hakemli Bilimsel Dergi',
+    loadMore: 'Daha Fazla Yükle', loadingMore: 'Yükleniyor...',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer...',
@@ -255,14 +255,14 @@ const UI_TEXT = {
     allTypes: 'All Types', clinicalTrial: 'Clinical Trial', review: 'Review', metaAnalysis: 'Meta-Analysis',
     randomized: 'Randomized', systematicReview: 'Systematic Review', caseReport: 'Case Report',
     clearFilters: 'Clear', invite: 'Invite', topics: 'Research Areas',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Articles', 'Fields', 'Languages'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Articles', 'Fields', 'Languages'],
     emailPlaceholder: 'your@email.com', emailBtn: 'Subscribe', emailSuccess: '✓ Subscribed!',
     emailTitle: '📬 Stay updated', emailSub: 'Weekly science digest and new features',
     loginRequired: 'Sign in to use this feature', loginBtn: 'Sign In / Register',
     feedbackTitle: 'Feedback', feedbackPlaceholder: 'Write your suggestion...',
     feedbackBtn: 'Send', feedbackSuccess: '✓ Thank you!', feedbackLabel: 'Help us improve',
     back: '← Back', sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed',
+    loadMore: 'Load More', loadingMore: 'Loading...',
   },
   nl: {
     search: 'Zoeken', searching: 'Zoeken...', placeholder: 'Bijv: creatine, alzheimer...',
@@ -281,14 +281,14 @@ const UI_TEXT = {
     allTypes: 'Alle types', clinicalTrial: 'Klinische studie', review: 'Overzicht', metaAnalysis: 'Meta-analyse',
     randomized: 'Gerandomiseerd', systematicReview: 'Systematisch', caseReport: 'Casusrapport',
     clearFilters: 'Wissen', invite: 'Uitnodigen', topics: 'Onderzoeksgebieden',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Artikelen', 'Gebieden', 'Talen'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Artikelen', 'Gebieden', 'Talen'],
     emailPlaceholder: 'uw@email.nl', emailBtn: 'Abonneren', emailSuccess: '✓ Geabonneerd!',
     emailTitle: '📬 Blijf op de hoogte', emailSub: 'Wekelijks wetenschapsoverzicht',
     loginRequired: 'Log in om deze functie te gebruiken', loginBtn: 'Inloggen / Registreren',
     feedbackTitle: 'Feedback', feedbackPlaceholder: 'Schrijf uw suggestie...',
     feedbackBtn: 'Verzenden', feedbackSuccess: '✓ Dank u!', feedbackLabel: 'Help ons verbeteren',
     back: '← Terug', sourceLabel: 'Bron: PubMed · NIH · Peer-reviewed',
+    loadMore: 'Meer laden', loadingMore: 'Laden...',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -307,14 +307,14 @@ const UI_TEXT = {
     allTypes: 'Alle', clinicalTrial: 'Klinisch', review: 'Übersicht', metaAnalysis: 'Meta',
     randomized: 'Randomisiert', systematicReview: 'Systematisch', caseReport: 'Fallbericht',
     clearFilters: 'Löschen', invite: 'Einladen', topics: 'Forschungsgebiete',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Artikel', 'Gebiete', 'Sprachen'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Artikel', 'Gebiete', 'Sprachen'],
     emailPlaceholder: 'ihre@email.de', emailBtn: 'Abonnieren', emailSuccess: '✓ Abonniert!',
     emailTitle: '📬 Neuigkeiten', emailSub: 'Wöchentliche Zusammenfassung',
     loginRequired: 'Anmelden erforderlich', loginBtn: 'Anmelden',
     feedbackTitle: 'Feedback', feedbackPlaceholder: 'Vorschlag...',
     feedbackBtn: 'Senden', feedbackSuccess: '✓ Danke!', feedbackLabel: 'App verbessern',
     back: '← Zurück', sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
+    loadMore: 'Mehr laden', loadingMore: 'Laden...',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -333,14 +333,14 @@ const UI_TEXT = {
     allTypes: 'Tous', clinicalTrial: 'Essai', review: 'Revue', metaAnalysis: 'Méta',
     randomized: 'Randomisé', systematicReview: 'Systématique', caseReport: 'Cas',
     clearFilters: 'Effacer', invite: 'Inviter', topics: 'Domaines',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Articles', 'Domaines', 'Langues'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Articles', 'Domaines', 'Langues'],
     emailPlaceholder: 'email@example.fr', emailBtn: "S'abonner", emailSuccess: '✓ Abonné!',
     emailTitle: '📬 Restez informé', emailSub: 'Résumé hebdomadaire',
     loginRequired: 'Connexion requise', loginBtn: 'Se connecter',
     feedbackTitle: 'Retour', feedbackPlaceholder: 'Suggestion...',
     feedbackBtn: 'Envoyer', feedbackSuccess: '✓ Merci!', feedbackLabel: 'Améliorer',
     back: '← Retour', sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
+    loadMore: 'Charger plus', loadingMore: 'Chargement...',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -359,14 +359,14 @@ const UI_TEXT = {
     allTypes: 'Todos', clinicalTrial: 'Ensayo', review: 'Revisión', metaAnalysis: 'Meta',
     randomized: 'Aleatorio', systematicReview: 'Sistemático', caseReport: 'Caso',
     clearFilters: 'Limpiar', invite: 'Invitar', topics: 'Áreas',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Artículos', 'Áreas', 'Idiomas'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Artículos', 'Áreas', 'Idiomas'],
     emailPlaceholder: 'email@ejemplo.com', emailBtn: 'Suscribirse', emailSuccess: '✓ Suscrito!',
     emailTitle: '📬 Novedades', emailSub: 'Resumen semanal',
     loginRequired: 'Iniciar sesión', loginBtn: 'Iniciar sesión',
     feedbackTitle: 'Comentarios', feedbackPlaceholder: 'Sugerencia...',
     feedbackBtn: 'Enviar', feedbackSuccess: '✓ Gracias!', feedbackLabel: 'Mejorar app',
     back: '← Volver', sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
+    loadMore: 'Cargar más', loadingMore: 'Cargando...',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -385,14 +385,14 @@ const UI_TEXT = {
     allTypes: 'الكل', clinicalTrial: 'تجربة', review: 'مراجعة', metaAnalysis: 'تحليل',
     randomized: 'عشوائي', systematicReview: 'منهجي', caseReport: 'حالة',
     clearFilters: 'مسح', invite: 'دعوة', topics: 'مجالات البحث',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['مقال', 'مجال', 'لغة'],
+    stats: ['35M+', '9', '7'], statsLabel: ['مقال', 'مجال', 'لغة'],
     emailPlaceholder: 'بريدك@email.com', emailBtn: 'اشترك', emailSuccess: '✓ تم!',
     emailTitle: '📬 ابق على اطلاع', emailSub: 'ملخص أسبوعي',
     loginRequired: 'سجل الدخول', loginBtn: 'تسجيل الدخول',
     feedbackTitle: 'تعليقات', feedbackPlaceholder: 'اقتراح...',
     feedbackBtn: 'إرسال', feedbackSuccess: '✓ شكراً!', feedbackLabel: 'تحسين التطبيق',
     back: '← رجوع', sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
+    loadMore: 'تحميل المزيد', loadingMore: 'جاري التحميل...',
   },
 }
 
@@ -548,9 +548,7 @@ function FeedbackForm({ dark, t }) {
           )}
         </div>
       ) : (
-        <button onClick={() => setShow(true)} className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white shadow-xl hover:opacity-90 transition text-xl">
-          💬
-        </button>
+        <button onClick={() => setShow(true)} className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white shadow-xl hover:opacity-90 transition text-xl">💬</button>
       )}
     </div>
   )
@@ -605,7 +603,12 @@ export default function Home() {
   const [query, setQuery] = useState('')
   const [articles, setArticles] = useState([])
   const articlesRef = useRef([])
+  const currentQueryRef = useRef('')
   const [loading, setLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
@@ -639,7 +642,6 @@ export default function Home() {
   const [showFilters, setShowFilters] = useState(false)
   const [filterPeriod, setFilterPeriod] = useState('allTime')
   const [filterType, setFilterType] = useState('')
-  const [limitPopup, setLimitPopup] = useState(null)
   const [userLoaded, setUserLoaded] = useState(false)
   const [searchLabel, setSearchLabel] = useState('')
   const inputRef = useRef(null)
@@ -665,7 +667,7 @@ export default function Home() {
     })
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
-      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]) }
+      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false) }
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
@@ -705,7 +707,7 @@ export default function Home() {
   const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
   const goBack = () => {
-    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([])
+    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setPage(1)
     window.history.pushState({}, '', '/')
   }
 
@@ -755,6 +757,17 @@ export default function Home() {
     setAutoTranslating(false)
   }
 
+  const translateBatch = async (articles, targetLang) => {
+    const updated = [...articles]
+    for (let g = 0; g < updated.length; g += 5) {
+      const group = updated.slice(g, g + 5)
+      const translated = await Promise.all(group.map(a => translateOne(a.title_en, targetLang)))
+      translated.forEach((title_tr, idx) => { if (title_tr) updated[g+idx] = { ...updated[g+idx], title_tr } })
+      await new Promise(r => setTimeout(r, 150))
+    }
+    return updated
+  }
+
   const loadUsername = async (userId) => { const { data } = await supabase.from('profiles').select('username').eq('id', userId).single(); if (data?.username) setUsername(data.username) }
   const loadFavorites = async (userId) => { const { data } = await supabase.from('favorites').select('pubmed_id').eq('user_id', userId); if (data) { const m = {}; data.forEach(f => { m[f.pubmed_id] = true }); setFavorites(m) } }
   const loadReadingList = async (userId) => { const { data } = await supabase.from('reading_list').select('pubmed_id').eq('user_id', userId); if (data) { const m = {}; data.forEach(r => { m[r.pubmed_id] = true }); setReadingList(m) } }
@@ -790,31 +803,69 @@ export default function Home() {
   const handleSearch = useCallback(async (searchQuery, label) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    
-    setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null); updateArticles([])
+    setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null)
+    setArticles([]); setHasMore(false); setPage(1); setTotalCount(0)
+    articlesRef.current = []
+    currentQueryRef.current = q
     if (label) setSearchLabel(label)
+    else setSearchLabel('')
     saveRecentSearch(q)
     window.history.pushState({ searched: true, query: q }, '', `/?q=${encodeURIComponent(q)}`)
     const activeFilters = { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
     try {
       const results = await searchPubMed(q, 20, activeFilters)
       const sorted = sortArticles(results, sortBy)
-      updateArticles(sorted); setLoading(false); saveSearchHistory(q)
+      setLoading(false)
+      saveSearchHistory(q)
+
+      // Toplam sayıyı hesapla
+      const count = results[0]?._totalCount || results.length
+      setTotalCount(count)
+      setHasMore(count > 20)
+
       if (lang !== 'en') {
         setAutoTranslating(true)
-        const updated = [...sorted]
-        for (let g = 0; g < updated.length; g += 5) {
-          const group = updated.slice(g, g + 5)
-          const translated = await Promise.all(group.map(a => translateOne(a.title_en, lang)))
-          translated.forEach((title_tr, idx) => { if (title_tr) updated[g+idx] = { ...updated[g+idx], title_tr } })
-          updateArticles([...updated]); await new Promise(r => setTimeout(r, 150))
-        }
+        const translated = await translateBatch(sorted, lang)
+        articlesRef.current = translated
+        setArticles(translated)
         setAutoTranslating(false)
+      } else {
+        articlesRef.current = sorted
+        setArticles(sorted)
       }
     } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
-  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType, user, userLoaded])
+  }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
 
-  const handleSortChange = (newSort) => { setSortBy(newSort); setShowSort(false); updateArticles(sortArticles(articlesRef.current, newSort)) }
+  const handleLoadMore = async () => {
+    setLoadingMore(true)
+    const nextPage = page + 1
+    const activeFilters = { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
+    try {
+      const { articles: newArticles, hasMore: moreAvailable } = await searchPubMedPage(currentQueryRef.current, nextPage, activeFilters)
+      if (newArticles.length > 0) {
+        let toAdd = newArticles
+        if (lang !== 'en') {
+          toAdd = await translateBatch(newArticles, lang)
+        }
+        const combined = [...articlesRef.current, ...toAdd]
+        articlesRef.current = combined
+        setArticles(combined)
+        setHasMore(moreAvailable)
+      } else {
+        setHasMore(false)
+      }
+      setPage(nextPage)
+    } catch (err) { console.error(err) }
+    setLoadingMore(false)
+  }
+
+  const handleSortChange = (newSort) => {
+    setSortBy(newSort); setShowSort(false)
+    const sorted = sortArticles(articlesRef.current, newSort)
+    articlesRef.current = sorted
+    setArticles(sorted)
+  }
+
   const handleCategoryClick = async (cat) => {
     setActiveCategory(cat.id)
     if (cat.id === 'all') { goBack(); return }
@@ -824,7 +875,6 @@ export default function Home() {
 
   const translateArticle = async (article, index) => {
     if (article.abstract_tr) { setExpandedId(expandedId === index ? null : index); return }
-    if (userLoaded && !user) { setLimitPopup('login'); return }
     setTranslating(prev => ({ ...prev, [index]: true }))
     try {
       const res = await fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en }) })
@@ -861,18 +911,6 @@ export default function Home() {
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
-
-      {limitPopup && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4" onClick={() => setLimitPopup(null)}>
-          <div className="bg-[#1a1a2e] border border-blue-500/30 rounded-2xl p-8 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
-            <div className="text-4xl mb-4">🔐</div>
-            <h2 className="text-xl font-bold text-white mb-2">{t.loginRequired}</h2>
-            <p className="text-white/50 text-sm mb-6">Ücretsiz hesap oluşturun ve araştırmaları keşfetmeye başlayın.</p>
-            <a href="/auth" className="block w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-bold text-white hover:opacity-90 transition mb-3">{t.loginBtn}</a>
-            <button onClick={() => setLimitPopup(null)} className="text-white/30 text-sm hover:text-white transition">Kapat</button>
-          </div>
-        </div>
-      )}
 
       <header className={`border-b ${border} px-3 py-3 sticky top-0 z-30`} style={{ background: dark ? 'rgba(10,10,15,0.97)' : 'rgba(248,249,255,0.97)' }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
@@ -1095,10 +1133,8 @@ export default function Home() {
                 <p className={`${textMuted} text-sm font-medium mb-4`}>🔥 {t.trending}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {trending.slice(0, 3).map((item, i) => (
-
-
                     <button key={i} onClick={() => handleSearch(item.query || item.topic)} className={`relative overflow-hidden ${cardBg} border ${border} rounded-2xl p-5 text-left hover:border-blue-500/30 transition-all group`}>
-                      <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬', '🧪', '🧠', '💊'][i % 6]}</div>
+                      <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬'][i % 3]}</div>
                       <div className="flex items-center gap-2 mb-2">
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
                         <span className="text-xs text-white/30">Bu hafta</span>
@@ -1142,7 +1178,9 @@ export default function Home() {
                 <button onClick={goBack} className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50 hover:text-black'} border rounded-xl text-xs transition`}>{t.back}</button>
                 <div>
                   {searchLabel && <p className={`text-xs ${textMuted} mb-0.5`}>{searchLabel}</p>}
-                  <p className={`${textMuted} text-sm`}>{articles.length} {t.found}</p>
+                  <p className={`${textMuted} text-sm`}>
+                    {articles.length} / {totalCount > 0 ? `${totalCount.toLocaleString()}+` : articles.length} {t.found}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
@@ -1211,6 +1249,14 @@ export default function Home() {
                 )
               })}
             </div>
+
+            {hasMore && (
+              <div className="text-center mt-8 mb-4">
+                <button onClick={handleLoadMore} disabled={loadingMore} className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 shadow-lg shadow-blue-500/20">
+                  {loadingMore ? `⏳ ${t.loadingMore}` : `📚 ${t.loadMore}`}
+                </button>
+              </div>
+            )}
           </div>
         )}
 

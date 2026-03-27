@@ -18,7 +18,6 @@ const LANGUAGES = [
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
 ]
 
-// Kategori başlıkları çokdilli
 const CATEGORY_LABELS = {
   health: { tr: 'Sağlık & Tıp', en: 'Health & Medicine', nl: 'Gezondheid & Geneeskunde', de: 'Gesundheit & Medizin', fr: 'Santé & Médecine', es: 'Salud & Medicina', ar: 'الصحة والطب' },
   neuro: { tr: 'Nöroloji & Psikoloji', en: 'Neurology & Psychology', nl: 'Neurologie & Psychologie', de: 'Neurologie & Psychologie', fr: 'Neurologie & Psychologie', es: 'Neurología & Psicología', ar: 'علم الأعصاب وعلم النفس' },
@@ -32,38 +31,29 @@ const CATEGORY_LABELS = {
 }
 
 const SUBCATEGORY_LABELS = {
-  // Health
   'Kanser': { en: 'Cancer', nl: 'Kanker', de: 'Krebs', fr: 'Cancer', es: 'Cáncer', ar: 'السرطان' },
   'Kalp & Damar': { en: 'Heart & Vascular', nl: 'Hart & Vaatziekten', de: 'Herz & Gefäße', fr: 'Cœur & Vasculaire', es: 'Corazón & Vascular', ar: 'القلب والأوعية' },
   'Metabolik': { en: 'Metabolic', nl: 'Metabolisch', de: 'Stoffwechsel', fr: 'Métabolique', es: 'Metabólico', ar: 'الأيض' },
   'Enfeksiyon': { en: 'Infection', nl: 'Infectie', de: 'Infektion', fr: 'Infection', es: 'Infección', ar: 'العدوى' },
-  // Neuro
   'Nörodejeneratif': { en: 'Neurodegenerative', nl: 'Neurodegeneratief', de: 'Neurodegenerativ', fr: 'Neurodégénératif', es: 'Neurodegenerativo', ar: 'التنكس العصبي' },
   'Ruh Sağlığı': { en: 'Mental Health', nl: 'Geestelijke Gezondheid', de: 'Psychische Gesundheit', fr: 'Santé Mentale', es: 'Salud Mental', ar: 'الصحة النفسية' },
   'Beyin & Davranış': { en: 'Brain & Behavior', nl: 'Hersenen & Gedrag', de: 'Gehirn & Verhalten', fr: 'Cerveau & Comportement', es: 'Cerebro & Comportamiento', ar: 'الدماغ والسلوك' },
-  // Biology
   'Genetik': { en: 'Genetics', nl: 'Genetica', de: 'Genetik', fr: 'Génétique', es: 'Genética', ar: 'الجينات' },
   'Mikrobiyoloji': { en: 'Microbiology', nl: 'Microbiologie', de: 'Mikrobiologie', fr: 'Microbiologie', es: 'Microbiología', ar: 'علم الأحياء الدقيقة' },
   'Hücre & Molekül': { en: 'Cell & Molecule', nl: 'Cel & Molecuul', de: 'Zelle & Molekül', fr: 'Cellule & Molécule', es: 'Célula & Molécula', ar: 'الخلية والجزيء' },
-  // Technology
   'Yapay Zeka': { en: 'Artificial Intelligence', nl: 'Kunstmatige Intelligentie', de: 'Künstliche Intelligenz', fr: 'Intelligence Artificielle', es: 'Inteligencia Artificial', ar: 'الذكاء الاصطناعي' },
   'Biyoteknoloji': { en: 'Biotechnology', nl: 'Biotechnologie', de: 'Biotechnologie', fr: 'Biotechnologie', es: 'Biotecnología', ar: 'التكنولوجيا الحيوية' },
   'Robotik & Cerrahi': { en: 'Robotics & Surgery', nl: 'Robotica & Chirurgie', de: 'Robotik & Chirurgie', fr: 'Robotique & Chirurgie', es: 'Robótica & Cirugía', ar: 'الروبوتات والجراحة' },
-  // Sports
   'Performans': { en: 'Performance', nl: 'Prestatie', de: 'Leistung', fr: 'Performance', es: 'Rendimiento', ar: 'الأداء' },
   'Beslenme': { en: 'Nutrition', nl: 'Voeding', de: 'Ernährung', fr: 'Nutrition', es: 'Nutrición', ar: 'التغذية' },
   'Yaralanma & İyileşme': { en: 'Injury & Recovery', nl: 'Blessure & Herstel', de: 'Verletzung & Erholung', fr: 'Blessure & Récupération', es: 'Lesión & Recuperación', ar: 'الإصابة والتعافي' },
-  // Environment
   'İklim': { en: 'Climate', nl: 'Klimaat', de: 'Klima', fr: 'Climat', es: 'Clima', ar: 'المناخ' },
   'Kirlilik': { en: 'Pollution', nl: 'Vervuiling', de: 'Verschmutzung', fr: 'Pollution', es: 'Contaminación', ar: 'التلوث' },
   'Ekosistem': { en: 'Ecosystem', nl: 'Ecosysteem', de: 'Ökosystem', fr: 'Écosystème', es: 'Ecosistema', ar: 'النظام البيئي' },
-  // Physics
   'Fizik': { en: 'Physics', nl: 'Fysica', de: 'Physik', fr: 'Physique', es: 'Física', ar: 'الفيزياء' },
   'Kimya': { en: 'Chemistry', nl: 'Chemie', de: 'Chemie', fr: 'Chimie', es: 'Química', ar: 'الكيمياء' },
-  // Astronomy
   'Uzay': { en: 'Space', nl: 'Ruimte', de: 'Weltraum', fr: 'Espace', es: 'Espacio', ar: 'الفضاء' },
   'Uzay Tıbbı': { en: 'Space Medicine', nl: 'Ruimtegeneeskunde', de: 'Raumfahrtmedizin', fr: 'Médecine Spatiale', es: 'Medicina Espacial', ar: 'طب الفضاء' },
-  // Aging
   'Yaşlanma Biyolojisi': { en: 'Aging Biology', nl: 'Verouderingsbiologie', de: 'Alterungsbiologie', fr: 'Biologie du Vieillissement', es: 'Biología del Envejecimiento', ar: 'بيولوجيا الشيخوخة' },
   'Uzun Ömür': { en: 'Longevity', nl: 'Levensduur', de: 'Langlebigkeit', fr: 'Longévité', es: 'Longevidad', ar: 'طول العمر' },
 }
@@ -137,7 +127,7 @@ const TOPIC_LABELS = {
   'Yenilenebilir Enerji': { en: 'Renewable Energy', nl: 'Hernieuwbare energie', de: 'Erneuerbare Energie', fr: 'Énergie renouvelable', es: 'Energía renovable', ar: 'الطاقة المتجددة' },
   'Hava Kirliliği': { en: 'Air Pollution', nl: 'Luchtvervuiling', de: 'Luftverschmutzung', fr: 'Pollution atmosphérique', es: 'Contaminación del aire', ar: 'تلوث الهواء' },
   'Plastik Kirliliği': { en: 'Plastic Pollution', nl: 'Plasticvervuiling', de: 'Plastikverschmutzung', fr: 'Pollution plastique', es: 'Contaminación plástica', ar: 'تلوث البلاستيك' },
-  'Su Kirliliği': { en: 'Water Pollution', nl: 'Watervervuiling', de: 'Wasserverschmutzung', fr: 'Pollution de l\'eau', es: 'Contaminación del agua', ar: 'تلوث المياه' },
+  'Su Kirliliği': { en: 'Water Pollution', nl: 'Watervervuiling', de: 'Wasserverschmutzung', fr: "Pollution de l'eau", es: 'Contaminación del agua', ar: 'تلوث المياه' },
   'Biyoçeşitlilik': { en: 'Biodiversity', nl: 'Biodiversiteit', de: 'Biodiversität', fr: 'Biodiversité', es: 'Biodiversidad', ar: 'التنوع البيولوجي' },
   'Orman Yangınları': { en: 'Wildfires', nl: 'Bosbranden', de: 'Waldbrände', fr: 'Incendies de forêt', es: 'Incendios forestales', ar: 'حرائق الغابات' },
   'Okyanuslar': { en: 'Oceans', nl: 'Oceanen', de: 'Ozeane', fr: 'Océans', es: 'Océanos', ar: 'المحيطات' },
@@ -152,7 +142,7 @@ const TOPIC_LABELS = {
   'Kara Delik': { en: 'Black Hole', nl: 'Zwart gat', de: 'Schwarzes Loch', fr: 'Trou noir', es: 'Agujero negro', ar: 'الثقب الأسود' },
   'Eksogezegenler': { en: 'Exoplanets', nl: 'Exoplaneten', de: 'Exoplaneten', fr: 'Exoplanètes', es: 'Exoplanetas', ar: 'الكواكب خارج المجموعة الشمسية' },
   'Karanlık Madde': { en: 'Dark Matter', nl: 'Donkere materie', de: 'Dunkle Materie', fr: 'Matière noire', es: 'Materia oscura', ar: 'المادة المظلمة' },
-  'Evrenin Genişlemesi': { en: 'Universe Expansion', nl: 'Uitdijend heelal', de: 'Ausdehnung des Universums', fr: 'Expansion de l\'univers', es: 'Expansión del universo', ar: 'تمدد الكون' },
+  'Evrenin Genişlemesi': { en: 'Universe Expansion', nl: 'Uitdijend heelal', de: 'Ausdehnung des Universums', fr: "Expansion de l'univers", es: 'Expansión del universo', ar: 'تمدد الكون' },
   'Uzay ve Sağlık': { en: 'Space & Health', nl: 'Ruimte & Gezondheid', de: 'Weltraum & Gesundheit', fr: 'Espace & Santé', es: 'Espacio & Salud', ar: 'الفضاء والصحة' },
   'Mars Araştırması': { en: 'Mars Exploration', nl: 'Marsverkenning', de: 'Marserkundung', fr: 'Exploration de Mars', es: 'Exploración de Marte', ar: 'استكشاف المريخ' },
   'Yaşlanma Biyolojisi': { en: 'Aging Biology', nl: 'Verouderingsbiologie', de: 'Alterungsbiologie', fr: 'Biologie du vieillissement', es: 'Biología del envejecimiento', ar: 'بيولوجيا الشيخوخة' },
@@ -165,194 +155,167 @@ const TOPIC_LABELS = {
 }
 
 const TOPIC_CATEGORIES = [
-  {
-    id: 'health', icon: '🏥',
-    subcategories: [
-      { label: 'Kanser', topics: [
-        { slug: 'meme-kanseri', label: 'Meme Kanseri', en: 'breast cancer' },
-        { slug: 'akciger-kanseri', label: 'Akciğer Kanseri', en: 'lung cancer' },
-        { slug: 'kolon-kanseri', label: 'Kolon Kanseri', en: 'colon cancer' },
-        { slug: 'kanser-tedavisi', label: 'Kanser Tedavisi', en: 'cancer treatment' },
-        { slug: 'kanser-immunoterapi', label: 'İmmünoterapi', en: 'cancer immunotherapy' },
-      ]},
-      { label: 'Kalp & Damar', topics: [
-        { slug: 'kalp-hastaligi', label: 'Kalp Hastalığı', en: 'cardiovascular disease' },
-        { slug: 'hipertansiyon', label: 'Hipertansiyon', en: 'hypertension' },
-        { slug: 'inme', label: 'İnme', en: 'stroke' },
-        { slug: 'kalp-yetmezligi', label: 'Kalp Yetmezliği', en: 'heart failure' },
-      ]},
-      { label: 'Metabolik', topics: [
-        { slug: 'diyabet', label: 'Diyabet', en: 'diabetes' },
-        { slug: 'obezite', label: 'Obezite', en: 'obesity' },
-        { slug: 'tiroid', label: 'Tiroid', en: 'thyroid disease' },
-        { slug: 'metabolik-sendrom', label: 'Metabolik Sendrom', en: 'metabolic syndrome' },
-      ]},
-      { label: 'Enfeksiyon', topics: [
-        { slug: 'covid-19', label: 'COVID-19', en: 'covid-19' },
-        { slug: 'antibiyotik-direnci', label: 'Antibiyotik Direnci', en: 'antibiotic resistance' },
-        { slug: 'asi', label: 'Aşı', en: 'vaccine immunization' },
-        { slug: 'grip', label: 'Grip & İnfluenza', en: 'influenza' },
-      ]},
-    ]
-  },
-  {
-    id: 'neuro', icon: '🧠',
-    subcategories: [
-      { label: 'Nörodejeneratif', topics: [
-        { slug: 'alzheimer', label: 'Alzheimer', en: 'alzheimer disease' },
-        { slug: 'parkinson', label: 'Parkinson', en: 'parkinson disease' },
-        { slug: 'ms-hastaligi', label: 'Multiple Skleroz', en: 'multiple sclerosis' },
-        { slug: 'als', label: 'ALS', en: 'amyotrophic lateral sclerosis' },
-      ]},
-      { label: 'Ruh Sağlığı', topics: [
-        { slug: 'depresyon', label: 'Depresyon', en: 'depression' },
-        { slug: 'anksiyete', label: 'Anksiyete', en: 'anxiety disorder' },
-        { slug: 'bipolar', label: 'Bipolar Bozukluk', en: 'bipolar disorder' },
-        { slug: 'sizofren', label: 'Şizofreni', en: 'schizophrenia' },
-      ]},
-      { label: 'Beyin & Davranış', topics: [
-        { slug: 'uyku-bozuklugu', label: 'Uyku Bozukluğu', en: 'sleep disorder' },
-        { slug: 'bagimlilik', label: 'Bağımlılık', en: 'addiction substance use' },
-        { slug: 'otizm', label: 'Otizm', en: 'autism spectrum disorder' },
-        { slug: 'dikkat-eksikligi', label: 'ADHD', en: 'attention deficit disorder' },
-      ]},
-    ]
-  },
-  {
-    id: 'biology', icon: '🧬',
-    subcategories: [
-      { label: 'Genetik', topics: [
-        { slug: 'crispr', label: 'CRISPR Gen Düzenleme', en: 'CRISPR gene editing' },
-        { slug: 'gen-tedavisi', label: 'Gen Tedavisi', en: 'gene therapy' },
-        { slug: 'genomik', label: 'Genomik', en: 'genomics' },
-        { slug: 'epigenetik', label: 'Epigenetik', en: 'epigenetics' },
-      ]},
-      { label: 'Mikrobiyoloji', topics: [
-        { slug: 'mikrobiyom', label: 'Mikrobiyom', en: 'microbiome gut bacteria' },
-        { slug: 'probiyotik', label: 'Probiyotik', en: 'probiotic gut health' },
-        { slug: 'viroloji', label: 'Viroloji', en: 'virology virus' },
-        { slug: 'antibiyotik', label: 'Antibiyotik', en: 'antibiotic' },
-      ]},
-      { label: 'Hücre & Molekül', topics: [
-        { slug: 'kok-hucre', label: 'Kök Hücre', en: 'stem cell' },
-        { slug: 'protein-katlama', label: 'Protein Katlama', en: 'protein folding' },
-        { slug: 'mitokondri', label: 'Mitokondri', en: 'mitochondria' },
-        { slug: 'apoptoz', label: 'Apoptoz', en: 'apoptosis cell death' },
-      ]},
-    ]
-  },
-  {
-    id: 'technology', icon: '💻',
-    subcategories: [
-      { label: 'Yapay Zeka', topics: [
-        { slug: 'yapay-zeka-tip', label: 'AI ve Tıp', en: 'artificial intelligence medicine' },
-        { slug: 'derin-ogrenme', label: 'Derin Öğrenme', en: 'deep learning neural network' },
-        { slug: 'dogal-dil-isleme', label: 'NLP', en: 'natural language processing' },
-        { slug: 'makine-ogrenmesi', label: 'Makine Öğrenmesi', en: 'machine learning' },
-      ]},
-      { label: 'Biyoteknoloji', topics: [
-        { slug: 'nanoteknoloji', label: 'Nanoteknoloji', en: 'nanotechnology medicine' },
-        { slug: 'biyosensor', label: 'Biyosensör', en: 'biosensor' },
-        { slug: 'organ-chip', label: 'Organ-on-Chip', en: 'organ on chip' },
-        { slug: '3d-biyoyazici', label: '3D Biyoyazıcı', en: '3D bioprinting' },
-      ]},
-      { label: 'Robotik & Cerrahi', topics: [
-        { slug: 'robotik-cerrahi', label: 'Robotik Cerrahi', en: 'robotic surgery' },
-        { slug: 'telesaglik', label: 'Telesağlık', en: 'telemedicine telehealth' },
-        { slug: 'giyilebilir', label: 'Giyilebilir Teknoloji', en: 'wearable health technology' },
-      ]},
-    ]
-  },
-  {
-    id: 'sports', icon: '💪',
-    subcategories: [
-      { label: 'Performans', topics: [
-        { slug: 'kreatin', label: 'Kreatin', en: 'creatine supplementation' },
-        { slug: 'spor-performans', label: 'Spor Performansı', en: 'athletic performance' },
-        { slug: 'kas-hipertrofisi', label: 'Kas Hipertrofisi', en: 'muscle hypertrophy' },
-        { slug: 'dayaniklilik', label: 'Dayanıklılık', en: 'endurance exercise' },
-      ]},
-      { label: 'Beslenme', topics: [
-        { slug: 'aralikli-oruc', label: 'Aralıklı Oruç', en: 'intermittent fasting' },
-        { slug: 'omega-3', label: 'Omega-3', en: 'omega 3 fatty acids' },
-        { slug: 'vitamin-d', label: 'Vitamin D', en: 'vitamin D deficiency' },
-        { slug: 'magnezyum', label: 'Magnezyum', en: 'magnesium supplementation' },
-      ]},
-      { label: 'Yaralanma & İyileşme', topics: [
-        { slug: 'spor-yaralanmasi', label: 'Spor Yaralanması', en: 'sports injury' },
-        { slug: 'fizik-tedavi', label: 'Fizik Tedavi', en: 'physical therapy rehabilitation' },
-        { slug: 'antrenman-toparlanma', label: 'Toparlanma', en: 'exercise recovery' },
-      ]},
-    ]
-  },
-  {
-    id: 'environment', icon: '🌍',
-    subcategories: [
-      { label: 'İklim', topics: [
-        { slug: 'iklim-degisikligi', label: 'İklim Değişikliği', en: 'climate change' },
-        { slug: 'karbon-emisyonu', label: 'Karbon Emisyonu', en: 'carbon dioxide emissions' },
-        { slug: 'yenilenebilir-enerji', label: 'Yenilenebilir Enerji', en: 'renewable energy solar' },
-      ]},
-      { label: 'Kirlilik', topics: [
-        { slug: 'hava-kirliligi', label: 'Hava Kirliliği', en: 'air pollution health' },
-        { slug: 'plastik-kirlilik', label: 'Plastik Kirliliği', en: 'microplastic pollution' },
-        { slug: 'su-kirliligi', label: 'Su Kirliliği', en: 'water pollution' },
-      ]},
-      { label: 'Ekosistem', topics: [
-        { slug: 'biodiversity', label: 'Biyoçeşitlilik', en: 'biodiversity conservation' },
-        { slug: 'orman-yanginlari', label: 'Orman Yangınları', en: 'wildfire forest fire' },
-        { slug: 'okyanuslar', label: 'Okyanuslar', en: 'ocean acidification coral reef' },
-      ]},
-    ]
-  },
-  {
-    id: 'physics', icon: '⚛️',
-    subcategories: [
-      { label: 'Fizik', topics: [
-        { slug: 'kuantum-fizik', label: 'Kuantum Fizik', en: 'quantum physics' },
-        { slug: 'kuantum-bilgisayar', label: 'Kuantum Bilgisayar', en: 'quantum computing' },
-        { slug: 'nukleer-fizik', label: 'Nükleer Fizik', en: 'nuclear physics' },
-        { slug: 'madde-fizigi', label: 'Yoğun Madde', en: 'condensed matter physics' },
-      ]},
-      { label: 'Kimya', topics: [
-        { slug: 'organik-kimya', label: 'Organik Kimya', en: 'organic chemistry synthesis' },
-        { slug: 'ilac-kimyasi', label: 'İlaç Kimyası', en: 'medicinal chemistry drug' },
-        { slug: 'malzeme-bilimi', label: 'Malzeme Bilimi', en: 'materials science' },
-        { slug: 'katalizor', label: 'Katalizör', en: 'catalysis chemical reaction' },
-      ]},
-    ]
-  },
-  {
-    id: 'astronomy', icon: '🔭',
-    subcategories: [
-      { label: 'Uzay', topics: [
-        { slug: 'kara-delik', label: 'Kara Delik', en: 'black hole' },
-        { slug: 'eksogezegenler', label: 'Eksogezegenler', en: 'exoplanet' },
-        { slug: 'karanlik-madde', label: 'Karanlık Madde', en: 'dark matter' },
-        { slug: 'evrenin-genisleme', label: 'Evrenin Genişlemesi', en: 'universe expansion dark energy' },
-      ]},
-      { label: 'Uzay Tıbbı', topics: [
-        { slug: 'uzay-saglik', label: 'Uzay ve Sağlık', en: 'space medicine astronaut health' },
-        { slug: 'mars-arastirma', label: 'Mars Araştırması', en: 'mars exploration' },
-      ]},
-    ]
-  },
-  {
-    id: 'aging', icon: '⏳',
-    subcategories: [
-      { label: 'Yaşlanma Biyolojisi', topics: [
-        { slug: 'yaslanma-biyoloji', label: 'Yaşlanma Biyolojisi', en: 'aging biology longevity' },
-        { slug: 'telomer', label: 'Telomer', en: 'telomere aging' },
-        { slug: 'senolik', label: 'Senolitik', en: 'senolytic aging' },
-        { slug: 'otofarji', label: 'Otofaji', en: 'autophagy' },
-      ]},
-      { label: 'Uzun Ömür', topics: [
-        { slug: 'kalori-kisitlama', label: 'Kalori Kısıtlama', en: 'caloric restriction longevity' },
-        { slug: 'nad-plus', label: 'NAD+', en: 'NAD+ aging' },
-        { slug: 'sirutuin', label: 'Sirtuinler', en: 'sirtuin longevity' },
-      ]},
-    ]
-  },
+  { id: 'health', icon: '🏥', subcategories: [
+    { label: 'Kanser', topics: [
+      { slug: 'meme-kanseri', label: 'Meme Kanseri', en: 'breast cancer' },
+      { slug: 'akciger-kanseri', label: 'Akciğer Kanseri', en: 'lung cancer' },
+      { slug: 'kolon-kanseri', label: 'Kolon Kanseri', en: 'colon cancer' },
+      { slug: 'kanser-tedavisi', label: 'Kanser Tedavisi', en: 'cancer treatment' },
+      { slug: 'kanser-immunoterapi', label: 'İmmünoterapi', en: 'cancer immunotherapy' },
+    ]},
+    { label: 'Kalp & Damar', topics: [
+      { slug: 'kalp-hastaligi', label: 'Kalp Hastalığı', en: 'cardiovascular disease' },
+      { slug: 'hipertansiyon', label: 'Hipertansiyon', en: 'hypertension' },
+      { slug: 'inme', label: 'İnme', en: 'stroke' },
+      { slug: 'kalp-yetmezligi', label: 'Kalp Yetmezliği', en: 'heart failure' },
+    ]},
+    { label: 'Metabolik', topics: [
+      { slug: 'diyabet', label: 'Diyabet', en: 'diabetes' },
+      { slug: 'obezite', label: 'Obezite', en: 'obesity' },
+      { slug: 'tiroid', label: 'Tiroid', en: 'thyroid disease' },
+      { slug: 'metabolik-sendrom', label: 'Metabolik Sendrom', en: 'metabolic syndrome' },
+    ]},
+    { label: 'Enfeksiyon', topics: [
+      { slug: 'covid-19', label: 'COVID-19', en: 'covid-19' },
+      { slug: 'antibiyotik-direnci', label: 'Antibiyotik Direnci', en: 'antibiotic resistance' },
+      { slug: 'asi', label: 'Aşı', en: 'vaccine immunization' },
+      { slug: 'grip', label: 'Grip & İnfluenza', en: 'influenza' },
+    ]},
+  ]},
+  { id: 'neuro', icon: '🧠', subcategories: [
+    { label: 'Nörodejeneratif', topics: [
+      { slug: 'alzheimer', label: 'Alzheimer', en: 'alzheimer disease' },
+      { slug: 'parkinson', label: 'Parkinson', en: 'parkinson disease' },
+      { slug: 'ms-hastaligi', label: 'Multiple Skleroz', en: 'multiple sclerosis' },
+      { slug: 'als', label: 'ALS', en: 'amyotrophic lateral sclerosis' },
+    ]},
+    { label: 'Ruh Sağlığı', topics: [
+      { slug: 'depresyon', label: 'Depresyon', en: 'depression' },
+      { slug: 'anksiyete', label: 'Anksiyete', en: 'anxiety disorder' },
+      { slug: 'bipolar', label: 'Bipolar Bozukluk', en: 'bipolar disorder' },
+      { slug: 'sizofren', label: 'Şizofreni', en: 'schizophrenia' },
+    ]},
+    { label: 'Beyin & Davranış', topics: [
+      { slug: 'uyku-bozuklugu', label: 'Uyku Bozukluğu', en: 'sleep disorder' },
+      { slug: 'bagimlilik', label: 'Bağımlılık', en: 'addiction substance use' },
+      { slug: 'otizm', label: 'Otizm', en: 'autism spectrum disorder' },
+      { slug: 'dikkat-eksikligi', label: 'ADHD', en: 'attention deficit disorder' },
+    ]},
+  ]},
+  { id: 'biology', icon: '🧬', subcategories: [
+    { label: 'Genetik', topics: [
+      { slug: 'crispr', label: 'CRISPR Gen Düzenleme', en: 'CRISPR gene editing' },
+      { slug: 'gen-tedavisi', label: 'Gen Tedavisi', en: 'gene therapy' },
+      { slug: 'genomik', label: 'Genomik', en: 'genomics' },
+      { slug: 'epigenetik', label: 'Epigenetik', en: 'epigenetics' },
+    ]},
+    { label: 'Mikrobiyoloji', topics: [
+      { slug: 'mikrobiyom', label: 'Mikrobiyom', en: 'microbiome gut bacteria' },
+      { slug: 'probiyotik', label: 'Probiyotik', en: 'probiotic gut health' },
+      { slug: 'viroloji', label: 'Viroloji', en: 'virology virus' },
+      { slug: 'antibiyotik', label: 'Antibiyotik', en: 'antibiotic' },
+    ]},
+    { label: 'Hücre & Molekül', topics: [
+      { slug: 'kok-hucre', label: 'Kök Hücre', en: 'stem cell' },
+      { slug: 'protein-katlama', label: 'Protein Katlama', en: 'protein folding' },
+      { slug: 'mitokondri', label: 'Mitokondri', en: 'mitochondria' },
+      { slug: 'apoptoz', label: 'Apoptoz', en: 'apoptosis cell death' },
+    ]},
+  ]},
+  { id: 'technology', icon: '💻', subcategories: [
+    { label: 'Yapay Zeka', topics: [
+      { slug: 'yapay-zeka-tip', label: 'AI ve Tıp', en: 'artificial intelligence medicine' },
+      { slug: 'derin-ogrenme', label: 'Derin Öğrenme', en: 'deep learning neural network' },
+      { slug: 'dogal-dil-isleme', label: 'NLP', en: 'natural language processing' },
+      { slug: 'makine-ogrenmesi', label: 'Makine Öğrenmesi', en: 'machine learning' },
+    ]},
+    { label: 'Biyoteknoloji', topics: [
+      { slug: 'nanoteknoloji', label: 'Nanoteknoloji', en: 'nanotechnology medicine' },
+      { slug: 'biyosensor', label: 'Biyosensör', en: 'biosensor' },
+      { slug: 'organ-chip', label: 'Organ-on-Chip', en: 'organ on chip' },
+      { slug: '3d-biyoyazici', label: '3D Biyoyazıcı', en: '3D bioprinting' },
+    ]},
+    { label: 'Robotik & Cerrahi', topics: [
+      { slug: 'robotik-cerrahi', label: 'Robotik Cerrahi', en: 'robotic surgery' },
+      { slug: 'telesaglik', label: 'Telesağlık', en: 'telemedicine telehealth' },
+      { slug: 'giyilebilir', label: 'Giyilebilir Teknoloji', en: 'wearable health technology' },
+    ]},
+  ]},
+  { id: 'sports', icon: '💪', subcategories: [
+    { label: 'Performans', topics: [
+      { slug: 'kreatin', label: 'Kreatin', en: 'creatine supplementation' },
+      { slug: 'spor-performans', label: 'Spor Performansı', en: 'athletic performance' },
+      { slug: 'kas-hipertrofisi', label: 'Kas Hipertrofisi', en: 'muscle hypertrophy' },
+      { slug: 'dayaniklilik', label: 'Dayanıklılık', en: 'endurance exercise' },
+    ]},
+    { label: 'Beslenme', topics: [
+      { slug: 'aralikli-oruc', label: 'Aralıklı Oruç', en: 'intermittent fasting' },
+      { slug: 'omega-3', label: 'Omega-3', en: 'omega 3 fatty acids' },
+      { slug: 'vitamin-d', label: 'Vitamin D', en: 'vitamin D deficiency' },
+      { slug: 'magnezyum', label: 'Magnezyum', en: 'magnesium supplementation' },
+    ]},
+    { label: 'Yaralanma & İyileşme', topics: [
+      { slug: 'spor-yaralanmasi', label: 'Spor Yaralanması', en: 'sports injury' },
+      { slug: 'fizik-tedavi', label: 'Fizik Tedavi', en: 'physical therapy rehabilitation' },
+      { slug: 'antrenman-toparlanma', label: 'Toparlanma', en: 'exercise recovery' },
+    ]},
+  ]},
+  { id: 'environment', icon: '🌍', subcategories: [
+    { label: 'İklim', topics: [
+      { slug: 'iklim-degisikligi', label: 'İklim Değişikliği', en: 'climate change' },
+      { slug: 'karbon-emisyonu', label: 'Karbon Emisyonu', en: 'carbon dioxide emissions' },
+      { slug: 'yenilenebilir-enerji', label: 'Yenilenebilir Enerji', en: 'renewable energy solar' },
+    ]},
+    { label: 'Kirlilik', topics: [
+      { slug: 'hava-kirliligi', label: 'Hava Kirliliği', en: 'air pollution health' },
+      { slug: 'plastik-kirlilik', label: 'Plastik Kirliliği', en: 'microplastic pollution' },
+      { slug: 'su-kirliligi', label: 'Su Kirliliği', en: 'water pollution' },
+    ]},
+    { label: 'Ekosistem', topics: [
+      { slug: 'biodiversity', label: 'Biyoçeşitlilik', en: 'biodiversity conservation' },
+      { slug: 'orman-yanginlari', label: 'Orman Yangınları', en: 'wildfire forest fire' },
+      { slug: 'okyanuslar', label: 'Okyanuslar', en: 'ocean acidification coral reef' },
+    ]},
+  ]},
+  { id: 'physics', icon: '⚛️', subcategories: [
+    { label: 'Fizik', topics: [
+      { slug: 'kuantum-fizik', label: 'Kuantum Fizik', en: 'quantum physics' },
+      { slug: 'kuantum-bilgisayar', label: 'Kuantum Bilgisayar', en: 'quantum computing' },
+      { slug: 'nukleer-fizik', label: 'Nükleer Fizik', en: 'nuclear physics' },
+      { slug: 'madde-fizigi', label: 'Yoğun Madde', en: 'condensed matter physics' },
+    ]},
+    { label: 'Kimya', topics: [
+      { slug: 'organik-kimya', label: 'Organik Kimya', en: 'organic chemistry synthesis' },
+      { slug: 'ilac-kimyasi', label: 'İlaç Kimyası', en: 'medicinal chemistry drug' },
+      { slug: 'malzeme-bilimi', label: 'Malzeme Bilimi', en: 'materials science' },
+      { slug: 'katalizor', label: 'Katalizör', en: 'catalysis chemical reaction' },
+    ]},
+  ]},
+  { id: 'astronomy', icon: '🔭', subcategories: [
+    { label: 'Uzay', topics: [
+      { slug: 'kara-delik', label: 'Kara Delik', en: 'black hole' },
+      { slug: 'eksogezegenler', label: 'Eksogezegenler', en: 'exoplanet' },
+      { slug: 'karanlik-madde', label: 'Karanlık Madde', en: 'dark matter' },
+      { slug: 'evrenin-genisleme', label: 'Evrenin Genişlemesi', en: 'universe expansion dark energy' },
+    ]},
+    { label: 'Uzay Tıbbı', topics: [
+      { slug: 'uzay-saglik', label: 'Uzay ve Sağlık', en: 'space medicine astronaut health' },
+      { slug: 'mars-arastirma', label: 'Mars Araştırması', en: 'mars exploration' },
+    ]},
+  ]},
+  { id: 'aging', icon: '⏳', subcategories: [
+    { label: 'Yaşlanma Biyolojisi', topics: [
+      { slug: 'yaslanma-biyoloji', label: 'Yaşlanma Biyolojisi', en: 'aging biology longevity' },
+      { slug: 'telomer', label: 'Telomer', en: 'telomere aging' },
+      { slug: 'senolik', label: 'Senolitik', en: 'senolytic aging' },
+      { slug: 'otofarji', label: 'Otofaji', en: 'autophagy' },
+    ]},
+    { label: 'Uzun Ömür', topics: [
+      { slug: 'kalori-kisitlama', label: 'Kalori Kısıtlama', en: 'caloric restriction longevity' },
+      { slug: 'nad-plus', label: 'NAD+', en: 'NAD+ aging' },
+      { slug: 'sirutuin', label: 'Sirtuinler', en: 'sirtuin longevity' },
+    ]},
+  ]},
 ]
 
 const TRENDING_WEEK = {
@@ -389,6 +352,12 @@ const UI_TEXT = {
     loadMore: 'Daha Fazla Yükle', loadingMore: 'Yükleniyor...',
     errorTitle: 'Bağlantı hatası', errorMsg: 'Sonuçlar yüklenemedi. Lütfen tekrar deneyin.', errorBtn: 'Tekrar Dene',
     newArticles: 'yeni makale',
+    pubDate: 'Yayın Tarihi', articleType: 'Makale Türü',
+    selectedLabel: '✓ Seçildi',
+    selectCollection: 'Koleksiyon Seç', noCollection: 'Henüz koleksiyon yok', createCollection: 'Koleksiyon oluştur →',
+    close2: 'Kapat', copyLink: 'Linki Kopyala', copied: '✓ Kopyalandı!',
+    about: 'Hakkında', privacy: 'Gizlilik Politikası', terms: 'Kullanım Şartları', community2: 'Topluluk',
+    shareVia: 'BİLİMCE ile paylaşıldı',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer...',
@@ -417,6 +386,12 @@ const UI_TEXT = {
     loadMore: 'Load More', loadingMore: 'Loading...',
     errorTitle: 'Connection error', errorMsg: 'Could not load results. Please try again.', errorBtn: 'Try Again',
     newArticles: 'new articles',
+    pubDate: 'Publication Date', articleType: 'Article Type',
+    selectedLabel: '✓ Selected',
+    selectCollection: 'Select Collection', noCollection: 'No collections yet', createCollection: 'Create collection →',
+    close2: 'Close', copyLink: 'Copy Link', copied: '✓ Copied!',
+    about: 'About', privacy: 'Privacy Policy', terms: 'Terms of Service', community2: 'Community',
+    shareVia: 'Shared via BİLİMCE',
   },
   nl: {
     search: 'Zoeken', searching: 'Zoeken...', placeholder: 'Bijv: creatine, alzheimer...',
@@ -445,6 +420,12 @@ const UI_TEXT = {
     loadMore: 'Meer laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindingsfout', errorMsg: 'Resultaten konden niet worden geladen.', errorBtn: 'Opnieuw proberen',
     newArticles: 'nieuwe artikelen',
+    pubDate: 'Publicatiedatum', articleType: 'Artikeltype',
+    selectedLabel: '✓ Geselecteerd',
+    selectCollection: 'Selecteer Collectie', noCollection: 'Nog geen collecties', createCollection: 'Collectie aanmaken →',
+    close2: 'Sluiten', copyLink: 'Link kopiëren', copied: '✓ Gekopieerd!',
+    about: 'Over ons', privacy: 'Privacybeleid', terms: 'Gebruiksvoorwaarden', community2: 'Gemeenschap',
+    shareVia: 'Gedeeld via BİLİMCE',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -473,6 +454,12 @@ const UI_TEXT = {
     loadMore: 'Mehr laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindungsfehler', errorMsg: 'Ergebnisse konnten nicht geladen werden.', errorBtn: 'Erneut versuchen',
     newArticles: 'neue Artikel',
+    pubDate: 'Erscheinungsdatum', articleType: 'Artikeltyp',
+    selectedLabel: '✓ Ausgewählt',
+    selectCollection: 'Sammlung auswählen', noCollection: 'Noch keine Sammlungen', createCollection: 'Sammlung erstellen →',
+    close2: 'Schließen', copyLink: 'Link kopieren', copied: '✓ Kopiert!',
+    about: 'Über uns', privacy: 'Datenschutz', terms: 'Nutzungsbedingungen', community2: 'Community',
+    shareVia: 'Geteilt über BİLİMCE',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -501,6 +488,12 @@ const UI_TEXT = {
     loadMore: 'Charger plus', loadingMore: 'Chargement...',
     errorTitle: 'Erreur de connexion', errorMsg: 'Impossible de charger les résultats.', errorBtn: 'Réessayer',
     newArticles: 'nouveaux articles',
+    pubDate: 'Date de publication', articleType: 'Type d\'article',
+    selectedLabel: '✓ Sélectionné',
+    selectCollection: 'Sélectionner une collection', noCollection: 'Pas encore de collections', createCollection: 'Créer une collection →',
+    close2: 'Fermer', copyLink: 'Copier le lien', copied: '✓ Copié!',
+    about: 'À propos', privacy: 'Politique de confidentialité', terms: 'Conditions d\'utilisation', community2: 'Communauté',
+    shareVia: 'Partagé via BİLİMCE',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -529,6 +522,12 @@ const UI_TEXT = {
     loadMore: 'Cargar más', loadingMore: 'Cargando...',
     errorTitle: 'Error de conexión', errorMsg: 'No se pudieron cargar los resultados.', errorBtn: 'Intentar de nuevo',
     newArticles: 'nuevos artículos',
+    pubDate: 'Fecha de publicación', articleType: 'Tipo de artículo',
+    selectedLabel: '✓ Seleccionado',
+    selectCollection: 'Seleccionar colección', noCollection: 'Sin colecciones aún', createCollection: 'Crear colección →',
+    close2: 'Cerrar', copyLink: 'Copiar enlace', copied: '✓ Copiado!',
+    about: 'Acerca de', privacy: 'Política de privacidad', terms: 'Términos de servicio', community2: 'Comunidad',
+    shareVia: 'Compartido via BİLİMCE',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -557,30 +556,26 @@ const UI_TEXT = {
     loadMore: 'تحميل المزيد', loadingMore: 'جاري التحميل...',
     errorTitle: 'خطأ في الاتصال', errorMsg: 'تعذر تحميل النتائج.', errorBtn: 'حاول مجدداً',
     newArticles: 'مقالات جديدة',
+    pubDate: 'تاريخ النشر', articleType: 'نوع المقال',
+    selectedLabel: '✓ محدد',
+    selectCollection: 'اختر مجموعة', noCollection: 'لا توجد مجموعات بعد', createCollection: 'إنشاء مجموعة →',
+    close2: 'إغلاق', copyLink: 'نسخ الرابط', copied: '✓ تم النسخ!',
+    about: 'حول', privacy: 'سياسة الخصوصية', terms: 'شروط الخدمة', community2: 'مجتمع',
+    shareVia: 'مشارك عبر BİLİMCE',
   },
 }
 
 const SEARCH_CATEGORIES = [
-  { id: 'all', icon: '🔬' },
-  { id: 'medicine', icon: '🏥' },
-  { id: 'biology', icon: '🧬' },
-  { id: 'neuro', icon: '🧠' },
-  { id: 'technology', icon: '💻' },
-  { id: 'sports', icon: '💪' },
-  { id: 'environment', icon: '🌍' },
-  { id: 'physics', icon: '⚛️' },
-  { id: 'astronomy', icon: '🔭' },
+  { id: 'all', icon: '🔬' }, { id: 'medicine', icon: '🏥' }, { id: 'biology', icon: '🧬' },
+  { id: 'neuro', icon: '🧠' }, { id: 'technology', icon: '💻' }, { id: 'sports', icon: '💪' },
+  { id: 'environment', icon: '🌍' }, { id: 'physics', icon: '⚛️' }, { id: 'astronomy', icon: '🔭' },
 ]
 
 const CATEGORY_QUERIES = {
-  medicine: 'clinical trial treatment disease',
-  biology: 'molecular biology genetics',
-  neuro: 'neuroscience brain',
-  technology: 'artificial intelligence machine learning',
-  sports: 'exercise nutrition sports',
-  environment: 'climate change environment',
-  physics: 'quantum physics',
-  astronomy: 'astronomy astrophysics',
+  medicine: 'clinical trial treatment disease', biology: 'molecular biology genetics',
+  neuro: 'neuroscience brain', technology: 'artificial intelligence machine learning',
+  sports: 'exercise nutrition sports', environment: 'climate change environment',
+  physics: 'quantum physics', astronomy: 'astronomy astrophysics',
 }
 
 const POPULAR_SEARCHES = {
@@ -724,11 +719,9 @@ function TopicExplorer({ dark, t, lang, onSearch }) {
   const border = dark ? 'border-white/5' : 'border-black/10'
   const text = dark ? 'text-white' : 'text-black'
   const textMuted = dark ? 'text-white/50' : 'text-black/50'
-
   const getCatLabel = (id) => CATEGORY_LABELS[id]?.[lang] || CATEGORY_LABELS[id]?.en || id
   const getSubLabel = (label) => SUBCATEGORY_LABELS[label]?.[lang] || SUBCATEGORY_LABELS[label]?.en || label
   const getTopicLabel = (label) => TOPIC_LABELS[label]?.[lang] || TOPIC_LABELS[label]?.en || label
-
   return (
     <div className="mb-12">
       <h2 className={`text-lg font-bold ${text} mb-6`}>🗺️ {t.topics}</h2>
@@ -802,6 +795,7 @@ export default function Home() {
   const [lang, setLang] = useState('tr')
   const [showLang, setShowLang] = useState(false)
   const [trending, setTrending] = useState([])
+  const [trendingRaw, setTrendingRaw] = useState([]) // orijinal İngilizce trending
   const [dark, setDark] = useState(true)
   const [notifCount, setNotifCount] = useState(0)
   const [suggestions, setSuggestions] = useState([])
@@ -823,21 +817,40 @@ export default function Home() {
   const t = UI_TEXT[lang]
   const hasActiveFilters = filterPeriod !== 'allTime' || filterType !== ''
 
+  const translateTrending = async (items, targetLang) => {
+    if (!items.length) return items
+    if (targetLang === 'en') return items.map(item => ({ ...item, topic: item.query }))
+    const translated = await Promise.all(items.map(async item => ({
+      ...item,
+      topic: await translateOne(item.query, targetLang) || item.query
+    })))
+    return translated
+  }
+
   useEffect(() => {
-    const savedLang = localStorage.getItem('bilimce_lang')
-    if (savedLang) setLang(savedLang)
+    const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
+    setLang(savedLang)
     const savedTheme = localStorage.getItem('bilimce_theme')
     if (savedTheme === 'light') { setDark(false); document.documentElement.classList.add('light') }
     const savedRecent = localStorage.getItem('bilimce_recent')
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data?.user || null)
-      setUserLoaded(true)
+      setUser(data?.user || null); setUserLoaded(true)
       if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
     })
-    fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || [])).catch(() => {})
+    fetch('/api/trending').then(r => r.json()).then(async d => {
+      const items = d.trending || []
+      setTrendingRaw(items)
+      const translated = await translateTrending(items, savedLang)
+      setTrending(translated)
+    }).catch(() => {})
     fetch('/api/daily').then(r => r.json()).then(async d => {
-      if (d.article) { setDailyArticle(d.article); const titleTr = await translateOne(d.article.title_en, savedLang || 'tr'); setDailyTitleTr(titleTr) }
+      if (d.article) {
+        setDailyArticle(d.article)
+        const savedLang2 = localStorage.getItem('bilimce_lang') || 'tr'
+        const titleTr = await translateOne(d.article.title_en, savedLang2)
+        setDailyTitleTr(titleTr)
+      }
     }).catch(() => {})
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
@@ -918,14 +931,17 @@ export default function Home() {
   const inputBg = dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
 
   const changeLang = async (code) => {
-  setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
-  if (articlesRef.current.length > 0) retranslateArticles(code)
-  if (dailyArticle) {
-    const titleTr = await translateOne(dailyArticle.title_en, code)
-    setDailyTitleTr(titleTr)
+    setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
+    if (articlesRef.current.length > 0) retranslateArticles(code)
+    if (dailyArticle) {
+      const titleTr = await translateOne(dailyArticle.title_en, code)
+      setDailyTitleTr(titleTr)
+    }
+    if (trendingRaw.length > 0) {
+      const translated = await translateTrending(trendingRaw, code)
+      setTrending(translated)
+    }
   }
-}
-
 
   const retranslateArticles = async (targetLang) => {
     setAutoTranslating(true)
@@ -980,19 +996,20 @@ export default function Home() {
 
   const shareArticle = (article) => setSharePopup(article)
   const copyLink = (article) => { navigator.clipboard.writeText(`https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/`); setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  const shareWhatsApp = (article) => { window.open(`https://wa.me/?text=${encodeURIComponent(`*${article.title_tr || article.title_en}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_BİLİMCE ile paylaşıldı_`)}`, '_blank') }
+  const shareWhatsApp = (article) => {
+    const title = article.title_tr || article.title_en
+    window.open(`https://wa.me/?text=${encodeURIComponent(`*${title}*\n\nhttps://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/\n\n_${t.shareVia}_`)}`, '_blank')
+  }
   const updateArticles = (arr) => { articlesRef.current = arr; setArticles([...arr]) }
 
   const handleSearch = useCallback(async (searchQuery, label) => {
     const q = searchQuery || query
     if (!q.trim()) return
-    setShowSuggestions(false)
-    setLoading(true); setSearching(true); setSearched(true); setExpandedId(null)
+    setShowSuggestions(false); setLoading(true); setSearching(true); setSearched(true); setExpandedId(null)
     setArticles([]); setHasMore(false); setPage(1); setTotalCount(0); setSearchError(false)
     articlesRef.current = []
     currentQueryRef.current = q
-    if (label) setSearchLabel(label)
-    else setSearchLabel('')
+    if (label) setSearchLabel(label); else setSearchLabel('')
     saveRecentSearch(q)
     window.history.pushState({ searched: true, query: q }, '', `/?q=${encodeURIComponent(q)}`)
     const activeFilters = { ...getDateFilter(filterPeriod), articleType: filterType || undefined }
@@ -1066,7 +1083,6 @@ export default function Home() {
     { id: 'last1month', label: t.last1month }, { id: 'last1year', label: t.last1year },
     { id: 'last5years', label: t.last5years }, { id: 'last10years', label: t.last10years },
   ]
-
   const TYPE_OPTIONS = [
     { id: '', label: t.allTypes }, { id: 'clinical-trial', label: t.clinicalTrial },
     { id: 'review', label: t.review }, { id: 'meta-analysis', label: t.metaAnalysis },
@@ -1133,10 +1149,13 @@ export default function Home() {
       {collectionPopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setCollectionPopup(null)}>
           <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
-            <h3 className="text-white font-semibold mb-1 text-sm">Koleksiyon Seç</h3>
+            <h3 className="text-white font-semibold mb-1 text-sm">{t.selectCollection}</h3>
             <p className="text-white/40 text-xs mb-4 truncate">{collectionPopup.title_tr || collectionPopup.title_en}</p>
             {collections.length === 0 ? (
-              <div className="text-center py-4"><p className="text-white/30 text-sm mb-3">Henüz koleksiyon yok</p><a href="/collections" className="text-blue-400 text-xs">Koleksiyon oluştur →</a></div>
+              <div className="text-center py-4">
+                <p className="text-white/30 text-sm mb-3">{t.noCollection}</p>
+                <a href="/collections" className="text-blue-400 text-xs">{t.createCollection}</a>
+              </div>
             ) : (
               <div className="flex flex-col gap-2 mb-4">
                 {collections.map(col => (
@@ -1146,7 +1165,7 @@ export default function Home() {
                 ))}
               </div>
             )}
-            <button onClick={() => setCollectionPopup(null)} className="w-full px-4 py-2 text-xs text-white/30 hover:text-white transition">Kapat</button>
+            <button onClick={() => setCollectionPopup(null)} className="w-full px-4 py-2 text-xs text-white/30 hover:text-white transition">{t.close2}</button>
           </div>
         </div>
       )}
@@ -1180,12 +1199,12 @@ export default function Home() {
             <p className={`${textMuted} text-xs mb-6`}>{sharePopup.journal} · {sharePopup.published_date?.slice(0,4)}</p>
             <div className="flex flex-col gap-3">
               <button onClick={() => copyLink(sharePopup)} className={`flex items-center gap-3 px-4 py-3 ${dark ? 'bg-white/5 border-white/10 text-white/70 hover:text-white' : 'bg-black/5 border-black/10 text-black/70 hover:text-black'} border rounded-xl text-sm transition`}>
-                <span>🔗</span><span>{copied ? '✓ Kopyalandı!' : 'Linki Kopyala'}</span>
+                <span>🔗</span><span>{copied ? t.copied : t.copyLink}</span>
               </button>
               <button onClick={() => shareWhatsApp(sharePopup)} className="flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm text-green-400 hover:bg-green-500/20 transition">
                 <span>💬</span><span>WhatsApp</span>
               </button>
-              <button onClick={() => setSharePopup(null)} className={`px-4 py-3 text-xs ${textMuted} transition`}>Kapat</button>
+              <button onClick={() => setSharePopup(null)} className={`px-4 py-3 text-xs ${textMuted} transition`}>{t.close2}</button>
             </div>
           </div>
         </div>
@@ -1246,7 +1265,7 @@ export default function Home() {
           {showFilters && (
             <div className={`max-w-2xl mx-auto mt-2 ${dark ? 'bg-[#1a1a2e] border-white/10' : 'bg-white border-black/10'} border rounded-2xl p-4`} onClick={e => e.stopPropagation()}>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 {t.last1year}</p>
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📅 {t.pubDate}</p>
                 <div className="flex flex-wrap gap-2">
                   {PERIOD_OPTIONS.map(opt => (
                     <button key={opt.id} onClick={() => setFilterPeriod(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterPeriod === opt.id ? 'bg-blue-500/30 border border-blue-500/50 text-blue-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
@@ -1256,7 +1275,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="mb-4">
-                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 {t.allTypes}</p>
+                <p className={`text-xs font-semibold ${textMuted} mb-2`}>📄 {t.articleType}</p>
                 <div className="flex flex-wrap gap-2">
                   {TYPE_OPTIONS.map(opt => (
                     <button key={opt.id} onClick={() => setFilterType(opt.id)} className={`px-3 py-1.5 rounded-xl text-xs transition ${filterType === opt.id ? 'bg-purple-500/30 border border-purple-500/50 text-purple-200' : `${dark ? 'bg-white/5 border-white/10 text-white/50 hover:text-white' : 'bg-black/5 border-black/10 text-black/50'} border`}`}>
@@ -1418,14 +1437,13 @@ export default function Home() {
                         <button onClick={() => setCollectionPopup(article)} className="px-4 py-2 bg-white/5 border border-white/10 text-white/40 hover:text-white/70 rounded-xl text-xs transition">📚</button>
                       )}
                       <button onClick={() => toggleCompare(article)} disabled={!isInCompare && compareList.length >= 2} className={`px-4 py-2 border rounded-xl text-xs transition disabled:opacity-30 ${isInCompare ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/40 hover:text-white/70'}`}>
-                        {isInCompare ? '✓ Seçildi' : `⚖️ ${t.compare}`}
+                        {isInCompare ? t.selectedLabel : `⚖️ ${t.compare}`}
                       </button>
                     </div>
                   </article>
                 )
               })}
             </div>
-
             {hasMore && (
               <div className="text-center mt-8 mb-4">
                 <button onClick={handleLoadMore} disabled={loadingMore} className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 shadow-lg shadow-blue-500/20">
@@ -1454,10 +1472,10 @@ export default function Home() {
           <div className={`text-center ${textMuted} text-xs border-t ${border} pt-6`}>
             <p className="mb-3">BİLİMCE - PubMed - {t.subtitle}</p>
             <div className="flex justify-center gap-6 flex-wrap">
-              <a href="/about" className="hover:text-white transition">Hakkında</a>
-              <a href="/privacy" className="hover:text-white transition">Gizlilik Politikası</a>
-              <a href="/terms" className="hover:text-white transition">Kullanım Şartları</a>
-              <a href="/community" className="hover:text-white transition">Topluluk</a>
+              <a href="/about" className="hover:text-white transition">{t.about}</a>
+              <a href="/privacy" className="hover:text-white transition">{t.privacy}</a>
+              <a href="/terms" className="hover:text-white transition">{t.terms}</a>
+              <a href="/community" className="hover:text-white transition">{t.community2}</a>
             </div>
           </div>
         </div>

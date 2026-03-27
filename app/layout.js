@@ -2,9 +2,9 @@ import './globals.css'
 
 export const metadata = {
   metadataBase: new URL('https://bilimce.vercel.app'),
-  title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku | Bilimsel Araştırma',
-  description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. PubMed verilerini yapay zeka ile Türkçe ve 6 farklı dilde okuyun. Kanser, alzheimer, diyabet araştırmaları.',
-  keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet, scientific research, pubmed turkish, science, medical research, wetenschappelijk onderzoek',
+  title: 'BİLİMCE - Read PubMed Articles in 7 Languages | Scientific Research',
+  description: 'Instant access to 35M+ peer-reviewed scientific articles. Read PubMed research in Turkish, English, German, French, Spanish, Dutch and Arabic. Cancer, alzheimer, diabetes research.',
+  keywords: 'bilimsel araştırma, türkçe makale, pubmed türkçe, bilim, tıp, araştırma, kanser, alzheimer, diyabet, scientific research, pubmed turkish, science, medical research, wetenschappelijk onderzoek, wissenschaftliche forschung',
   authors: [{ name: 'BİLİMCE' }],
   creator: 'TayfunKNO',
   publisher: 'BİLİMCE',
@@ -19,17 +19,18 @@ export const metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'tr_TR',
+    locale: 'en_US',
+    alternateLocale: ['tr_TR', 'de_DE', 'fr_FR', 'es_ES', 'nl_NL', 'ar_SA'],
     url: 'https://bilimce.vercel.app',
-    title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
-    description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
+    title: 'BİLİMCE - Scientific Research in 7 Languages',
+    description: 'Access 35M+ peer-reviewed scientific articles instantly. Read PubMed research in 7 languages with AI translation.',
     siteName: 'BİLİMCE',
-    images: [{ url: 'https://bilimce.vercel.app/img8548.png', width: 1200, height: 630, alt: 'BİLİMCE - Bilimsel Araştırmalar' }],
+    images: [{ url: 'https://bilimce.vercel.app/img8548.png', width: 1200, height: 630, alt: 'BİLİMCE - Scientific Research Platform' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BİLİMCE - PubMed Makalelerini Türkçe Oku',
-    description: 'Dünya genelindeki 35 milyondan fazla hakemli bilimsel makaleye anında erişin. Yapay zeka ile Türkçe ve 6 farklı dilde okuyun.',
+    title: 'BİLİMCE - Scientific Research in 7 Languages',
+    description: 'Access 35M+ peer-reviewed scientific articles instantly. Read PubMed research in 7 languages.',
     images: ['https://bilimce.vercel.app/img8548.png'],
   },
   alternates: {
@@ -38,8 +39,9 @@ export const metadata = {
   icons: {
     icon: '/logo.svg',
     apple: [
-      { url: '/icon-192.png', sizes: '192x192' },
-      { url: '/icon-512.png', sizes: '512x512' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-180.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
   },
 }
@@ -57,6 +59,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,7 +154,7 @@ export default function RootLayout({ children }) {
             <text x="30" y="41" text-anchor="middle" fill="white" font-size="28" font-weight="900" font-family="Arial, sans-serif">B</text>
           </svg>
           <div class="splash-title">BİLİMCE</div>
-          <div class="splash-sub">Bilimsel araştırmalar Türkçe</div>
+          <div class="splash-sub">Scientific Research · 7 Languages</div>
           <div class="splash-dots">
             <div class="splash-dot"></div>
             <div class="splash-dot"></div>

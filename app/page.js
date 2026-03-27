@@ -917,7 +917,15 @@ export default function Home() {
   const cardBg = dark ? 'bg-white/3' : 'bg-black/3'
   const inputBg = dark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
 
-  const changeLang = (code) => { setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false); if (articlesRef.current.length > 0) retranslateArticles(code) }
+  const changeLang = async (code) => {
+  setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
+  if (articlesRef.current.length > 0) retranslateArticles(code)
+  if (dailyArticle) {
+    const titleTr = await translateOne(dailyArticle.title_en, code)
+    setDailyTitleTr(titleTr)
+  }
+}
+
 
   const retranslateArticles = async (targetLang) => {
     setAutoTranslating(true)

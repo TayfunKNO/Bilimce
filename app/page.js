@@ -209,6 +209,11 @@ const TOPIC_CATEGORIES = [
   },
 ]
 
+const TRENDING_WEEK = {
+  tr: 'Bu hafta', en: 'This week', nl: 'Deze week', de: 'Diese Woche',
+  fr: 'Cette semaine', es: 'Esta semana', ar: 'هذا الأسبوع'
+}
+
 const UI_TEXT = {
   tr: {
     search: 'Ara', searching: 'Aranıyor...', placeholder: 'Örn: kreatin, alzheimer, kanser tedavisi...',
@@ -227,8 +232,7 @@ const UI_TEXT = {
     allTypes: 'Tüm Türler', clinicalTrial: 'Klinik Çalışma', review: 'Derleme', metaAnalysis: 'Meta-Analiz',
     randomized: 'Randomize', systematicReview: 'Sistematik Derleme', caseReport: 'Vaka Raporu',
     clearFilters: 'Temizle', invite: 'Davet Et', topics: 'Araştırma Alanları',
-    stats: ['35M+', '9', '7'],
-    statsLabel: ['Makale', 'Alan', 'Dil'],
+    stats: ['35M+', '9', '7'], statsLabel: ['Makale', 'Alan', 'Dil'],
     emailPlaceholder: 'email@adresin.com', emailBtn: 'Abone Ol', emailSuccess: '✓ Abone oldunuz!',
     emailTitle: '📬 Yeni özelliklerden haberdar ol', emailSub: 'Haftalık bilim özeti ve yeni özellikler için email bırak',
     loginRequired: 'Bu özelliği kullanmak için giriş yapın', loginBtn: 'Giriş Yap / Kayıt Ol',
@@ -237,6 +241,7 @@ const UI_TEXT = {
     feedbackLabel: 'Uygulamamızı geliştirmemize yardım edin',
     back: '← Geri', sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi · Hakemli Bilimsel Dergi',
     loadMore: 'Daha Fazla Yükle', loadingMore: 'Yükleniyor...',
+    errorTitle: 'Bağlantı hatası', errorMsg: 'Sonuçlar yüklenemedi. Lütfen tekrar deneyin.', errorBtn: 'Tekrar Dene',
   },
   en: {
     search: 'Search', searching: 'Searching...', placeholder: 'E.g: creatine, alzheimer, cancer...',
@@ -263,6 +268,7 @@ const UI_TEXT = {
     feedbackBtn: 'Send', feedbackSuccess: '✓ Thank you!', feedbackLabel: 'Help us improve',
     back: '← Back', sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed',
     loadMore: 'Load More', loadingMore: 'Loading...',
+    errorTitle: 'Connection error', errorMsg: 'Could not load results. Please try again.', errorBtn: 'Try Again',
   },
   nl: {
     search: 'Zoeken', searching: 'Zoeken...', placeholder: 'Bijv: creatine, alzheimer...',
@@ -289,6 +295,7 @@ const UI_TEXT = {
     feedbackBtn: 'Verzenden', feedbackSuccess: '✓ Dank u!', feedbackLabel: 'Help ons verbeteren',
     back: '← Terug', sourceLabel: 'Bron: PubMed · NIH · Peer-reviewed',
     loadMore: 'Meer laden', loadingMore: 'Laden...',
+    errorTitle: 'Verbindingsfout', errorMsg: 'Resultaten konden niet worden geladen.', errorBtn: 'Opnieuw proberen',
   },
   de: {
     search: 'Suchen', searching: 'Suche...', placeholder: 'Z.B: Kreatin, Alzheimer...',
@@ -315,6 +322,7 @@ const UI_TEXT = {
     feedbackBtn: 'Senden', feedbackSuccess: '✓ Danke!', feedbackLabel: 'App verbessern',
     back: '← Zurück', sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
     loadMore: 'Mehr laden', loadingMore: 'Laden...',
+    errorTitle: 'Verbindungsfehler', errorMsg: 'Ergebnisse konnten nicht geladen werden.', errorBtn: 'Erneut versuchen',
   },
   fr: {
     search: 'Rechercher', searching: 'Recherche...', placeholder: 'Ex: créatine, alzheimer...',
@@ -341,6 +349,7 @@ const UI_TEXT = {
     feedbackBtn: 'Envoyer', feedbackSuccess: '✓ Merci!', feedbackLabel: 'Améliorer',
     back: '← Retour', sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
     loadMore: 'Charger plus', loadingMore: 'Chargement...',
+    errorTitle: 'Erreur de connexion', errorMsg: 'Impossible de charger les résultats.', errorBtn: 'Réessayer',
   },
   es: {
     search: 'Buscar', searching: 'Buscando...', placeholder: 'Ej: creatina, alzheimer...',
@@ -367,6 +376,7 @@ const UI_TEXT = {
     feedbackBtn: 'Enviar', feedbackSuccess: '✓ Gracias!', feedbackLabel: 'Mejorar app',
     back: '← Volver', sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
     loadMore: 'Cargar más', loadingMore: 'Cargando...',
+    errorTitle: 'Error de conexión', errorMsg: 'No se pudieron cargar los resultados.', errorBtn: 'Intentar de nuevo',
   },
   ar: {
     search: 'بحث', searching: 'جاري البحث...', placeholder: 'مثال: كرياتين، الزهايمر...',
@@ -393,6 +403,7 @@ const UI_TEXT = {
     feedbackBtn: 'إرسال', feedbackSuccess: '✓ شكراً!', feedbackLabel: 'تحسين التطبيق',
     back: '← رجوع', sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
     loadMore: 'تحميل المزيد', loadingMore: 'جاري التحميل...',
+    errorTitle: 'خطأ في الاتصال', errorMsg: 'تعذر تحميل النتائج.', errorBtn: 'حاول مجدداً',
   },
 }
 
@@ -609,6 +620,7 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
+  const [searchError, setSearchError] = useState(false)
   const [translating, setTranslating] = useState({})
   const [activeCategory, setActiveCategory] = useState('all')
   const [searched, setSearched] = useState(false)
@@ -661,13 +673,13 @@ export default function Home() {
       setUserLoaded(true)
       if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
     })
-    fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || []))
+    fetch('/api/trending').then(r => r.json()).then(d => setTrending(d.trending || [])).catch(() => {})
     fetch('/api/daily').then(r => r.json()).then(async d => {
       if (d.article) { setDailyArticle(d.article); const titleTr = await translateOne(d.article.title_en, savedLang || 'tr'); setDailyTitleTr(titleTr) }
-    })
+    }).catch(() => {})
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
-      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false) }
+      else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setSearchError(false) }
     }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
@@ -707,7 +719,7 @@ export default function Home() {
   const saveRecentSearch = (q) => { const updated = [q, ...recentSearches.filter(s => s !== q)].slice(0, 10); setRecentSearches(updated); localStorage.setItem('bilimce_recent', JSON.stringify(updated)) }
 
   const goBack = () => {
-    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setPage(1)
+    setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setPage(1); setSearchError(false)
     window.history.pushState({}, '', '/')
   }
 
@@ -804,7 +816,7 @@ export default function Home() {
     const q = searchQuery || query
     if (!q.trim()) return
     setShowSuggestions(false); setLoading(true); setSearched(true); setExpandedId(null)
-    setArticles([]); setHasMore(false); setPage(1); setTotalCount(0)
+    setArticles([]); setHasMore(false); setPage(1); setTotalCount(0); setSearchError(false)
     articlesRef.current = []
     currentQueryRef.current = q
     if (label) setSearchLabel(label)
@@ -817,12 +829,9 @@ export default function Home() {
       const sorted = sortArticles(results, sortBy)
       setLoading(false)
       saveSearchHistory(q)
-
-      // Toplam sayıyı hesapla
       const count = results[0]?._totalCount || results.length
       setTotalCount(count)
       setHasMore(count > 20)
-
       if (lang !== 'en') {
         setAutoTranslating(true)
         const translated = await translateBatch(sorted, lang)
@@ -833,7 +842,12 @@ export default function Home() {
         articlesRef.current = sorted
         setArticles(sorted)
       }
-    } catch (err) { console.error(err); setLoading(false); setAutoTranslating(false) }
+    } catch (err) {
+      console.error(err)
+      setLoading(false)
+      setAutoTranslating(false)
+      setSearchError(true)
+    }
   }, [query, sortBy, lang, recentSearches, filterPeriod, filterType])
 
   const handleLoadMore = async () => {
@@ -844,9 +858,7 @@ export default function Home() {
       const { articles: newArticles, hasMore: moreAvailable } = await searchPubMedPage(currentQueryRef.current, nextPage, activeFilters)
       if (newArticles.length > 0) {
         let toAdd = newArticles
-        if (lang !== 'en') {
-          toAdd = await translateBatch(newArticles, lang)
-        }
+        if (lang !== 'en') { toAdd = await translateBatch(newArticles, lang) }
         const combined = [...articlesRef.current, ...toAdd]
         articlesRef.current = combined
         setArticles(combined)
@@ -1137,7 +1149,7 @@ export default function Home() {
                       <div className="absolute top-3 right-3 text-2xl opacity-20 group-hover:opacity-40 transition">{['🧬', '⚛️', '🔬'][i % 3]}</div>
                       <div className="flex items-center gap-2 mb-2">
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${i === 0 ? 'bg-yellow-500/20 text-yellow-400' : i === 1 ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>#{i+1}</span>
-                        <span className="text-xs text-white/30">Bu hafta</span>
+                        <span className="text-xs text-white/30">{TRENDING_WEEK[lang] || 'This week'}</span>
                       </div>
                       <p className={`text-sm ${text} font-semibold leading-snug mb-2 group-hover:text-blue-400 transition`}>{item.topic}</p>
                       <p className="text-xs text-blue-400/60">{item.count}+ yeni makale</p>
@@ -1171,7 +1183,19 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && articles.length > 0 && (
+        {/* Hata mesajı */}
+        {!loading && searchError && (
+          <div className="text-center py-16">
+            <div className="text-5xl mb-4">⚡</div>
+            <h3 className={`text-lg font-bold ${text} mb-2`}>{t.errorTitle}</h3>
+            <p className={`${textMuted} text-sm mb-6`}>{t.errorMsg}</p>
+            <button onClick={() => handleSearch(currentQueryRef.current)} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition">
+              🔄 {t.errorBtn}
+            </button>
+          </div>
+        )}
+
+        {!loading && !searchError && articles.length > 0 && (
           <div className={compareList.length > 0 ? 'pb-28' : ''}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -1260,7 +1284,7 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && searched && articles.length === 0 && (
+        {!loading && !searchError && searched && articles.length === 0 && (
           <div className={`text-center py-20 ${textMuted}`}>
             <div className="text-5xl mb-4">🔭</div>
             <p>{t.noResult}</p>

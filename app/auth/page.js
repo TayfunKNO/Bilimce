@@ -163,6 +163,8 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
+  const [appleLoading, setAppleLoading] = useState(false)
+
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [resetMode, setResetMode] = useState(false)

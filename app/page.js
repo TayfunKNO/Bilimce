@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { searchPubMed, searchPubMedPage } from '../lib/pubmed'
 
 const supabase = createClient(
-  'https://xlnnopufkjaqxjsmhtot.supabase.co',
+  'https://lypjtxqvusqndqawugxu.supabase.co',
   'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
 )
 

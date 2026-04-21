@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
   'https://lypjtxqvusqndqawugxu.supabase.co',
-  process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
+  process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_rqtzTjZBNww4u56gNNCI4A_OS_ID1Bo'
 )
 
 const VAPID_PUBLIC_KEY = 'BEtOdaXxiV3Bl4TNOO42Ir1s1quGBR0QePpK3iHg2b4T5Mvpl6i4qCj15PDD54eJ78j0l8VrONIC2F5WWcThUzo'

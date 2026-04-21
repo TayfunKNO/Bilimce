@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
   'https://lypjtxqvusqndqawugxu.supabase.co',
-  process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
+  process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_rqtzTjZBNww4u56gNNCI4A_OS_ID1Bo'
 )
 
 export async function GET(request) {

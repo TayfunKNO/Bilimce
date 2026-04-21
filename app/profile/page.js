@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
   'https://lypjtxqvusqndqawugxu.supabase.co',
-  'sb_publishable_EbJEG5Y_81M3qM4isjXyaw_uUraIsAu'
+  'sb_publishable_rqtzTjZBNww4u56gNNCI4A_OS_ID1Bo'
 )
 
 const BADGES = {

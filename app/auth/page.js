@@ -12,147 +12,133 @@ const UI = {
     login: 'Hesabına giriş yap', register: 'Yeni hesap oluştur', reset: 'Şifreni sıfırla',
     email: 'Email', password: 'Şifre', emailPlaceholder: 'ornek@email.com',
     google: 'Google ile Devam Et', googleLoading: 'Yönlendiriliyor...',
+    apple: 'Apple ile Devam Et',
     or: 'veya', forgot: 'Şifremi unuttum',
     loading: 'Yükleniyor...', resetBtn: 'Sıfırlama Linki Gönder',
     loginBtn: 'Giriş Yap', registerBtn: 'Kayıt Ol',
     noAccount: 'Hesabın yok mu?', hasAccount: 'Zaten hesabın var mı?',
     backBtn: '← Geri dön',
     terms: 'Kullanım Şartları', privacy: 'Gizlilik Politikası',
-    termsText: 'Devam ederek',
-    termsText2: "'nı ve",
-    termsText3: "'nı kabul etmiş olursunuz.",
+    termsText: 'Devam ederek', termsText2: "'nı ve", termsText3: "'nı kabul etmiş olursunuz.",
     resetSuccess: 'Şifre sıfırlama linki emailinize gönderildi.',
     regSuccess: 'Kayıt başarılı! Lütfen emailinizi doğrulayın.',
-    googleError: 'Google ile giriş başarısız.',
+    googleError: 'Google ile giriş başarısız.', appleError: 'Apple ile giriş başarısız.',
     errEmail: 'Email gerekli', errPass: 'Şifre gerekli',
-    errInvalid: 'Email veya şifre hatalı.',
-    errExists: 'Bu email zaten kayıtlı.',
+    errInvalid: 'Email veya şifre hatalı.', errExists: 'Bu email zaten kayıtlı.',
     errPassLen: 'Şifre en az 6 karakter olmalı.',
   },
   en: {
     login: 'Sign in to your account', register: 'Create new account', reset: 'Reset your password',
     email: 'Email', password: 'Password', emailPlaceholder: 'example@email.com',
     google: 'Continue with Google', googleLoading: 'Redirecting...',
+    apple: 'Sign in with Apple',
     or: 'or', forgot: 'Forgot password',
     loading: 'Loading...', resetBtn: 'Send Reset Link',
     loginBtn: 'Sign In', registerBtn: 'Register',
     noAccount: 'No account?', hasAccount: 'Already have an account?',
     backBtn: '← Back',
     terms: 'Terms of Service', privacy: 'Privacy Policy',
-    termsText: 'By continuing you accept our',
-    termsText2: ' and',
-    termsText3: '.',
+    termsText: 'By continuing you accept our', termsText2: ' and', termsText3: '.',
     resetSuccess: 'Password reset link sent to your email.',
     regSuccess: 'Registration successful! Please verify your email.',
-    googleError: 'Google sign in failed.',
+    googleError: 'Google sign in failed.', appleError: 'Apple sign in failed.',
     errEmail: 'Email required', errPass: 'Password required',
-    errInvalid: 'Invalid email or password.',
-    errExists: 'This email is already registered.',
+    errInvalid: 'Invalid email or password.', errExists: 'This email is already registered.',
     errPassLen: 'Password must be at least 6 characters.',
   },
   nl: {
     login: 'Inloggen op uw account', register: 'Nieuw account aanmaken', reset: 'Wachtwoord opnieuw instellen',
     email: 'E-mail', password: 'Wachtwoord', emailPlaceholder: 'voorbeeld@email.com',
     google: 'Doorgaan met Google', googleLoading: 'Doorsturen...',
+    apple: 'Inloggen met Apple',
     or: 'of', forgot: 'Wachtwoord vergeten',
     loading: 'Laden...', resetBtn: 'Reset link verzenden',
     loginBtn: 'Inloggen', registerBtn: 'Registreren',
     noAccount: 'Geen account?', hasAccount: 'Al een account?',
     backBtn: '← Terug',
     terms: 'Gebruiksvoorwaarden', privacy: 'Privacybeleid',
-    termsText: 'Door verder te gaan accepteert u onze',
-    termsText2: ' en',
-    termsText3: '.',
+    termsText: 'Door verder te gaan accepteert u onze', termsText2: ' en', termsText3: '.',
     resetSuccess: 'Resetlink verzonden naar uw e-mail.',
     regSuccess: 'Registratie geslaagd! Verifieer uw e-mail.',
-    googleError: 'Google aanmelding mislukt.',
+    googleError: 'Google aanmelding mislukt.', appleError: 'Apple aanmelding mislukt.',
     errEmail: 'E-mail vereist', errPass: 'Wachtwoord vereist',
-    errInvalid: 'Ongeldig e-mailadres of wachtwoord.',
-    errExists: 'Dit e-mailadres is al geregistreerd.',
+    errInvalid: 'Ongeldig e-mailadres of wachtwoord.', errExists: 'Dit e-mailadres is al geregistreerd.',
     errPassLen: 'Wachtwoord moet minimaal 6 tekens zijn.',
   },
   de: {
     login: 'In Ihr Konto einloggen', register: 'Neues Konto erstellen', reset: 'Passwort zurücksetzen',
     email: 'E-Mail', password: 'Passwort', emailPlaceholder: 'beispiel@email.com',
     google: 'Mit Google fortfahren', googleLoading: 'Weiterleiten...',
+    apple: 'Mit Apple anmelden',
     or: 'oder', forgot: 'Passwort vergessen',
     loading: 'Laden...', resetBtn: 'Reset-Link senden',
     loginBtn: 'Anmelden', registerBtn: 'Registrieren',
     noAccount: 'Kein Konto?', hasAccount: 'Bereits ein Konto?',
     backBtn: '← Zurück',
     terms: 'Nutzungsbedingungen', privacy: 'Datenschutzrichtlinie',
-    termsText: 'Durch Fortfahren akzeptieren Sie unsere',
-    termsText2: ' und',
-    termsText3: '.',
+    termsText: 'Durch Fortfahren akzeptieren Sie unsere', termsText2: ' und', termsText3: '.',
     resetSuccess: 'Passwort-Reset-Link an Ihre E-Mail gesendet.',
     regSuccess: 'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail.',
-    googleError: 'Google-Anmeldung fehlgeschlagen.',
+    googleError: 'Google-Anmeldung fehlgeschlagen.', appleError: 'Apple-Anmeldung fehlgeschlagen.',
     errEmail: 'E-Mail erforderlich', errPass: 'Passwort erforderlich',
-    errInvalid: 'Ungültige E-Mail oder Passwort.',
-    errExists: 'Diese E-Mail ist bereits registriert.',
+    errInvalid: 'Ungültige E-Mail oder Passwort.', errExists: 'Diese E-Mail ist bereits registriert.',
     errPassLen: 'Passwort muss mindestens 6 Zeichen lang sein.',
   },
   fr: {
     login: 'Connexion à votre compte', register: 'Créer un nouveau compte', reset: 'Réinitialiser le mot de passe',
     email: 'E-mail', password: 'Mot de passe', emailPlaceholder: 'exemple@email.com',
     google: 'Continuer avec Google', googleLoading: 'Redirection...',
+    apple: 'Se connecter avec Apple',
     or: 'ou', forgot: 'Mot de passe oublié',
     loading: 'Chargement...', resetBtn: 'Envoyer le lien de réinitialisation',
     loginBtn: 'Se connecter', registerBtn: "S'inscrire",
     noAccount: 'Pas de compte?', hasAccount: 'Déjà un compte?',
     backBtn: '← Retour',
     terms: "Conditions d'utilisation", privacy: 'Politique de confidentialité',
-    termsText: 'En continuant, vous acceptez nos',
-    termsText2: ' et notre',
-    termsText3: '.',
+    termsText: 'En continuant, vous acceptez nos', termsText2: ' et notre', termsText3: '.',
     resetSuccess: 'Lien de réinitialisation envoyé à votre e-mail.',
     regSuccess: 'Inscription réussie! Veuillez vérifier votre e-mail.',
-    googleError: 'Connexion Google échouée.',
+    googleError: 'Connexion Google échouée.', appleError: 'Connexion Apple échouée.',
     errEmail: 'E-mail requis', errPass: 'Mot de passe requis',
-    errInvalid: 'E-mail ou mot de passe invalide.',
-    errExists: 'Cet e-mail est déjà enregistré.',
+    errInvalid: 'E-mail ou mot de passe invalide.', errExists: 'Cet e-mail est déjà enregistré.',
     errPassLen: 'Le mot de passe doit contenir au moins 6 caractères.',
   },
   es: {
     login: 'Iniciar sesión en tu cuenta', register: 'Crear nueva cuenta', reset: 'Restablecer contraseña',
     email: 'Correo electrónico', password: 'Contraseña', emailPlaceholder: 'ejemplo@email.com',
     google: 'Continuar con Google', googleLoading: 'Redirigiendo...',
+    apple: 'Iniciar sesión con Apple',
     or: 'o', forgot: 'Olvidé mi contraseña',
     loading: 'Cargando...', resetBtn: 'Enviar enlace de restablecimiento',
     loginBtn: 'Iniciar sesión', registerBtn: 'Registrarse',
     noAccount: '¿No tienes cuenta?', hasAccount: '¿Ya tienes cuenta?',
     backBtn: '← Volver',
     terms: 'Términos de servicio', privacy: 'Política de privacidad',
-    termsText: 'Al continuar aceptas nuestros',
-    termsText2: ' y',
-    termsText3: '.',
+    termsText: 'Al continuar aceptas nuestros', termsText2: ' y', termsText3: '.',
     resetSuccess: 'Enlace de restablecimiento enviado a tu correo.',
     regSuccess: '¡Registro exitoso! Por favor verifica tu correo.',
-    googleError: 'Inicio de sesión con Google fallido.',
+    googleError: 'Inicio de sesión con Google fallido.', appleError: 'Inicio de sesión con Apple fallido.',
     errEmail: 'Correo requerido', errPass: 'Contraseña requerida',
-    errInvalid: 'Correo o contraseña inválidos.',
-    errExists: 'Este correo ya está registrado.',
+    errInvalid: 'Correo o contraseña inválidos.', errExists: 'Este correo ya está registrado.',
     errPassLen: 'La contraseña debe tener al menos 6 caracteres.',
   },
   ar: {
     login: 'تسجيل الدخول إلى حسابك', register: 'إنشاء حساب جديد', reset: 'إعادة تعيين كلمة المرور',
     email: 'البريد الإلكتروني', password: 'كلمة المرور', emailPlaceholder: 'مثال@email.com',
     google: 'المتابعة مع Google', googleLoading: 'جاري التحويل...',
+    apple: 'تسجيل الدخول مع Apple',
     or: 'أو', forgot: 'نسيت كلمة المرور',
     loading: 'جاري التحميل...', resetBtn: 'إرسال رابط إعادة التعيين',
     loginBtn: 'تسجيل الدخول', registerBtn: 'إنشاء حساب',
     noAccount: 'ليس لديك حساب؟', hasAccount: 'لديك حساب بالفعل؟',
     backBtn: '← رجوع',
     terms: 'شروط الخدمة', privacy: 'سياسة الخصوصية',
-    termsText: 'بالمتابعة، أنت توافق على',
-    termsText2: ' و',
-    termsText3: '.',
+    termsText: 'بالمتابعة، أنت توافق على', termsText2: ' و', termsText3: '.',
     resetSuccess: 'تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني.',
     regSuccess: 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني.',
-    googleError: 'فشل تسجيل الدخول عبر Google.',
+    googleError: 'فشل تسجيل الدخول عبر Google.', appleError: 'فشل تسجيل الدخول عبر Apple.',
     errEmail: 'البريد الإلكتروني مطلوب', errPass: 'كلمة المرور مطلوبة',
-    errInvalid: 'بريد إلكتروني أو كلمة مرور غير صحيحة.',
-    errExists: 'هذا البريد الإلكتروني مسجل بالفعل.',
+    errInvalid: 'بريد إلكتروني أو كلمة مرور غير صحيحة.', errExists: 'هذا البريد الإلكتروني مسجل بالفعل.',
     errPassLen: 'يجب أن تكون كلمة المرور 6 أحرف على الأقل.',
   },
 }
@@ -164,7 +150,6 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [appleLoading, setAppleLoading] = useState(false)
-
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [resetMode, setResetMode] = useState(false)
@@ -205,23 +190,22 @@ export default function AuthPage() {
   }
 
   const handleGoogle = async () => {
-    const handleApple = async () => {
-  setAppleLoading(true); setError('')
-  try {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: 'https://bilimce.vercel.app' } })
-    if (error) throw error
-  } catch (err) {
-    setError('Apple ile giriş başarısız.')
-    setAppleLoading(false)
-  }
-}
-
     setGoogleLoading(true); setError('')
     try {
       const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://bilimce.vercel.app' } })
       if (error) throw error
     } catch (err) {
       setError(t.googleError); setGoogleLoading(false)
+    }
+  }
+
+  const handleApple = async () => {
+    setAppleLoading(true); setError('')
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: 'https://bilimce.vercel.app' } })
+      if (error) throw error
+    } catch (err) {
+      setError(t.appleError); setAppleLoading(false)
     }
   }
 
@@ -242,7 +226,7 @@ export default function AuthPage() {
 
           {!resetMode && (
             <>
-              <button onClick={handleGoogle} disabled={googleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white/10 border border-white/15 rounded-xl text-sm font-medium text-white hover:bg-white/15 transition disabled:opacity-50 mb-4">
+              <button onClick={handleGoogle} disabled={googleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white/10 border border-white/15 rounded-xl text-sm font-medium text-white hover:bg-white/15 transition disabled:opacity-50 mb-3">
                 <svg width="18" height="18" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -251,18 +235,13 @@ export default function AuthPage() {
                 </svg>
                 {googleLoading ? t.googleLoading : t.google}
               </button>
-                <button onClick={handleApple} disabled={appleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-white/15 rounded-xl text-sm font-medium text-black hover:bg-white/90 transition disabled:opacity-50 mb-3">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
-    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-  </svg>
-  {appleLoading ? t.googleLoading : 'Sign in with Apple'}
-</button>
-<button onClick={handleApple} disabled={appleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-white/15 rounded-xl text-sm font-medium text-black hover:bg-white/90 transition disabled:opacity-50 mb-3">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
-    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-  </svg>
-  {appleLoading ? t.googleLoading : 'Sign in with Apple'}
-</button>
+
+              <button onClick={handleApple} disabled={appleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-white/15 rounded-xl text-sm font-medium text-black hover:bg-white/90 transition disabled:opacity-50 mb-4">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                {appleLoading ? t.googleLoading : t.apple}
+              </button>
 
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex-1 h-px bg-white/10"></div>

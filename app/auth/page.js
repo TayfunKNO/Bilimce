@@ -203,6 +203,17 @@ export default function AuthPage() {
   }
 
   const handleGoogle = async () => {
+    const handleApple = async () => {
+  setAppleLoading(true); setError('')
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: 'https://bilimce.vercel.app' } })
+    if (error) throw error
+  } catch (err) {
+    setError('Apple ile giriş başarısız.')
+    setAppleLoading(false)
+  }
+}
+
     setGoogleLoading(true); setError('')
     try {
       const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://bilimce.vercel.app' } })

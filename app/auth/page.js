@@ -160,13 +160,24 @@ export default function AuthPage() {
     setLang(savedLang)
   }, []) 
   useEffect(() => {
-  const checkUser = async () => {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      window.location.href = '/'
+    }
+  })
+
+  const check = async () => {
     const { data } = await supabase.auth.getSession()
     if (data.session) {
       window.location.href = '/'
     }
   }
-  checkUser()
+
+  check()
+
+  return () => subscription.unsubscribe()
 }, [])
 
   const t = UI[lang] || UI.tr

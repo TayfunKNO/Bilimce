@@ -1084,7 +1084,17 @@ export default function Home() {
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
   const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
-
+if (!userLoaded) {
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
+      <div className="text-center">
+        <img src="/logo.svg" alt="BİLİMCE" className="w-16 h-16 mx-auto mb-5 animate-pulse" />
+        <h1 className="text-2xl font-bold text-white tracking-tight mb-2">BİLİMCE</h1>
+        <p className="text-white/40 text-sm">Yükleniyor...</p>
+      </div>
+    </div>
+  )
+}
   const PERIOD_OPTIONS = [
     { id: 'allTime', label: t.allTime }, { id: 'last1week', label: t.last1week },
     { id: 'last1month', label: t.last1month }, { id: 'last1year', label: t.last1year },

@@ -1142,7 +1142,15 @@ export default function Home() {
                     <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
                     <a href="/invite" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
                     <div className={`border-t ${border}`} />
-                    <button onClick={() => { supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false) }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
+                    <button onClick={async () => {
+  await supabase.auth.signOut()
+  setUser(null)
+  setFavorites({})
+  setReadingList({})
+  setNotifCount(0)
+  setShowMenu(false)
+  window.location.href = '/auth'
+}} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>

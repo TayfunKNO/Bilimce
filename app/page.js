@@ -835,7 +835,14 @@ export default function Home() {
     const savedRecent = localStorage.getItem('bilimce_recent')
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data?.user || null); setUserLoaded(true)
+  const currentUser = data?.user || null
+  setUser(currentUser)
+  setUserLoaded(true)
+
+  if (!currentUser) {
+    window.location.href = '/auth'
+  }
+})
       if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
     })
     fetch('/api/trending').then(r => r.json()).then(async d => {

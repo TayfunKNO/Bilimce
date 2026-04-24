@@ -351,9 +351,7 @@ const UI_TEXT = {
     back: '← Geri', sourceLabel: 'Kaynak: PubMed · NIH Ulusal Tıp Kütüphanesi · Hakemli Bilimsel Dergi',
     loadMore: 'Daha Fazla Yükle', loadingMore: 'Yükleniyor...',
     errorTitle: 'Bağlantı hatası', errorMsg: 'Sonuçlar yüklenemedi. Lütfen tekrar deneyin.', errorBtn: 'Tekrar Dene',
-    newArticles: 'yeni makale',
-    pubDate: 'Yayın Tarihi', articleType: 'Makale Türü',
-    selectedLabel: '✓ Seçildi',
+    newArticles: 'yeni makale', pubDate: 'Yayın Tarihi', articleType: 'Makale Türü', selectedLabel: '✓ Seçildi',
     selectCollection: 'Koleksiyon Seç', noCollection: 'Henüz koleksiyon yok', createCollection: 'Koleksiyon oluştur →',
     close2: 'Kapat', copyLink: 'Linki Kopyala', copied: '✓ Kopyalandı!',
     about: 'Hakkında', privacy: 'Gizlilik Politikası', terms: 'Kullanım Şartları', community2: 'Topluluk',
@@ -385,9 +383,7 @@ const UI_TEXT = {
     back: '← Back', sourceLabel: 'Source: PubMed · NIH National Library of Medicine · Peer-reviewed',
     loadMore: 'Load More', loadingMore: 'Loading...',
     errorTitle: 'Connection error', errorMsg: 'Could not load results. Please try again.', errorBtn: 'Try Again',
-    newArticles: 'new articles',
-    pubDate: 'Publication Date', articleType: 'Article Type',
-    selectedLabel: '✓ Selected',
+    newArticles: 'new articles', pubDate: 'Publication Date', articleType: 'Article Type', selectedLabel: '✓ Selected',
     selectCollection: 'Select Collection', noCollection: 'No collections yet', createCollection: 'Create collection →',
     close2: 'Close', copyLink: 'Copy Link', copied: '✓ Copied!',
     about: 'About', privacy: 'Privacy Policy', terms: 'Terms of Service', community2: 'Community',
@@ -419,9 +415,7 @@ const UI_TEXT = {
     back: '← Terug', sourceLabel: 'Bron: PubMed · NIH · Peer-reviewed',
     loadMore: 'Meer laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindingsfout', errorMsg: 'Resultaten konden niet worden geladen.', errorBtn: 'Opnieuw proberen',
-    newArticles: 'nieuwe artikelen',
-    pubDate: 'Publicatiedatum', articleType: 'Artikeltype',
-    selectedLabel: '✓ Geselecteerd',
+    newArticles: 'nieuwe artikelen', pubDate: 'Publicatiedatum', articleType: 'Artikeltype', selectedLabel: '✓ Geselecteerd',
     selectCollection: 'Selecteer Collectie', noCollection: 'Nog geen collecties', createCollection: 'Collectie aanmaken →',
     close2: 'Sluiten', copyLink: 'Link kopiëren', copied: '✓ Gekopieerd!',
     about: 'Over ons', privacy: 'Privacybeleid', terms: 'Gebruiksvoorwaarden', community2: 'Gemeenschap',
@@ -453,9 +447,7 @@ const UI_TEXT = {
     back: '← Zurück', sourceLabel: 'Quelle: PubMed · NIH · Peer-reviewed',
     loadMore: 'Mehr laden', loadingMore: 'Laden...',
     errorTitle: 'Verbindungsfehler', errorMsg: 'Ergebnisse konnten nicht geladen werden.', errorBtn: 'Erneut versuchen',
-    newArticles: 'neue Artikel',
-    pubDate: 'Erscheinungsdatum', articleType: 'Artikeltyp',
-    selectedLabel: '✓ Ausgewählt',
+    newArticles: 'neue Artikel', pubDate: 'Erscheinungsdatum', articleType: 'Artikeltyp', selectedLabel: '✓ Ausgewählt',
     selectCollection: 'Sammlung auswählen', noCollection: 'Noch keine Sammlungen', createCollection: 'Sammlung erstellen →',
     close2: 'Schließen', copyLink: 'Link kopieren', copied: '✓ Kopiert!',
     about: 'Über uns', privacy: 'Datenschutz', terms: 'Nutzungsbedingungen', community2: 'Community',
@@ -487,12 +479,10 @@ const UI_TEXT = {
     back: '← Retour', sourceLabel: 'Source: PubMed · NIH · Revue à comité de lecture',
     loadMore: 'Charger plus', loadingMore: 'Chargement...',
     errorTitle: 'Erreur de connexion', errorMsg: 'Impossible de charger les résultats.', errorBtn: 'Réessayer',
-    newArticles: 'nouveaux articles',
-    pubDate: 'Date de publication', articleType: 'Type d\'article',
-    selectedLabel: '✓ Sélectionné',
+    newArticles: 'nouveaux articles', pubDate: 'Date de publication', articleType: "Type d'article", selectedLabel: '✓ Sélectionné',
     selectCollection: 'Sélectionner une collection', noCollection: 'Pas encore de collections', createCollection: 'Créer une collection →',
     close2: 'Fermer', copyLink: 'Copier le lien', copied: '✓ Copié!',
-    about: 'À propos', privacy: 'Politique de confidentialité', terms: 'Conditions d\'utilisation', community2: 'Communauté',
+    about: 'À propos', privacy: 'Politique de confidentialité', terms: "Conditions d'utilisation", community2: 'Communauté',
     shareVia: 'Partagé via BİLİMCE',
   },
   es: {
@@ -521,9 +511,7 @@ const UI_TEXT = {
     back: '← Volver', sourceLabel: 'Fuente: PubMed · NIH · Revista revisada por pares',
     loadMore: 'Cargar más', loadingMore: 'Cargando...',
     errorTitle: 'Error de conexión', errorMsg: 'No se pudieron cargar los resultados.', errorBtn: 'Intentar de nuevo',
-    newArticles: 'nuevos artículos',
-    pubDate: 'Fecha de publicación', articleType: 'Tipo de artículo',
-    selectedLabel: '✓ Seleccionado',
+    newArticles: 'nuevos artículos', pubDate: 'Fecha de publicación', articleType: 'Tipo de artículo', selectedLabel: '✓ Seleccionado',
     selectCollection: 'Seleccionar colección', noCollection: 'Sin colecciones aún', createCollection: 'Crear colección →',
     close2: 'Cerrar', copyLink: 'Copiar enlace', copied: '✓ Copiado!',
     about: 'Acerca de', privacy: 'Política de privacidad', terms: 'Términos de servicio', community2: 'Comunidad',
@@ -555,9 +543,7 @@ const UI_TEXT = {
     back: '← رجوع', sourceLabel: 'المصدر: PubMed · NIH · مجلة علمية محكمة',
     loadMore: 'تحميل المزيد', loadingMore: 'جاري التحميل...',
     errorTitle: 'خطأ في الاتصال', errorMsg: 'تعذر تحميل النتائج.', errorBtn: 'حاول مجدداً',
-    newArticles: 'مقالات جديدة',
-    pubDate: 'تاريخ النشر', articleType: 'نوع المقال',
-    selectedLabel: '✓ محدد',
+    newArticles: 'مقالات جديدة', pubDate: 'تاريخ النشر', articleType: 'نوع المقال', selectedLabel: '✓ محدد',
     selectCollection: 'اختر مجموعة', noCollection: 'لا توجد مجموعات بعد', createCollection: 'إنشاء مجموعة →',
     close2: 'إغلاق', copyLink: 'نسخ الرابط', copied: '✓ تم النسخ!',
     about: 'حول', privacy: 'سياسة الخصوصية', terms: 'شروط الخدمة', community2: 'مجتمع',
@@ -795,7 +781,7 @@ export default function Home() {
   const [lang, setLang] = useState('tr')
   const [showLang, setShowLang] = useState(false)
   const [trending, setTrending] = useState([])
-  const [trendingRaw, setTrendingRaw] = useState([]) // orijinal İngilizce trending
+  const [trendingRaw, setTrendingRaw] = useState([])
   const [dark, setDark] = useState(true)
   const [notifCount, setNotifCount] = useState(0)
   const [suggestions, setSuggestions] = useState([])
@@ -834,23 +820,29 @@ export default function Home() {
     if (savedTheme === 'light') { setDark(false); document.documentElement.classList.add('light') }
     const savedRecent = localStorage.getItem('bilimce_recent')
     if (savedRecent) setRecentSearches(JSON.parse(savedRecent))
-    supabase.auth.getUser().then(({ data }) => {
-  const currentUser = data?.user || null
-  setUser(currentUser)
-  setUserLoaded(true)
 
-  if (!currentUser) {
-    window.location.href = '/auth'
-  }
-})
-      if (data?.user) { loadFavorites(data.user.id); loadUsername(data.user.id); loadReadingList(data.user.id); checkNotifications(data.user.id); loadCollections(data.user.id) }
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data?.user || null
+      setUser(u)
+      setUserLoaded(true)
+      if (!u) { window.location.href = '/auth'; return }
+      loadFavorites(u.id); loadUsername(u.id); loadReadingList(u.id); checkNotifications(u.id); loadCollections(u.id)
     })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const u = session?.user || null
+      setUser(u)
+      if (u) { loadFavorites(u.id); loadUsername(u.id); loadReadingList(u.id); checkNotifications(u.id); loadCollections(u.id) }
+      else { window.location.href = '/auth' }
+    })
+
     fetch('/api/trending').then(r => r.json()).then(async d => {
       const items = d.trending || []
       setTrendingRaw(items)
       const translated = await translateTrending(items, savedLang)
       setTrending(translated)
     }).catch(() => {})
+
     fetch('/api/daily').then(r => r.json()).then(async d => {
       if (d.article) {
         setDailyArticle(d.article)
@@ -859,12 +851,13 @@ export default function Home() {
         setDailyTitleTr(titleTr)
       }
     }).catch(() => {})
+
     const handlePopState = (e) => {
       if (e.state?.searched) { setSearched(true) }
       else { setSearched(false); setQuery(''); setSearchLabel(''); articlesRef.current = []; setArticles([]); setHasMore(false); setSearchError(false); setSearching(false) }
     }
     window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
+    return () => { subscription.unsubscribe(); window.removeEventListener('popstate', handlePopState) }
   }, [])
 
   const loadCollections = async (userId) => {
@@ -940,14 +933,8 @@ export default function Home() {
   const changeLang = async (code) => {
     setLang(code); localStorage.setItem('bilimce_lang', code); setShowLang(false)
     if (articlesRef.current.length > 0) retranslateArticles(code)
-    if (dailyArticle) {
-      const titleTr = await translateOne(dailyArticle.title_en, code)
-      setDailyTitleTr(titleTr)
-    }
-    if (trendingRaw.length > 0) {
-      const translated = await translateTrending(trendingRaw, code)
-      setTrending(translated)
-    }
+    if (dailyArticle) { const titleTr = await translateOne(dailyArticle.title_en, code); setDailyTitleTr(titleTr) }
+    if (trendingRaw.length > 0) { const translated = await translateTrending(trendingRaw, code); setTrending(translated) }
   }
 
   const retranslateArticles = async (targetLang) => {
@@ -1084,24 +1071,7 @@ export default function Home() {
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
   const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
-if (!userLoaded) { 
-  if (!userLoaded) {
-  return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-      <p className="text-white">Yükleniyor...</p>
-    </div>
-  )
-}
-  return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
-      <div className="text-center">
-        <img src="/logo.svg" alt="BİLİMCE" className="w-16 h-16 mx-auto mb-5 animate-pulse" />
-        <h1 className="text-2xl font-bold text-white tracking-tight mb-2">BİLİMCE</h1>
-        <p className="text-white/40 text-sm">Yükleniyor...</p>
-      </div>
-    </div>
-  )
-}
+
   const PERIOD_OPTIONS = [
     { id: 'allTime', label: t.allTime }, { id: 'last1week', label: t.last1week },
     { id: 'last1month', label: t.last1month }, { id: 'last1year', label: t.last1year },
@@ -1113,6 +1083,15 @@ if (!userLoaded) {
     { id: 'randomized', label: t.randomized }, { id: 'systematic-review', label: t.systematicReview },
     { id: 'case-report', label: t.caseReport },
   ]
+
+  if (!userLoaded) return (
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+      <div className="text-center">
+        <img src="/logo.svg" alt="BİLİMCE" className="w-16 h-16 mx-auto mb-5 animate-pulse" />
+        <p className="text-white/40 text-sm mt-3">Yükleniyor...</p>
+      </div>
+    </div>
+  )
 
   return (
     <div className={`min-h-screen ${bg}`} onClick={() => { setShowMenu(false); setShowSort(false); setShowLang(false); setShowSuggestions(false) }}>
@@ -1140,7 +1119,7 @@ if (!userLoaded) {
                 </div>
               )}
             </div>
-            {userLoaded && user ? (
+            {user ? (
               <div className="relative" onClick={e => e.stopPropagation()}>
                 <button onClick={() => setShowMenu(!showMenu)} className={`flex items-center gap-1.5 px-2.5 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition max-w-[140px]`}>
                   <span>👤</span><span className="truncate">{displayName}</span>
@@ -1159,21 +1138,13 @@ if (!userLoaded) {
                     <a href="/community" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🌐 {t.community}</a>
                     <a href="/invite" className={`block px-4 py-3 text-xs ${dark ? 'text-white/60 hover:text-white hover:bg-white/5' : 'text-black/60 hover:text-black hover:bg-black/5'} transition`}>🎁 {t.invite}</a>
                     <div className={`border-t ${border}`} />
-                    <button onClick={async () => {
-  await supabase.auth.signOut()
-  setUser(null)
-  setFavorites({})
-  setReadingList({})
-  setNotifCount(0)
-  setShowMenu(false)
-  window.location.href = '/auth'
-}} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
+                    <button onClick={async () => { await supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false); window.location.href = '/auth' }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
               </div>
-            ) : userLoaded ? (
+            ) : (
               <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
-            ) : null}
+            )}
           </div>
         </div>
       </header>

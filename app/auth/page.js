@@ -158,7 +158,16 @@ export default function AuthPage() {
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
     setLang(savedLang)
-  }, [])
+  }, []) 
+  useEffect(() => {
+  const checkUser = async () => {
+    const { data } = await supabase.auth.getSession()
+    if (data.session) {
+      window.location.href = '/'
+    }
+  }
+  checkUser()
+}, [])
 
   const t = UI[lang] || UI.tr
 

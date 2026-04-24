@@ -1084,7 +1084,14 @@ export default function Home() {
 
   const currentLang = LANGUAGES.find(l => l.code === lang)
   const displayName = (username || user?.email?.split('@')[0] || '').slice(0, 10)
-if (!userLoaded) {
+if (!userLoaded) { 
+  if (!userLoaded) {
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+      <p className="text-white">Yükleniyor...</p>
+    </div>
+  )
+}
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
       <div className="text-center">

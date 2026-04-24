@@ -21,7 +21,7 @@ const UI = {
     terms: 'Kullanım Şartları', privacy: 'Gizlilik Politikası',
     termsText: 'Devam ederek', termsText2: "'nı ve", termsText3: "'nı kabul etmiş olursunuz.",
     resetSuccess: 'Şifre sıfırlama linki emailinize gönderildi.',
-    regSuccess: 'Kayıt başarılı! Email doğrulama kapalıysa giriş yapabilirsiniz. Açıksa lütfen emailinizi doğrulayın.',
+    regSuccess: 'Kayıt başarılı! Şimdi giriş yapabilirsiniz.',
     googleError: 'Google ile giriş başarısız.', appleError: 'Apple ile giriş başarısız.',
     errEmail: 'Email gerekli', errPass: 'Şifre gerekli',
     errInvalid: 'Email veya şifre hatalı.', errExists: 'Bu email zaten kayıtlı.',

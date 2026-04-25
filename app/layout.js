@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
       <head>
     <html lang="tr">
       <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057710720683944"
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<script>
      crossorigin="anonymous"></script>" crossorigin="anonymous"></script>
         <link rel="manifest" href="/manifest.json" />
 

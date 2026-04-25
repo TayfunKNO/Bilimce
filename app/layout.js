@@ -57,12 +57,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr">
       <head>
-    <html lang="tr">
-      <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-<script>
-     crossorigin="anonymous"></script>" crossorigin="anonymous"></script>
-        <link rel="manifest" href="/manifest.json" />
-
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057710720683944" crossorigin="anonymous"></script>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.png" />

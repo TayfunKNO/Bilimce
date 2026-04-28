@@ -40,7 +40,7 @@ const UI = {
     terms: 'Terms of Service', privacy: 'Privacy Policy',
     termsText: 'By continuing you accept our', termsText2: ' and', termsText3: '.',
     resetSuccess: 'Password reset link sent to your email.',
-    regSuccess: 'Registration successful! Please verify your email.',
+    regSuccess: 'Registration successful! You can now sign in.',
     googleError: 'Google sign in failed.', appleError: 'Apple sign in failed.',
     errEmail: 'Email required', errPass: 'Password required',
     errInvalid: 'Invalid email or password.', errExists: 'This email is already registered.',
@@ -59,7 +59,7 @@ const UI = {
     terms: 'Gebruiksvoorwaarden', privacy: 'Privacybeleid',
     termsText: 'Door verder te gaan accepteert u onze', termsText2: ' en', termsText3: '.',
     resetSuccess: 'Resetlink verzonden naar uw e-mail.',
-    regSuccess: 'Registratie geslaagd! Verifieer uw e-mail.',
+    regSuccess: 'Registratie geslaagd!',
     googleError: 'Google aanmelding mislukt.', appleError: 'Apple aanmelding mislukt.',
     errEmail: 'E-mail vereist', errPass: 'Wachtwoord vereist',
     errInvalid: 'Ongeldig e-mailadres of wachtwoord.', errExists: 'Dit e-mailadres is al geregistreerd.',
@@ -78,7 +78,7 @@ const UI = {
     terms: 'Nutzungsbedingungen', privacy: 'Datenschutzrichtlinie',
     termsText: 'Durch Fortfahren akzeptieren Sie unsere', termsText2: ' und', termsText3: '.',
     resetSuccess: 'Passwort-Reset-Link an Ihre E-Mail gesendet.',
-    regSuccess: 'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail.',
+    regSuccess: 'Registrierung erfolgreich!',
     googleError: 'Google-Anmeldung fehlgeschlagen.', appleError: 'Apple-Anmeldung fehlgeschlagen.',
     errEmail: 'E-Mail erforderlich', errPass: 'Passwort erforderlich',
     errInvalid: 'Ungültige E-Mail oder Passwort.', errExists: 'Diese E-Mail ist bereits registriert.',
@@ -97,7 +97,7 @@ const UI = {
     terms: "Conditions d'utilisation", privacy: 'Politique de confidentialité',
     termsText: 'En continuant, vous acceptez nos', termsText2: ' et notre', termsText3: '.',
     resetSuccess: 'Lien de réinitialisation envoyé à votre e-mail.',
-    regSuccess: 'Inscription réussie! Veuillez vérifier votre e-mail.',
+    regSuccess: 'Inscription réussie!',
     googleError: 'Connexion Google échouée.', appleError: 'Connexion Apple échouée.',
     errEmail: 'E-mail requis', errPass: 'Mot de passe requis',
     errInvalid: 'E-mail ou mot de passe invalide.', errExists: 'Cet e-mail est déjà enregistré.',
@@ -116,7 +116,7 @@ const UI = {
     terms: 'Términos de servicio', privacy: 'Política de privacidad',
     termsText: 'Al continuar aceptas nuestros', termsText2: ' y', termsText3: '.',
     resetSuccess: 'Enlace de restablecimiento enviado a tu correo.',
-    regSuccess: '¡Registro exitoso! Por favor verifica tu correo.',
+    regSuccess: '¡Registro exitoso!',
     googleError: 'Inicio de sesión con Google fallido.', appleError: 'Inicio de sesión con Apple fallido.',
     errEmail: 'Correo requerido', errPass: 'Contraseña requerida',
     errInvalid: 'Correo o contraseña inválidos.', errExists: 'Este correo ya está registrado.',
@@ -135,7 +135,7 @@ const UI = {
     terms: 'شروط الخدمة', privacy: 'سياسة الخصوصية',
     termsText: 'بالمتابعة، أنت توافق على', termsText2: ' و', termsText3: '.',
     resetSuccess: 'تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني.',
-    regSuccess: 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني.',
+    regSuccess: 'تم التسجيل بنجاح!',
     googleError: 'فشل تسجيل الدخول عبر Google.', appleError: 'فشل تسجيل الدخول عبر Apple.',
     errEmail: 'البريد الإلكتروني مطلوب', errPass: 'كلمة المرور مطلوبة',
     errInvalid: 'بريد إلكتروني أو كلمة مرور غير صحيحة.', errExists: 'هذا البريد الإلكتروني مسجل بالفعل.',
@@ -153,34 +153,26 @@ export default function AuthPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [resetMode, setResetMode] = useState(false)
-  const [lang, setLang] = useState('tr')
+  const [lang, setLang] = useState('en')
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
+    const savedLang = localStorage.getItem('bilimce_lang') || 'en'
     setLang(savedLang)
-  }, []) 
+  }, [])
+
   useEffect(() => {
-  const {
-    data: { subscription },
-  } = supabase.auth.onAuthStateChange((event, session) => {
-    if (session) {
-      window.location.href = '/'
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) window.location.href = '/'
+    })
+    const check = async () => {
+      const { data } = await supabase.auth.getSession()
+      if (data.session) window.location.href = '/'
     }
-  })
+    check()
+    return () => subscription.unsubscribe()
+  }, [])
 
-  const check = async () => {
-    const { data } = await supabase.auth.getSession()
-    if (data.session) {
-      window.location.href = '/'
-    }
-  }
-
-  check()
-
-  return () => subscription.unsubscribe()
-}, [])
-
-  const t = UI[lang] || UI.tr
+  const t = UI[lang] || UI.en
 
   const handleAuth = async () => {
     if (!email.trim()) { setError(t.errEmail); return }
@@ -230,24 +222,24 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4 py-8" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <a href="/"><img src="/logo.svg" alt="BİLİMCE" className="w-16 h-16 mx-auto mb-4" /></a>
-          <h1 className="text-2xl font-bold text-white tracking-tight">BİLİMCE</h1>
-          <p className="text-white/40 text-sm mt-1">
+          <a href="/"><img src="/logo.svg" alt="BİLİMCE" className="w-20 h-20 mx-auto mb-4" /></a>
+          <h1 className="text-3xl font-bold text-white tracking-tight">BİLİMCE</h1>
+          <p className="text-white/40 text-base mt-2">
             {resetMode ? t.reset : isLogin ? t.login : t.register}
           </p>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
           {error && <p className="text-red-400 text-sm mb-4 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">{error}</p>}
           {success && <p className="text-green-400 text-sm mb-4 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3">{success}</p>}
 
           {!resetMode && (
             <>
-              <button onClick={handleGoogle} disabled={googleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white/10 border border-white/15 rounded-xl text-sm font-medium text-white hover:bg-white/15 transition disabled:opacity-50 mb-3">
-                <svg width="18" height="18" viewBox="0 0 24 24">
+              <button onClick={handleGoogle} disabled={googleLoading} className="w-full flex items-center justify-center gap-3 py-4 bg-white/10 border border-white/15 rounded-xl text-base font-medium text-white hover:bg-white/15 transition disabled:opacity-50 mb-3">
+                <svg width="20" height="20" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -256,57 +248,57 @@ export default function AuthPage() {
                 {googleLoading ? t.googleLoading : t.google}
               </button>
 
-              <button onClick={handleApple} disabled={appleLoading} className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-white/15 rounded-xl text-sm font-medium text-black hover:bg-white/90 transition disabled:opacity-50 mb-4">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="black">
+              <button onClick={handleApple} disabled={appleLoading} className="w-full flex items-center justify-center gap-3 py-4 bg-white border border-white/15 rounded-xl text-base font-medium text-black hover:bg-white/90 transition disabled:opacity-50 mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="black">
                   <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                 </svg>
                 {appleLoading ? t.googleLoading : t.apple}
               </button>
 
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-5">
                 <div className="flex-1 h-px bg-white/10"></div>
-                <span className="text-white/30 text-xs">{t.or}</span>
+                <span className="text-white/30 text-sm">{t.or}</span>
                 <div className="flex-1 h-px bg-white/10"></div>
               </div>
             </>
           )}
 
           <div className="mb-4">
-            <label className="text-white/50 text-xs mb-2 block">{t.email}</label>
+            <label className="text-white/50 text-sm mb-2 block">{t.email}</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t.emailPlaceholder}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 transition" />
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
           </div>
 
           {!resetMode && (
             <div className="mb-2">
-              <label className="text-white/50 text-xs mb-2 block">{t.password}</label>
+              <label className="text-white/50 text-sm mb-2 block">{t.password}</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••"
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 transition" />
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
             </div>
           )}
 
           {isLogin && !resetMode && (
-            <div className="flex justify-end mb-4">
-              <button onClick={() => { setResetMode(true); setError(''); setSuccess('') }} className="text-xs text-white/30 hover:text-blue-400 transition">
+            <div className="flex justify-end mb-5">
+              <button onClick={() => { setResetMode(true); setError(''); setSuccess('') }} className="text-sm text-white/30 hover:text-blue-400 transition">
                 {t.forgot}
               </button>
             </div>
           )}
 
-          {!isLogin && <div className="mb-4" />}
+          {!isLogin && <div className="mb-5" />}
 
           <button onClick={handleAuth} disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
+            className="w-full py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-base font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
             {loading ? t.loading : resetMode ? t.resetBtn : isLogin ? t.loginBtn : t.registerBtn}
           </button>
 
           {resetMode ? (
-            <p className="text-center text-white/40 text-sm mt-4">
+            <p className="text-center text-white/40 text-sm mt-5">
               <button onClick={() => { setResetMode(false); setError(''); setSuccess('') }} className="text-blue-400 hover:text-blue-300">{t.backBtn}</button>
             </p>
           ) : (
-            <p className="text-center text-white/40 text-sm mt-4">
+            <p className="text-center text-white/40 text-sm mt-5">
               {isLogin ? t.noAccount : t.hasAccount}{' '}
               <button onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess('') }} className="text-blue-400 hover:text-blue-300">
                 {isLogin ? t.registerBtn : t.loginBtn}

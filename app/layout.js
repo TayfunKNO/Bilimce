@@ -47,7 +47,7 @@ export const metadata = {
 }
 
 export const viewport = {
-  themeColor: '#0a0a0f',
+  themeColor: '#0f1117',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -57,7 +57,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr">
       <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057710720683944" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057710720683944" crossOrigin="anonymous"></script>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icon-192.png" />
@@ -69,10 +72,11 @@ export default function RootLayout({ children }) {
         <meta name="application-name" content="BİLİMCE" />
         <meta name="mobile-web-app-capable" content="yes" />
         <style>{`
+          * { font-family: 'Space Grotesk', sans-serif; }
           #splash {
             position: fixed;
             inset: 0;
-            background: #0a0a0f;
+            background: #0f1117;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -91,7 +95,7 @@ export default function RootLayout({ children }) {
             animation: pulse 1.5s ease-in-out infinite;
           }
           .splash-title {
-            font-family: sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 28px;
             font-weight: 900;
             color: white;
@@ -99,7 +103,7 @@ export default function RootLayout({ children }) {
             margin-bottom: 8px;
           }
           .splash-sub {
-            font-family: sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 14px;
             color: rgba(255,255,255,0.4);
             margin-bottom: 40px;
@@ -152,7 +156,7 @@ export default function RootLayout({ children }) {
             <polygon points="30,3 54,16 54,44 30,57 6,44 6,16" fill="url(#splashGrad)"/>
             <circle cx="44" cy="11" r="3" fill="#8b5cf6" opacity="0.6"/>
             <circle cx="16" cy="49" r="2" fill="#3b82f6" opacity="0.4"/>
-            <text x="30" y="41" text-anchor="middle" fill="white" font-size="28" font-weight="900" font-family="Arial, sans-serif">B</text>
+            <text x="30" y="41" text-anchor="middle" fill="white" font-size="28" font-weight="900" font-family="Space Grotesk, Arial, sans-serif">B</text>
           </svg>
           <div class="splash-title">BİLİMCE</div>
           <div class="splash-sub">Scientific Research · 7 Languages</div>

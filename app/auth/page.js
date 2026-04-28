@@ -143,6 +143,11 @@ const UI = {
   },
 }
 
+const isCapacitor = () => {
+  if (typeof window === 'undefined') return false
+  return window.Capacitor !== undefined
+}
+
 export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -154,10 +159,12 @@ export default function AuthPage() {
   const [success, setSuccess] = useState('')
   const [resetMode, setResetMode] = useState(false)
   const [lang, setLang] = useState('en')
+  const [isNative, setIsNative] = useState(false)
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang') || 'en'
     setLang(savedLang)
+    setIsNative(isCapacitor())
   }, [])
 
   useEffect(() => {
@@ -204,7 +211,10 @@ export default function AuthPage() {
   const handleGoogle = async () => {
     setGoogleLoading(true); setError('')
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://bilimce.vercel.app' } })
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: 'https://bilimce.vercel.app' }
+      })
       if (error) throw error
     } catch (err) {
       setError(t.googleError); setGoogleLoading(false)
@@ -214,15 +224,36 @@ export default function AuthPage() {
   const handleApple = async () => {
     setAppleLoading(true); setError('')
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider: 'apple', options: { redirectTo: 'https://bilimce.vercel.app' } })
-      if (error) throw error
+      if (isNative) {
+        const { SignInWithApple } = await import('@capacitor-community/apple-authentication')
+        const result = await SignInWithApple.authorize({
+          clientId: 'com.bilimce.app',
+          redirectURI: 'https://bilimce.vercel.app',
+          scopes: 'email name',
+        })
+        const { data, error } = await supabase.auth.signInWithIdToken({
+          provider: 'apple',
+          token: result.response.identityToken,
+        })
+        if (error) throw error
+        window.location.href = '/'
+      } else {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'apple',
+          options: { redirectTo: 'https://bilimce.vercel.app' }
+        })
+        if (error) throw error
+      }
     } catch (err) {
-      setError(t.appleError); setAppleLoading(false)
+      if (err.message !== 'The user canceled the operation.') {
+        setError(t.appleError)
+      }
+      setAppleLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4 py-8" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#0d1117] flex items-center justify-center px-4 py-8" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <a href="/"><img src="/logo.svg" alt="BİLİMCE" className="w-20 h-20 mx-auto mb-4" /></a>
@@ -232,7 +263,7 @@ export default function AuthPage() {
           </p>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-2xl p-8">
           {error && <p className="text-red-400 text-sm mb-4 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">{error}</p>}
           {success && <p className="text-green-400 text-sm mb-4 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3">{success}</p>}
 
@@ -266,7 +297,7 @@ export default function AuthPage() {
           <div className="mb-4">
             <label className="text-white/50 text-sm mb-2 block">{t.email}</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t.emailPlaceholder}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
+              className="w-full bg-white/5 border border-[#30363d] rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
           </div>
 
           {!resetMode && (
@@ -274,7 +305,7 @@ export default function AuthPage() {
               <label className="text-white/50 text-sm mb-2 block">{t.password}</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••"
                 onKeyDown={e => e.key === 'Enter' && handleAuth()}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
+                className="w-full bg-white/5 border border-[#30363d] rounded-xl px-4 py-4 text-white placeholder-white/25 outline-none text-base focus:border-blue-500/50 transition" />
             </div>
           )}
 

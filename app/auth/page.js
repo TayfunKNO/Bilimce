@@ -225,7 +225,8 @@ export default function AuthPage() {
     setAppleLoading(true); setError('')
     try {
       if (isNative) {
-        const { SignInWithApple } = await import('@capacitor-community/apple-authentication')
+        const { SignInWithApple } = await import('@capacitor-community/apple-sign-in')
+
         const result = await SignInWithApple.authorize({
           clientId: 'com.bilimce.app',
           redirectURI: 'https://bilimce.vercel.app',

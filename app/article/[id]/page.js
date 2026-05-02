@@ -23,8 +23,8 @@ const UI = {
     noComments: 'Henüz yorum yok. İlk yorumu siz yapın!',
     noAbstract: 'Özet mevcut değil.',
     printTitle: 'Özet (Türkçe)', printSource: 'Kaynak',
-    printDate: new Date().toLocaleDateString('tr-TR'),
     dateLocale: 'tr-TR',
+    pdfLang: 'PDF Dili Seç', pdfSaving: 'PDF Hazırlanıyor...', pdfClose: 'Kapat',
   },
   en: {
     loading: 'Loading...', back: '← Back', notFound: 'Article not found',
@@ -41,8 +41,8 @@ const UI = {
     noComments: 'No comments yet. Be the first!',
     noAbstract: 'No abstract available.',
     printTitle: 'Abstract (Translated)', printSource: 'Source',
-    printDate: new Date().toLocaleDateString('en-GB'),
     dateLocale: 'en-GB',
+    pdfLang: 'Select PDF Language', pdfSaving: 'Preparing PDF...', pdfClose: 'Close',
   },
   nl: {
     loading: 'Laden...', back: '← Terug', notFound: 'Artikel niet gevonden',
@@ -59,8 +59,8 @@ const UI = {
     noComments: 'Nog geen reacties. Wees de eerste!',
     noAbstract: 'Geen samenvatting beschikbaar.',
     printTitle: 'Samenvatting (Vertaald)', printSource: 'Bron',
-    printDate: new Date().toLocaleDateString('nl-NL'),
     dateLocale: 'nl-NL',
+    pdfLang: 'PDF-taal selecteren', pdfSaving: 'PDF voorbereiden...', pdfClose: 'Sluiten',
   },
   de: {
     loading: 'Laden...', back: '← Zurück', notFound: 'Artikel nicht gefunden',
@@ -77,8 +77,8 @@ const UI = {
     noComments: 'Noch keine Kommentare. Seien Sie der Erste!',
     noAbstract: 'Kein Abstract verfügbar.',
     printTitle: 'Zusammenfassung (Übersetzt)', printSource: 'Quelle',
-    printDate: new Date().toLocaleDateString('de-DE'),
     dateLocale: 'de-DE',
+    pdfLang: 'PDF-Sprache auswählen', pdfSaving: 'PDF wird vorbereitet...', pdfClose: 'Schließen',
   },
   fr: {
     loading: 'Chargement...', back: '← Retour', notFound: 'Article introuvable',
@@ -95,8 +95,8 @@ const UI = {
     noComments: 'Pas encore de commentaires. Soyez le premier!',
     noAbstract: 'Aucun résumé disponible.',
     printTitle: 'Résumé (Traduit)', printSource: 'Source',
-    printDate: new Date().toLocaleDateString('fr-FR'),
     dateLocale: 'fr-FR',
+    pdfLang: 'Sélectionner la langue PDF', pdfSaving: 'Préparation du PDF...', pdfClose: 'Fermer',
   },
   es: {
     loading: 'Cargando...', back: '← Volver', notFound: 'Artículo no encontrado',
@@ -113,8 +113,8 @@ const UI = {
     noComments: 'Aún no hay comentarios. ¡Sé el primero!',
     noAbstract: 'No hay resumen disponible.',
     printTitle: 'Resumen (Traducido)', printSource: 'Fuente',
-    printDate: new Date().toLocaleDateString('es-ES'),
     dateLocale: 'es-ES',
+    pdfLang: 'Seleccionar idioma PDF', pdfSaving: 'Preparando PDF...', pdfClose: 'Cerrar',
   },
   ar: {
     loading: 'جاري التحميل...', back: '← رجوع', notFound: 'المقال غير موجود',
@@ -131,10 +131,20 @@ const UI = {
     noComments: 'لا تعليقات بعد. كن أول من يعلق!',
     noAbstract: 'لا يوجد ملخص.',
     printTitle: 'الملخص (مترجم)', printSource: 'المصدر',
-    printDate: new Date().toLocaleDateString('ar-SA'),
     dateLocale: 'ar-SA',
+    pdfLang: 'اختر لغة PDF', pdfSaving: 'جاري تحضير PDF...', pdfClose: 'إغلاق',
   },
 }
+
+const PDF_LANGUAGES = [
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+]
 
 const decodeHtml = (str) => {
   if (!str) return str
@@ -200,23 +210,55 @@ async function fetchRelated(searchTerms, currentId) {
   } catch { return [] }
 }
 
-const printArticle = (article, titleTr, abstractTr, t) => {
-  const title = titleTr || article.title_en
-  const abstract = abstractTr || article.abstract_en || t.noAbstract
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
-<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;color:#1a1a1a;line-height:1.6}.header{border-bottom:2px solid #3b82f6;padding-bottom:16px;margin-bottom:24px}.badge{background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:12px}h1{font-size:20px;font-weight:bold;color:#111827;margin:0 0 12px;line-height:1.4}.meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#6b7280}.meta span{background:#f3f4f6;padding:3px 10px;border-radius:12px}.section{margin:24px 0}.section-title{font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}.abstract-part{margin-bottom:12px;font-size:14px;color:#374151}.abstract-label{font-size:11px;font-weight:bold;color:#3b82f6;text-transform:uppercase;display:block;margin-bottom:4px}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center}@media print{body{margin:20px}}</style>
-</head><body>
-<div class="header"><div class="badge">BİLİMCE</div><h1>${title}</h1>
-<div class="meta">${article.journal ? `<span>📖 ${article.journal}</span>` : ''} ${article.published_date ? `<span>📅 ${article.published_date.slice(0,4)}</span>` : ''} ${article.authors ? `<span>👤 ${article.authors}</span>` : ''}<span>🔬 PubMed ID: ${article.pubmed_id}</span></div></div>
-<div class="section"><div class="section-title">${titleTr ? t.printTitle : t.abstract}</div>
-${abstract.split('\n\n').map(s => { const c = s.indexOf(':'); if (c > 0 && c < 30) { return `<div class="abstract-part"><span class="abstract-label">${s.slice(0,c)}</span>${s.slice(c+1).trim()}</div>` } return `<div class="abstract-part">${s}</div>` }).join('')}
+const translateOne = async (text, targetLang) => {
+  if (!text || targetLang === 'en') return text
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
+    const res = await fetch(url)
+    const data = await res.json()
+    return data[0]?.map(t => t[0]).filter(Boolean).join('') || text
+  } catch { return text }
+}
+
+const generatePdfHtml = (article, title, abstract, langCode) => {
+  const date = new Date().toLocaleDateString(langCode === 'ar' ? 'ar-SA' : langCode + '-' + langCode.toUpperCase())
+  const dir = langCode === 'ar' ? 'rtl' : 'ltr'
+  return `<!DOCTYPE html><html dir="${dir}"><head><meta charset="UTF-8"><title>${title}</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;color:#1a1a1a;line-height:1.6;direction:${dir}}
+.header{border-bottom:2px solid #3b82f6;padding-bottom:16px;margin-bottom:24px}
+.badge{background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block;margin-bottom:12px}
+h1{font-size:20px;font-weight:bold;color:#111827;margin:0 0 12px;line-height:1.4}
+.meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#6b7280}
+.meta span{background:#f3f4f6;padding:3px 10px;border-radius:12px}
+.section{margin:24px 0}
+.section-title{font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.abstract-part{margin-bottom:12px;font-size:14px;color:#374151}
+.abstract-label{font-size:11px;font-weight:bold;color:#3b82f6;text-transform:uppercase;display:block;margin-bottom:4px}
+.footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center}
+@media print{body{margin:20px}}
+</style></head><body>
+<div class="header">
+<div class="badge">BİLİMCE</div>
+<h1>${title}</h1>
+<div class="meta">
+${article.journal ? `<span>📖 ${article.journal}</span>` : ''}
+${article.published_date ? `<span>📅 ${article.published_date.slice(0,4)}</span>` : ''}
+${article.authors ? `<span>👤 ${article.authors}</span>` : ''}
+<span>🔬 PubMed ID: ${article.pubmed_id}</span>
+</div></div>
+<div class="section">
+${(abstract || '').split('\n\n').map(s => {
+  const c = s.indexOf(':')
+  if (c > 0 && c < 30) return `<div class="abstract-part"><span class="abstract-label">${s.slice(0,c)}</span>${s.slice(c+1).trim()}</div>`
+  return `<div class="abstract-part">${s}</div>`
+}).join('')}
 </div>
-<div class="footer"><p>${t.printSource}: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p><p>BİLİMCE - bilimce.vercel.app | ${t.printDate}</p></div>
+<div class="footer">
+<p>Source: https://pubmed.ncbi.nlm.nih.gov/${article.pubmed_id}/</p>
+<p>BİLİMCE - bilimce.vercel.app | ${date}</p>
+</div>
 </body></html>`
-  const w = window.open('', '_blank')
-  if (!w) { alert('Pop-up engelleyiciyi kapatın'); return }
-  w.document.write(html); w.document.close(); w.focus()
-  setTimeout(() => w.print(), 600)
 }
 
 export default function ArticlePage({ params }) {
@@ -241,17 +283,17 @@ export default function ArticlePage({ params }) {
   const [translating, setTranslating] = useState(false)
   const [showTr, setShowTr] = useState(false)
   const [lang, setLang] = useState('tr')
+  const [showPdfModal, setShowPdfModal] = useState(false)
+  const [pdfLang, setPdfLang] = useState('tr')
+  const [pdfSaving, setPdfSaving] = useState(false)
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
     setLang(savedLang)
+    setPdfLang(savedLang)
     fetchArticle(pubmedId).then(a => {
       setArticle(a); setLoading(false)
       if (a?.searchTerms) fetchRelated(a.searchTerms, pubmedId).then(setRelated)
-      if (a) {
-        const schema = { '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: a.title_en, description: a.abstract_en?.slice(0, 200), author: a.authors ? a.authors.split(', ').map(name => ({ '@type': 'Person', name })) : [], datePublished: a.published_date, isPartOf: { '@type': 'Periodical', name: a.journal }, url: `https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/` }
-        const script = document.createElement('script'); script.type = 'application/ld+json'; script.text = JSON.stringify(schema); document.head.appendChild(script)
-      }
     })
     fetchCitationCount(pubmedId).then(setCitationCount)
     loadComments(); loadRatings()
@@ -262,6 +304,10 @@ export default function ArticlePage({ params }) {
   }, [pubmedId])
 
   const t = UI[lang] || UI.tr
+
+  const goBack = () => {
+    try { window.history.back() } catch { window.location.href = '/' }
+  }
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
@@ -316,8 +362,33 @@ export default function ArticlePage({ params }) {
     setComments(prev => prev.filter(c => c.id !== id))
   }
 
+  const handleSavePdf = async () => {
+    if (!article) return
+    setPdfSaving(true)
+    try {
+      let translatedTitle = article.title_en
+      let translatedAbstract = article.abstract_en
+      if (pdfLang !== 'en') {
+        translatedTitle = await translateOne(article.title_en, pdfLang)
+        translatedAbstract = await translateOne(article.abstract_en, pdfLang)
+      }
+      const html = generatePdfHtml(article, translatedTitle, translatedAbstract, pdfLang)
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `bilimce-${pubmedId}-${pdfLang}.html`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      setShowPdfModal(false)
+    } catch (err) { console.error(err) }
+    setPdfSaving(false)
+  }
+
   if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+    <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
       <div className="text-white/30">{UI[lang]?.loading || 'Loading...'}</div>
     </div>
   )
@@ -327,14 +398,36 @@ export default function ArticlePage({ params }) {
   const sections = displayAbstract.split('\n\n').filter(Boolean)
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-      <header className="border-b border-white/5 px-4 py-3">
+    <div className="min-h-screen bg-[#0d1117]" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+
+      {showPdfModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4" onClick={() => setShowPdfModal(false)}>
+          <div className="bg-[#161b22] border border-[#30363d] rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
+            <h3 className="text-white font-semibold mb-4 text-base">📄 {t.pdfLang}</h3>
+            <div className="grid grid-cols-2 gap-2 mb-5">
+              {PDF_LANGUAGES.map(l => (
+                <button key={l.code} onClick={() => setPdfLang(l.code)}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm border transition ${pdfLang === l.code ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'}`}>
+                  <span>{l.flag}</span><span>{l.label}</span>
+                </button>
+              ))}
+            </div>
+            <button onClick={handleSavePdf} disabled={pdfSaving}
+              className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 mb-2">
+              {pdfSaving ? t.pdfSaving : t.savePdf}
+            </button>
+            <button onClick={() => setShowPdfModal(false)} className="w-full py-2 text-xs text-white/30 hover:text-white transition">{t.pdfClose}</button>
+          </div>
+        </div>
+      )}
+
+      <header className="border-b border-[#30363d] px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
-          <button onClick={() => window.history.back()} className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">{t.back}</button>
+          <button onClick={goBack} className="px-4 py-2 bg-white/5 border border-[#30363d] rounded-xl text-xs text-white/60 hover:text-white transition">{t.back}</button>
         </div>
       </header>
 
@@ -343,7 +436,7 @@ export default function ArticlePage({ params }) {
           <div className="text-center py-20 text-white/30">
             <div className="text-5xl mb-4">🔭</div>
             <p className="mb-4">{t.notFound}</p>
-            <button onClick={() => window.history.back()} className="inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">{t.back}</button>
+            <button onClick={goBack} className="inline-block px-6 py-3 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">{t.back}</button>
           </div>
         ) : (
           <>
@@ -380,7 +473,7 @@ export default function ArticlePage({ params }) {
               </div>
 
               {abstract ? (
-                <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
+                <div className="bg-white/3 border border-[#30363d] rounded-2xl p-6 mb-6">
                   <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                     <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">
                       {showTr ? t.abstractTr : t.abstract}
@@ -434,24 +527,24 @@ export default function ArticlePage({ params }) {
                   </div>
                 </div>
               ) : (
-                <div className="bg-white/3 border border-white/5 rounded-2xl p-6 mb-6">
+                <div className="bg-white/3 border border-[#30363d] rounded-2xl p-6 mb-6">
                   <p className="text-white/40 text-sm">{t.noAbstract}</p>
                 </div>
               )}
 
               <div className="flex flex-wrap gap-3 mb-12">
                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">{t.viewPubmed}</a>
-                <button onClick={() => printArticle(article, titleTr, abstractTr, t)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">{t.savePdf}</button>
-                <button onClick={() => window.history.back()} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">{t.back}</button>
+                <button onClick={() => setShowPdfModal(true)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">{t.savePdf}</button>
+                <button onClick={goBack} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">{t.back}</button>
               </div>
             </article>
 
             {related.length > 0 && (
-              <div className="border-t border-white/5 pt-8 mb-8">
+              <div className="border-t border-[#30363d] pt-8 mb-8">
                 <h2 className="text-lg font-semibold text-white mb-4">{t.related}</h2>
                 <div className="grid gap-3">
                   {related.map(r => (
-                    <a key={r.pubmed_id} href={`/article/${r.pubmed_id}`} className="bg-white/3 border border-white/5 rounded-xl p-4 hover:border-white/15 transition-all block">
+                    <a key={r.pubmed_id} href={`/article/${r.pubmed_id}`} className="bg-white/3 border border-[#30363d] rounded-xl p-4 hover:border-white/15 transition-all block">
                       <p className="text-sm text-white/80 leading-snug mb-2">{r.title_en}</p>
                       <div className="flex gap-3 text-xs text-white/30">
                         {r.journal && <span>{r.journal}</span>}
@@ -463,17 +556,17 @@ export default function ArticlePage({ params }) {
               </div>
             )}
 
-            <div className="border-t border-white/5 pt-8">
+            <div className="border-t border-[#30363d] pt-8">
               <h2 className="text-lg font-semibold text-white mb-6">{t.comments} ({comments.length})</h2>
               {user ? (
                 <div className="mb-6">
-                  <textarea value={newComment} onChange={e => setNewComment(e.target.value)} placeholder={t.commentPlaceholder} rows={3} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 resize-none mb-3" />
+                  <textarea value={newComment} onChange={e => setNewComment(e.target.value)} placeholder={t.commentPlaceholder} rows={3} className="w-full bg-white/5 border border-[#30363d] rounded-xl px-4 py-3 text-white placeholder-white/25 outline-none text-sm focus:border-blue-500/50 resize-none mb-3" />
                   <button onClick={submitComment} disabled={submitting || !newComment.trim()} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
                     {submitting ? t.submitting : t.submit}
                   </button>
                 </div>
               ) : (
-                <div className="mb-6 p-4 bg-white/3 border border-white/5 rounded-xl text-center">
+                <div className="mb-6 p-4 bg-white/3 border border-[#30363d] rounded-xl text-center">
                   <p className="text-white/40 text-sm mb-3">{t.loginComment}</p>
                   <a href="/auth" className="px-6 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm hover:bg-blue-500/30 transition">{t.loginBtn}</a>
                 </div>
@@ -483,7 +576,7 @@ export default function ArticlePage({ params }) {
               ) : (
                 <div className="flex flex-col gap-4">
                   {comments.map(comment => (
-                    <div key={comment.id} className="bg-white/3 border border-white/5 rounded-xl p-4">
+                    <div key={comment.id} className="bg-white/3 border border-[#30363d] rounded-xl p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-blue-400 text-xs font-semibold">👤 {comment.username}</span>
                         <div className="flex items-center gap-3">

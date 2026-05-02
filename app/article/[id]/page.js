@@ -25,6 +25,7 @@ const UI = {
     printTitle: 'Özet (Türkçe)', printSource: 'Kaynak',
     dateLocale: 'tr-TR',
     pdfLang: 'PDF Dili Seç', pdfSaving: 'PDF Hazırlanıyor...', pdfClose: 'Kapat',
+    translateTitle: 'Başlığı çevir', fullText: 'Tam Metni Oku (PMC)',
   },
   en: {
     loading: 'Loading...', back: '← Back', notFound: 'Article not found',
@@ -43,6 +44,7 @@ const UI = {
     printTitle: 'Abstract (Translated)', printSource: 'Source',
     dateLocale: 'en-GB',
     pdfLang: 'Select PDF Language', pdfSaving: 'Preparing PDF...', pdfClose: 'Close',
+    translateTitle: 'Translate title', fullText: 'Read Full Text (PMC)',
   },
   nl: {
     loading: 'Laden...', back: '← Terug', notFound: 'Artikel niet gevonden',
@@ -61,6 +63,7 @@ const UI = {
     printTitle: 'Samenvatting (Vertaald)', printSource: 'Bron',
     dateLocale: 'nl-NL',
     pdfLang: 'PDF-taal selecteren', pdfSaving: 'PDF voorbereiden...', pdfClose: 'Sluiten',
+    translateTitle: 'Titel vertalen', fullText: 'Volledige tekst lezen (PMC)',
   },
   de: {
     loading: 'Laden...', back: '← Zurück', notFound: 'Artikel nicht gefunden',
@@ -79,6 +82,7 @@ const UI = {
     printTitle: 'Zusammenfassung (Übersetzt)', printSource: 'Quelle',
     dateLocale: 'de-DE',
     pdfLang: 'PDF-Sprache auswählen', pdfSaving: 'PDF wird vorbereitet...', pdfClose: 'Schließen',
+    translateTitle: 'Titel übersetzen', fullText: 'Volltext lesen (PMC)',
   },
   fr: {
     loading: 'Chargement...', back: '← Retour', notFound: 'Article introuvable',
@@ -97,6 +101,7 @@ const UI = {
     printTitle: 'Résumé (Traduit)', printSource: 'Source',
     dateLocale: 'fr-FR',
     pdfLang: 'Sélectionner la langue PDF', pdfSaving: 'Préparation du PDF...', pdfClose: 'Fermer',
+    translateTitle: 'Traduire le titre', fullText: 'Lire le texte intégral (PMC)',
   },
   es: {
     loading: 'Cargando...', back: '← Volver', notFound: 'Artículo no encontrado',
@@ -115,12 +120,13 @@ const UI = {
     printTitle: 'Resumen (Traducido)', printSource: 'Fuente',
     dateLocale: 'es-ES',
     pdfLang: 'Seleccionar idioma PDF', pdfSaving: 'Preparando PDF...', pdfClose: 'Cerrar',
+    translateTitle: 'Traducir título', fullText: 'Leer texto completo (PMC)',
   },
   ar: {
     loading: 'جاري التحميل...', back: '← رجوع', notFound: 'المقال غير موجود',
     abstract: 'الملخص', abstractTr: 'الملخص (مترجم)', abstractEn: 'الإنجليزية',
     translating: 'ترجمة...', translateBtn: 'ترجمة',
-    citations: 'اقتباسات', rate: 'قيّم هذا البحث',
+    citations: 'اقتباسات', rate: 'قيم هذا البحث',
     rateConfirm: 'تأكيد ✓', rated: 'تم التقييم!', avg: 'المتوسط',
     votes: 'أصوات', loginRate: 'سجل الدخول للتقييم →',
     viewPubmed: 'عرض على PubMed →', savePdf: '📄 حفظ PDF',
@@ -133,6 +139,7 @@ const UI = {
     printTitle: 'الملخص (مترجم)', printSource: 'المصدر',
     dateLocale: 'ar-SA',
     pdfLang: 'اختر لغة PDF', pdfSaving: 'جاري تحضير PDF...', pdfClose: 'إغلاق',
+    translateTitle: 'ترجمة العنوان', fullText: 'قراءة النص الكامل (PMC)',
   },
 }
 
@@ -221,7 +228,7 @@ const translateOne = async (text, targetLang) => {
 }
 
 const generatePdfHtml = (article, title, abstract, langCode) => {
-  const date = new Date().toLocaleDateString(langCode === 'ar' ? 'ar-SA' : langCode + '-' + langCode.toUpperCase())
+  const date = new Date().toLocaleDateString()
   const dir = langCode === 'ar' ? 'rtl' : 'ltr'
   return `<!DOCTYPE html><html dir="${dir}"><head><meta charset="UTF-8"><title>${title}</title>
 <style>
@@ -232,7 +239,6 @@ h1{font-size:20px;font-weight:bold;color:#111827;margin:0 0 12px;line-height:1.4
 .meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#6b7280}
 .meta span{background:#f3f4f6;padding:3px 10px;border-radius:12px}
 .section{margin:24px 0}
-.section-title{font-size:11px;font-weight:bold;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .abstract-part{margin-bottom:12px;font-size:14px;color:#374151}
 .abstract-label{font-size:11px;font-weight:bold;color:#3b82f6;text-transform:uppercase;display:block;margin-bottom:4px}
 .footer{margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center}
@@ -259,6 +265,63 @@ ${(abstract || '').split('\n\n').map(s => {
 <p>BİLİMCE - bilimce.vercel.app | ${date}</p>
 </div>
 </body></html>`
+}
+
+function NoAbstractSection({ article, pubmedId, t }) {
+  const [translations, setTranslations] = useState({})
+  const [translating, setTranslating] = useState(false)
+  const [selectedLang, setSelectedLang] = useState(null)
+
+  const LANGS = [
+    { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'nl', label: 'Nederlands', flag: '🇳' },
+    { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+  ]
+
+  const handleTranslate = async (code) => {
+    if (translations[code]) { setSelectedLang(code); return }
+    setTranslating(true); setSelectedLang(code)
+    try {
+      const title = await translateOne(article.title_en, code)
+      setTranslations(prev => ({ ...prev, [code]: { title } }))
+    } catch {}
+    setTranslating(false)
+  }
+
+  return (
+    <div className="bg-white/3 border border-[#30363d] rounded-2xl p-6 mb-6">
+      <p className="text-white/40 text-sm mb-4">{t.noAbstract}</p>
+      <p className="text-xs text-white/30 mb-3">🌐 {t.translateTitle}:</p>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {LANGS.map(l => (
+          <button key={l.code} onClick={() => handleTranslate(l.code)}
+            className={`px-3 py-1.5 rounded-xl text-xs border transition ${selectedLang === l.code ? 'bg-blue-500/30 border-blue-500/50 text-blue-200' : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10'}`}>
+            {l.flag} {l.label}
+          </button>
+        ))}
+      </div>
+      {translating && <p className="text-blue-400/60 text-xs animate-pulse mb-3">{t.translating}</p>}
+      {selectedLang && translations[selectedLang] && (
+        <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 mb-4">
+          <p className="text-sm text-white/80 leading-relaxed">{translations[selectedLang].title}</p>
+        </div>
+      )}
+      <div className="flex flex-wrap gap-3">
+        <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer"
+          className="px-4 py-2 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-xs font-medium hover:bg-blue-500/30 transition">
+          🔬 {t.viewPubmed}
+        </a>
+        <a href={`https://www.ncbi.nlm.nih.gov/pmc/search/?term=${pubmedId}`} target="_blank" rel="noopener noreferrer"
+          className="px-4 py-2 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-xs font-medium hover:bg-green-500/30 transition">
+          📄 {t.fullText}
+        </a>
+      </div>
+    </div>
+  )
 }
 
 export default function ArticlePage({ params }) {
@@ -304,15 +367,11 @@ export default function ArticlePage({ params }) {
   }, [pubmedId])
 
   const t = UI[lang] || UI.tr
-const goBack = () => {
-  if (window.history.length > 1) {
-    window.history.back()
-  } else {
-    window.location.href = '/'
-  }
-}
 
-  
+  const goBack = () => {
+    if (window.history.length > 1) { window.history.back() }
+    else { window.location.href = '/' }
+  }
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()
@@ -487,7 +546,6 @@ const goBack = () => {
                       {translating ? t.translating : showTr ? t.abstractEn : t.translateBtn}
                     </button>
                   </div>
-
                   {sections.length > 1 ? (
                     <div className="flex flex-col gap-4">
                       {sections.map((section, i) => {
@@ -508,7 +566,6 @@ const goBack = () => {
                   ) : (
                     <p className="text-sm text-white/80 leading-relaxed">{sections[0]}</p>
                   )}
-
                   <div className="mt-6 pt-4 border-t border-white/5">
                     <p className="text-xs text-white/40 mb-3">{t.rate}</p>
                     {user ? (
@@ -532,13 +589,7 @@ const goBack = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-white/3 border border-[#30363d] rounded-2xl p-6 mb-6">
-                  <p className="text-white/40 text-sm mb-4">{t.noAbstract}</p>
-    <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
-      🔬 {t.viewPubmed}
-    </a>
-
-                </div>
+                <NoAbstractSection article={article} pubmedId={pubmedId} t={t} />
               )}
 
               <div className="flex flex-wrap gap-3 mb-12">

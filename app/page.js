@@ -1245,7 +1245,9 @@ export default function Home() {
                 ⚙️ {hasActiveFilters ? '●' : t.filters}
               </button>
               <button onClick={() => handleSearch()} disabled={loading}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50 whitespace-nowrap">
+  className="px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition disabled:opacity-50">
+
+                
                 {loading ? t.searching : t.search}
               </button>
             </div>

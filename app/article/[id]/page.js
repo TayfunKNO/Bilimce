@@ -304,10 +304,15 @@ export default function ArticlePage({ params }) {
   }, [pubmedId])
 
   const t = UI[lang] || UI.tr
-
-  const goBack = () => {
-    try { window.history.back() } catch { window.location.href = '/' }
+const goBack = () => {
+  if (window.history.length > 1) {
+    window.history.back()
+  } else {
+    window.location.href = '/'
   }
+}
+
+  
 
   const loadUsername = async (userId) => {
     const { data } = await supabase.from('profiles').select('username').eq('id', userId).single()

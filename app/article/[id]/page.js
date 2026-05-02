@@ -528,7 +528,11 @@ export default function ArticlePage({ params }) {
                 </div>
               ) : (
                 <div className="bg-white/3 border border-[#30363d] rounded-2xl p-6 mb-6">
-                  <p className="text-white/40 text-sm">{t.noAbstract}</p>
+                  <p className="text-white/40 text-sm mb-4">{t.noAbstract}</p>
+    <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">
+      🔬 {t.viewPubmed}
+    </a>
+
                 </div>
               )}
 

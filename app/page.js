@@ -833,7 +833,7 @@ export default function Home() {
       const u = session?.user || null
       setUser(u)
       if (u) { loadFavorites(u.id); loadUsername(u.id); loadReadingList(u.id); checkNotifications(u.id); loadCollections(u.id) }
-      else { window.location.href = '/auth' }
+      
     })
 
     fetch('/api/trending').then(r => r.json()).then(async d => {

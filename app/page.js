@@ -825,7 +825,7 @@ export default function Home() {
       const u = data?.user || null
       setUser(u)
       setUserLoaded(true)
-      if (!u) { window.location.href = '/auth'; return }
+      
       loadFavorites(u.id); loadUsername(u.id); loadReadingList(u.id); checkNotifications(u.id); loadCollections(u.id)
     })
 

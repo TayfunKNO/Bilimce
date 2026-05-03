@@ -94,6 +94,12 @@ const UI = {
     topicPlaceholder: 'Konu ekle (örn: kanser, alzheimer)', add: 'Ekle',
     history: '🕐 Arama Geçmişi', logout: 'Çıkış Yap',
     searches: 'arama',
+    deleteAccount: 'Hesabı Sil',
+    deleteConfirmTitle: 'Hesabı Silmek İstediğinize Emin Misiniz?',
+    deleteConfirmDesc: 'Bu işlem geri alınamaz. Tüm verileriniz (favoriler, yorumlar, koleksiyonlar) kalıcı olarak silinecek.',
+    deleteConfirm: 'Evet, Hesabımı Sil',
+    deleteCancel: 'İptal',
+    deleting: 'Siliniyor...',
   },
   en: {
     home: 'Home', loading: 'Loading...', user: 'User',
@@ -106,6 +112,12 @@ const UI = {
     topicPlaceholder: 'Add topic (e.g: cancer, alzheimer)', add: 'Add',
     history: '🕐 Search History', logout: 'Sign Out',
     searches: 'searches',
+    deleteAccount: 'Delete Account',
+    deleteConfirmTitle: 'Are You Sure You Want to Delete Your Account?',
+    deleteConfirmDesc: 'This action cannot be undone. All your data (favorites, comments, collections) will be permanently deleted.',
+    deleteConfirm: 'Yes, Delete My Account',
+    deleteCancel: 'Cancel',
+    deleting: 'Deleting...',
   },
   nl: {
     home: 'Startpagina', loading: 'Laden...', user: 'Gebruiker',
@@ -118,6 +130,12 @@ const UI = {
     topicPlaceholder: 'Onderwerp toevoegen (bijv: kanker)', add: 'Toevoegen',
     history: '🕐 Zoekgeschiedenis', logout: 'Uitloggen',
     searches: 'zoekopdrachten',
+    deleteAccount: 'Account verwijderen',
+    deleteConfirmTitle: 'Weet u zeker dat u uw account wilt verwijderen?',
+    deleteConfirmDesc: 'Deze actie kan niet ongedaan worden gemaakt. Al uw gegevens worden permanent verwijderd.',
+    deleteConfirm: 'Ja, verwijder mijn account',
+    deleteCancel: 'Annuleren',
+    deleting: 'Verwijderen...',
   },
   de: {
     home: 'Startseite', loading: 'Laden...', user: 'Benutzer',
@@ -130,6 +148,12 @@ const UI = {
     topicPlaceholder: 'Thema hinzufügen (z.B: Krebs)', add: 'Hinzufügen',
     history: '🕐 Suchverlauf', logout: 'Abmelden',
     searches: 'Suchen',
+    deleteAccount: 'Konto löschen',
+    deleteConfirmTitle: 'Möchten Sie Ihr Konto wirklich löschen?',
+    deleteConfirmDesc: 'Diese Aktion kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
+    deleteConfirm: 'Ja, mein Konto löschen',
+    deleteCancel: 'Abbrechen',
+    deleting: 'Löschen...',
   },
   fr: {
     home: 'Accueil', loading: 'Chargement...', user: 'Utilisateur',
@@ -142,6 +166,12 @@ const UI = {
     topicPlaceholder: 'Ajouter un sujet (ex: cancer)', add: 'Ajouter',
     history: '🕐 Historique de recherche', logout: 'Déconnexion',
     searches: 'recherches',
+    deleteAccount: 'Supprimer le compte',
+    deleteConfirmTitle: 'Êtes-vous sûr de vouloir supprimer votre compte?',
+    deleteConfirmDesc: 'Cette action est irréversible. Toutes vos données seront définitivement supprimées.',
+    deleteConfirm: 'Oui, supprimer mon compte',
+    deleteCancel: 'Annuler',
+    deleting: 'Suppression...',
   },
   es: {
     home: 'Inicio', loading: 'Cargando...', user: 'Usuario',
@@ -154,6 +184,12 @@ const UI = {
     topicPlaceholder: 'Añadir tema (ej: cáncer)', add: 'Añadir',
     history: '🕐 Historial de búsqueda', logout: 'Cerrar sesión',
     searches: 'búsquedas',
+    deleteAccount: 'Eliminar cuenta',
+    deleteConfirmTitle: '¿Estás seguro de que quieres eliminar tu cuenta?',
+    deleteConfirmDesc: 'Esta acción no se puede deshacer. Todos tus datos serán eliminados permanentemente.',
+    deleteConfirm: 'Sí, eliminar mi cuenta',
+    deleteCancel: 'Cancelar',
+    deleting: 'Eliminando...',
   },
   ar: {
     home: 'الرئيسية', loading: 'جاري التحميل...', user: 'مستخدم',
@@ -166,6 +202,12 @@ const UI = {
     topicPlaceholder: 'أضف موضوعاً (مثل: السرطان)', add: 'إضافة',
     history: '🕐 سجل البحث', logout: 'تسجيل الخروج',
     searches: 'عمليات بحث',
+    deleteAccount: 'حذف الحساب',
+    deleteConfirmTitle: 'هل أنت متأكد من حذف حسابك؟',
+    deleteConfirmDesc: 'لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع بياناتك نهائياً.',
+    deleteConfirm: 'نعم، احذف حسابي',
+    deleteCancel: 'إلغاء',
+    deleting: 'جاري الحذف...',
   },
 }
 
@@ -186,6 +228,8 @@ export default function ProfilePage() {
   const [activityData, setActivityData] = useState([])
   const [loading, setLoading] = useState(true)
   const [lang, setLang] = useState('tr')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
@@ -313,10 +357,33 @@ export default function ProfilePage() {
     setTopics(prev => prev.filter(t => t !== topic))
   }
 
+  const deleteAccount = async () => {
+    if (!user) return
+    setDeleting(true)
+    try {
+      await supabase.from('favorites').delete().eq('user_id', user.id)
+      await supabase.from('reading_list').delete().eq('user_id', user.id)
+      await supabase.from('comments').delete().eq('user_id', user.id)
+      await supabase.from('ratings').delete().eq('user_id', user.id)
+      await supabase.from('search_history').delete().eq('user_id', user.id)
+      await supabase.from('badges').delete().eq('user_id', user.id)
+      await supabase.from('user_avatars').delete().eq('user_id', user.id)
+      await supabase.from('topic_subscriptions').delete().eq('user_id', user.id)
+      await supabase.from('collection_articles').delete().eq('user_id', user.id)
+      await supabase.from('collections').delete().eq('user_id', user.id)
+      await supabase.from('profiles').delete().eq('id', user.id)
+      await supabase.auth.signOut()
+      window.location.href = '/auth'
+    } catch (err) {
+      console.error(err)
+      setDeleting(false)
+    }
+  }
+
   const maxActivity = Math.max(...activityData.map(d => d.count), 1)
 
   if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+    <div className="min-h-screen bg-[#0d1117] flex items-center justify-center">
       <div className="text-white/30">{t.loading}</div>
     </div>
   )
@@ -330,14 +397,33 @@ export default function ProfilePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
-      <header className="border-b border-white/5 px-4 py-3">
+    <div className="min-h-screen bg-[#0d1117]">
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
+          <div className="bg-[#161b22] border border-red-500/30 rounded-2xl p-6 max-w-sm w-full">
+            <div className="text-4xl text-center mb-4">⚠️</div>
+            <h3 className="text-white font-bold text-center mb-2">{t.deleteConfirmTitle}</h3>
+            <p className="text-white/40 text-sm text-center mb-6">{t.deleteConfirmDesc}</p>
+            <button onClick={deleteAccount} disabled={deleting}
+              className="w-full py-3 bg-red-500/20 border border-red-500/30 text-red-400 rounded-xl text-sm font-semibold hover:bg-red-500/30 transition disabled:opacity-50 mb-2">
+              {deleting ? t.deleting : t.deleteConfirm}
+            </button>
+            <button onClick={() => setShowDeleteModal(false)}
+              className="w-full py-3 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">
+              {t.deleteCancel}
+            </button>
+          </div>
+        </div>
+      )}
+
+      <header className="border-b border-[#30363d] px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <a href="/" className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold text-white">B</a>
             <span className="font-bold text-base tracking-tight text-white">BİLİMCE</span>
           </div>
-          <a href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white/60 hover:text-white transition">{t.home}</a>
+          <a href="/" className="px-4 py-2 bg-white/5 border border-[#30363d] rounded-xl text-xs text-white/60 hover:text-white transition">{t.home}</a>
         </div>
       </header>
 
@@ -385,13 +471,13 @@ export default function ProfilePage() {
         <div className="grid grid-cols-5 gap-3 mb-6">
           {statItems.map((stat, i) => (
             stat.href ? (
-              <a key={i} href={stat.href} className="bg-white/3 border border-white/5 rounded-xl p-3 text-center hover:border-white/10 transition">
+              <a key={i} href={stat.href} className="bg-white/3 border border-[#30363d] rounded-xl p-3 text-center hover:border-white/10 transition">
                 <div className="text-xl mb-1">{stat.icon}</div>
                 <div className="text-lg font-bold text-white">{stat.value}</div>
                 <div className="text-xs text-white/40">{stat.label}</div>
               </a>
             ) : (
-              <div key={i} className="bg-white/3 border border-white/5 rounded-xl p-3 text-center">
+              <div key={i} className="bg-white/3 border border-[#30363d] rounded-xl p-3 text-center">
                 <div className="text-xl mb-1">{stat.icon}</div>
                 <div className="text-lg font-bold text-white">{stat.value}</div>
                 <div className="text-xs text-white/40">{stat.label}</div>
@@ -400,7 +486,7 @@ export default function ProfilePage() {
           ))}
         </div>
 
-        <div className="bg-white/3 border border-white/5 rounded-2xl p-5 mb-6">
+        <div className="bg-white/3 border border-[#30363d] rounded-2xl p-5 mb-6">
           <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide mb-4">{t.activity}</h2>
           <div className="flex items-end gap-1 h-16">
             {activityData.map((day, i) => (
@@ -418,7 +504,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="bg-white/3 border border-white/5 rounded-2xl p-5 mb-6">
+        <div className="bg-white/3 border border-[#30363d] rounded-2xl p-5 mb-6">
           <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide mb-4">{t.badgesTitle} ({badges.length}/{badgeList.length})</h2>
           <div className="grid grid-cols-2 gap-3">
             {badgeList.map(badge => {
@@ -437,7 +523,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="bg-white/3 border border-white/5 rounded-2xl p-5 mb-6">
+        <div className="bg-white/3 border border-[#30363d] rounded-2xl p-5 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide">{t.notifications}</h2>
             <button onClick={toggleNotifications} className={`px-4 py-2 rounded-xl text-xs font-medium transition ${notifications ? 'bg-green-500/20 border border-green-500/20 text-green-300' : 'bg-white/5 border border-white/10 text-white/50 hover:text-white'}`}>
@@ -462,7 +548,7 @@ export default function ProfilePage() {
         </div>
 
         {searchHistory.length > 0 && (
-          <div className="bg-white/3 border border-white/5 rounded-2xl p-5 mb-6">
+          <div className="bg-white/3 border border-[#30363d] rounded-2xl p-5 mb-6">
             <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wide mb-4">{t.history}</h2>
             <div className="flex flex-col gap-2">
               {searchHistory.map((item, i) => (
@@ -475,8 +561,14 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }} className="w-full px-6 py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm hover:bg-red-500/20 transition">
+        <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }}
+          className="w-full px-6 py-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm hover:bg-red-500/20 transition mb-3">
           {t.logout}
+        </button>
+
+        <button onClick={() => setShowDeleteModal(true)}
+          className="w-full px-6 py-3 bg-red-500/5 border border-red-500/10 text-red-400/60 rounded-xl text-sm hover:bg-red-500/10 hover:text-red-400 transition">
+          🗑️ {t.deleteAccount}
         </button>
       </main>
     </div>

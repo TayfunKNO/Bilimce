@@ -347,6 +347,10 @@ export default function ArticlePage({ params }) {
   const [showTr, setShowTr] = useState(false)
   const [lang, setLang] = useState('tr')
   const [showPdfModal, setShowPdfModal] = useState(false)
+  const [analysis, setAnalysis] = useState(null)
+const [analyzing, setAnalyzing] = useState(false)
+const [showAnalysis, setShowAnalysis] = useState(false)
+
   const [pdfLang, setPdfLang] = useState('tr')
   const [pdfSaving, setPdfSaving] = useState(false)
 

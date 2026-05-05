@@ -7,7 +7,16 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://bilimce.vercel.app',
     cleartext: true
-  }
+  },
+  ios: {
+    contentInset: 'always',
+    scrollEnabled: true,
+  },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 0,
+    },
+  },
 };
 
 export default config;

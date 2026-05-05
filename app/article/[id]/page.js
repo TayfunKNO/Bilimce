@@ -508,13 +508,16 @@ export default function ArticlePage({ params }) {
     setAnalyzing(true); setShowAnalysis(true)
     try {
       const response = await fetch('/api/analyze', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en, lang: t.analysisLang })
-})
-const data = await response.json()
-setAnalysis(data)
-setAnalyzing(false)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en, lang: t.analysisLang })
+      })
+      const data = await response.json()
+      setAnalysis(data)
+    } catch (err) { console.error(err) }
+    setAnalyzing(false)
+  }
+
 return
 
           max_tokens: 1000,

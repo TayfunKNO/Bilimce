@@ -507,11 +507,16 @@ export default function ArticlePage({ params }) {
     if (!article?.abstract_en) return
     setAnalyzing(true); setShowAnalysis(true)
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+      const response = await fetch('/api/analyze', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ title: article.title_en, abstract: article.abstract_en, lang: t.analysisLang })
+})
+const data = await response.json()
+setAnalysis(data)
+setAnalyzing(false)
+return
+
           max_tokens: 1000,
           messages: [{
             role: 'user',

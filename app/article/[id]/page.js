@@ -32,7 +32,7 @@ const UI = {
     neutral: '📊 Bağlam', consensus: '🌐 Bilimsel Konsensüs',
     confidenceLabel: 'Güven seviyesi',
     high: 'Yüksek', medium: 'Orta', low: 'Düşük',
-    analysisLang: 'tr',
+    analysisLang: 'Turkish',
   },
   en: {
     loading: 'Loading...', back: '← Back', notFound: 'Article not found',
@@ -505,11 +505,8 @@ export default function ArticlePage({ params }) {
 
   const handleAnalyze = async () => {
     if (!article?.abstract_en) return
-    setAnalyzing(true); setShowAnalysis(true)
-    try {
-      const handleAnalyze = async () => {
-    if (!article?.abstract_en) return
-    setAnalyzing(true); setShowAnalysis(true)
+    setAnalyzing(true)
+    setShowAnalysis(true)
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -518,31 +515,6 @@ export default function ArticlePage({ params }) {
       })
       const data = await response.json()
       setAnalysis(data)
-    } catch (err) { console.error(err) }
-    setAnalyzing(false)
-  }
-
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `Analyze this scientific research abstract and respond ONLY in JSON format with no markdown or extra text:
-{"positive":["finding 1","finding 2"],"negative":["limitation 1","limitation 2"],"neutral":["context 1"],"consensus":"one sentence about scientific consensus","confidence":"high/medium/low"}
-
-Translate ALL findings to ${t.analysisLang}.
-
-Title: ${article.title_en}
-Abstract: ${article.abstract_en}`
-          }]
-        })
-      })
-      const data = await response.json()
-      const text = data.content?.[0]?.text || '{}'
-      const clean = text.replace(/```json|```/g, '').trim()
-      setAnalysis(JSON.parse(clean))
     } catch (err) { console.error(err) }
     setAnalyzing(false)
   }

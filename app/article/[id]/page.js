@@ -26,6 +26,13 @@ const UI = {
     dateLocale: 'tr-TR',
     pdfLang: 'PDF Dili Seç', pdfSaving: 'PDF Hazırlanıyor...', pdfClose: 'Kapat',
     translateTitle: 'Başlığı çevir', fullText: 'Tam Metni Oku (PMC)',
+    analyzeBtn: '🔍 Araştırmayı Analiz Et', analyzing: '🔄 Analiz ediliyor...',
+    analysisTitle: '🔍 Araştırma Analizi',
+    positive: '✅ Olumlu Bulgular', negative: '⚠️ Sınırlamalar & Karşı Görüşler',
+    neutral: '📊 Bağlam', consensus: '🌐 Bilimsel Konsensüs',
+    confidenceLabel: 'Güven seviyesi',
+    high: 'Yüksek', medium: 'Orta', low: 'Düşük',
+    analysisLang: 'tr',
   },
   en: {
     loading: 'Loading...', back: '← Back', notFound: 'Article not found',
@@ -45,6 +52,13 @@ const UI = {
     dateLocale: 'en-GB',
     pdfLang: 'Select PDF Language', pdfSaving: 'Preparing PDF...', pdfClose: 'Close',
     translateTitle: 'Translate title', fullText: 'Read Full Text (PMC)',
+    analyzeBtn: '🔍 Analyze Research', analyzing: '🔄 Analyzing...',
+    analysisTitle: '🔍 Research Analysis',
+    positive: '✅ Positive Findings', negative: '⚠️ Limitations & Counter Arguments',
+    neutral: '📊 Context', consensus: '🌐 Scientific Consensus',
+    confidenceLabel: 'Confidence level',
+    high: 'High', medium: 'Medium', low: 'Low',
+    analysisLang: 'English',
   },
   nl: {
     loading: 'Laden...', back: '← Terug', notFound: 'Artikel niet gevonden',
@@ -64,6 +78,13 @@ const UI = {
     dateLocale: 'nl-NL',
     pdfLang: 'PDF-taal selecteren', pdfSaving: 'PDF voorbereiden...', pdfClose: 'Sluiten',
     translateTitle: 'Titel vertalen', fullText: 'Volledige tekst lezen (PMC)',
+    analyzeBtn: '🔍 Onderzoek analyseren', analyzing: '🔄 Analyseren...',
+    analysisTitle: '🔍 Onderzoeksanalyse',
+    positive: '✅ Positieve bevindingen', negative: '⚠️ Beperkingen & Tegenargumenten',
+    neutral: '📊 Context', consensus: '🌐 Wetenschappelijke consensus',
+    confidenceLabel: 'Betrouwbaarheidsniveau',
+    high: 'Hoog', medium: 'Gemiddeld', low: 'Laag',
+    analysisLang: 'Dutch',
   },
   de: {
     loading: 'Laden...', back: '← Zurück', notFound: 'Artikel nicht gefunden',
@@ -83,6 +104,13 @@ const UI = {
     dateLocale: 'de-DE',
     pdfLang: 'PDF-Sprache auswählen', pdfSaving: 'PDF wird vorbereitet...', pdfClose: 'Schließen',
     translateTitle: 'Titel übersetzen', fullText: 'Volltext lesen (PMC)',
+    analyzeBtn: '🔍 Forschung analysieren', analyzing: '🔄 Analysieren...',
+    analysisTitle: '🔍 Forschungsanalyse',
+    positive: '✅ Positive Ergebnisse', negative: '⚠️ Einschränkungen & Gegenargumente',
+    neutral: '📊 Kontext', consensus: '🌐 Wissenschaftlicher Konsens',
+    confidenceLabel: 'Vertrauensniveau',
+    high: 'Hoch', medium: 'Mittel', low: 'Niedrig',
+    analysisLang: 'German',
   },
   fr: {
     loading: 'Chargement...', back: '← Retour', notFound: 'Article introuvable',
@@ -102,6 +130,13 @@ const UI = {
     dateLocale: 'fr-FR',
     pdfLang: 'Sélectionner la langue PDF', pdfSaving: 'Préparation du PDF...', pdfClose: 'Fermer',
     translateTitle: 'Traduire le titre', fullText: 'Lire le texte intégral (PMC)',
+    analyzeBtn: '🔍 Analyser la recherche', analyzing: '🔄 Analyse en cours...',
+    analysisTitle: '🔍 Analyse de recherche',
+    positive: '✅ Résultats positifs', negative: '⚠️ Limites & Contre-arguments',
+    neutral: '📊 Contexte', consensus: '🌐 Consensus scientifique',
+    confidenceLabel: 'Niveau de confiance',
+    high: 'Élevé', medium: 'Moyen', low: 'Faible',
+    analysisLang: 'French',
   },
   es: {
     loading: 'Cargando...', back: '← Volver', notFound: 'Artículo no encontrado',
@@ -121,12 +156,19 @@ const UI = {
     dateLocale: 'es-ES',
     pdfLang: 'Seleccionar idioma PDF', pdfSaving: 'Preparando PDF...', pdfClose: 'Cerrar',
     translateTitle: 'Traducir título', fullText: 'Leer texto completo (PMC)',
+    analyzeBtn: '🔍 Analizar investigación', analyzing: '🔄 Analizando...',
+    analysisTitle: '🔍 Análisis de investigación',
+    positive: '✅ Hallazgos positivos', negative: '⚠️ Limitaciones & Contraargumentos',
+    neutral: '📊 Contexto', consensus: '🌐 Consenso científico',
+    confidenceLabel: 'Nivel de confianza',
+    high: 'Alto', medium: 'Medio', low: 'Bajo',
+    analysisLang: 'Spanish',
   },
   ar: {
     loading: 'جاري التحميل...', back: '← رجوع', notFound: 'المقال غير موجود',
     abstract: 'الملخص', abstractTr: 'الملخص (مترجم)', abstractEn: 'الإنجليزية',
     translating: 'ترجمة...', translateBtn: 'ترجمة',
-    citations: 'اقتباسات', rate: 'قيم هذا البحث',
+    citations: 'اقتباسات', rate: 'قيّم هذا البحث',
     rateConfirm: 'تأكيد ✓', rated: 'تم التقييم!', avg: 'المتوسط',
     votes: 'أصوات', loginRate: 'سجل الدخول للتقييم →',
     viewPubmed: 'عرض على PubMed →', savePdf: '📄 حفظ PDF',
@@ -140,6 +182,13 @@ const UI = {
     dateLocale: 'ar-SA',
     pdfLang: 'اختر لغة PDF', pdfSaving: 'جاري تحضير PDF...', pdfClose: 'إغلاق',
     translateTitle: 'ترجمة العنوان', fullText: 'قراءة النص الكامل (PMC)',
+    analyzeBtn: '🔍 تحليل البحث', analyzing: '🔄 جاري التحليل...',
+    analysisTitle: '🔍 تحليل البحث',
+    positive: '✅ النتائج الإيجابية', negative: '⚠️ القيود والحجج المضادة',
+    neutral: '📊 السياق', consensus: '🌐 الإجماع العلمي',
+    confidenceLabel: 'مستوى الثقة',
+    high: 'عالي', medium: 'متوسط', low: 'منخفض',
+    analysisLang: 'Arabic',
   },
 }
 
@@ -275,7 +324,7 @@ function NoAbstractSection({ article, pubmedId, t }) {
   const LANGS = [
     { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
     { code: 'en', label: 'English', flag: '🇬🇧' },
-    { code: 'nl', label: 'Nederlands', flag: '🇳' },
+    { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
     { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
     { code: 'fr', label: 'Français', flag: '🇫🇷' },
     { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -347,12 +396,11 @@ export default function ArticlePage({ params }) {
   const [showTr, setShowTr] = useState(false)
   const [lang, setLang] = useState('tr')
   const [showPdfModal, setShowPdfModal] = useState(false)
-  const [analysis, setAnalysis] = useState(null)
-const [analyzing, setAnalyzing] = useState(false)
-const [showAnalysis, setShowAnalysis] = useState(false)
-
   const [pdfLang, setPdfLang] = useState('tr')
   const [pdfSaving, setPdfSaving] = useState(false)
+  const [analysis, setAnalysis] = useState(null)
+  const [analyzing, setAnalyzing] = useState(false)
+  const [showAnalysis, setShowAnalysis] = useState(false)
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bilimce_lang') || 'tr'
@@ -453,6 +501,36 @@ const [showAnalysis, setShowAnalysis] = useState(false)
       setShowPdfModal(false)
     } catch (err) { console.error(err) }
     setPdfSaving(false)
+  }
+
+  const handleAnalyze = async () => {
+    if (!article?.abstract_en) return
+    setAnalyzing(true); setShowAnalysis(true)
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `Analyze this scientific research abstract and respond ONLY in JSON format with no markdown or extra text:
+{"positive":["finding 1","finding 2"],"negative":["limitation 1","limitation 2"],"neutral":["context 1"],"consensus":"one sentence about scientific consensus","confidence":"high/medium/low"}
+
+Translate ALL findings to ${t.analysisLang}.
+
+Title: ${article.title_en}
+Abstract: ${article.abstract_en}`
+          }]
+        })
+      })
+      const data = await response.json()
+      const text = data.content?.[0]?.text || '{}'
+      const clean = text.replace(/```json|```/g, '').trim()
+      setAnalysis(JSON.parse(clean))
+    } catch (err) { console.error(err) }
+    setAnalyzing(false)
   }
 
   if (loading) return (
@@ -596,12 +674,85 @@ const [showAnalysis, setShowAnalysis] = useState(false)
                 <NoAbstractSection article={article} pubmedId={pubmedId} t={t} />
               )}
 
-              <div className="flex flex-wrap gap-3 mb-12">
+              <div className="flex flex-wrap gap-3 mb-6">
                 <a href={`https://pubmed.ncbi.nlm.nih.gov/${pubmedId}/`} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 bg-blue-500/20 border border-blue-500/20 text-blue-300 rounded-xl text-sm font-medium hover:bg-blue-500/30 transition">{t.viewPubmed}</a>
                 <button onClick={() => setShowPdfModal(true)} className="px-5 py-2.5 bg-green-500/20 border border-green-500/20 text-green-300 rounded-xl text-sm font-medium hover:bg-green-500/30 transition">{t.savePdf}</button>
+                {abstract && (
+                  <button onClick={handleAnalyze} disabled={analyzing}
+                    className="px-5 py-2.5 bg-purple-500/20 border border-purple-500/20 text-purple-300 rounded-xl text-sm font-medium hover:bg-purple-500/30 transition disabled:opacity-50">
+                    {analyzing ? t.analyzing : t.analyzeBtn}
+                  </button>
+                )}
                 <button onClick={goBack} className="px-5 py-2.5 bg-white/5 border border-white/10 text-white/60 rounded-xl text-sm hover:text-white transition">{t.back}</button>
               </div>
             </article>
+
+            {showAnalysis && (
+              <div className="border border-purple-500/20 bg-purple-500/5 rounded-2xl p-6 mb-8">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-base font-bold text-white">{t.analysisTitle}</h2>
+                  <button onClick={() => setShowAnalysis(false)} className="text-white/30 hover:text-white text-xs transition">✕</button>
+                </div>
+                {analyzing ? (
+                  <div className="flex items-center gap-3 text-purple-300/60 text-sm animate-pulse">
+                    <span>🔄</span><span>{t.analyzing}</span>
+                  </div>
+                ) : analysis ? (
+                  <div className="flex flex-col gap-5">
+                    {analysis.positive?.length > 0 && (
+                      <div>
+                        <p className="text-xs font-bold text-green-400 uppercase tracking-wide mb-2">{t.positive}</p>
+                        <div className="flex flex-col gap-2">
+                          {analysis.positive.map((item, i) => (
+                            <div key={i} className="flex items-start gap-2 text-sm text-white/70">
+                              <span className="text-green-400 shrink-0 mt-0.5">+</span><span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {analysis.negative?.length > 0 && (
+                      <div>
+                        <p className="text-xs font-bold text-red-400 uppercase tracking-wide mb-2">{t.negative}</p>
+                        <div className="flex flex-col gap-2">
+                          {analysis.negative.map((item, i) => (
+                            <div key={i} className="flex items-start gap-2 text-sm text-white/70">
+                              <span className="text-red-400 shrink-0 mt-0.5">−</span><span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {analysis.neutral?.length > 0 && (
+                      <div>
+                        <p className="text-xs font-bold text-blue-400 uppercase tracking-wide mb-2">{t.neutral}</p>
+                        <div className="flex flex-col gap-2">
+                          {analysis.neutral.map((item, i) => (
+                            <div key={i} className="flex items-start gap-2 text-sm text-white/70">
+                              <span className="text-blue-400 shrink-0 mt-0.5">·</span><span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {analysis.consensus && (
+                      <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                        <p className="text-xs font-bold text-white/50 uppercase tracking-wide mb-1">{t.consensus}</p>
+                        <p className="text-sm text-white/80">{analysis.consensus}</p>
+                      </div>
+                    )}
+                    {analysis.confidence && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-white/30">{t.confidenceLabel}:</span>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-lg ${analysis.confidence === 'high' ? 'bg-green-500/20 text-green-400' : analysis.confidence === 'medium' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+                          {analysis.confidence === 'high' ? t.high : analysis.confidence === 'medium' ? t.medium : t.low}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            )}
 
             {related.length > 0 && (
               <div className="border-t border-[#30363d] pt-8 mb-8">

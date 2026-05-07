@@ -1476,7 +1476,9 @@ export default function Home() {
           </div>
           <div className={`text-center ${textMuted} text-xs border-t ${border} pt-6`}>
             <p className="mb-3">BİLİMCE - PubMed - {t.subtitle}</p>
-            <div className="flex justify-center gap-6 flex-wrap">
+            <div className="flex justify-center gap-6 flex-
+          <a href="/blog" className="hover:text-white transition">📝 Blog</a>
+
               <a href="/about" className="hover:text-white transition">{t.about}</a>
               <a href="/privacy" className="hover:text-white transition">{t.privacy}</a>
               <a href="/terms" className="hover:text-white transition">{t.terms}</a>

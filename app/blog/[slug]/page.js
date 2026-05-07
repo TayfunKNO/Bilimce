@@ -1,19 +1,21 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { useParams } from 'next/navigation'
 
 const supabase = createClient(
   'https://lypjtxqvusqndqawugxu.supabase.co',
   'sb_publishable_rqtzTjZBNww4u56gNNCI4A_OS_ID1Bo'
 )
 
-export default function BlogPostPage({ params }) {
+export default function BlogPostPage() {
+  const params = useParams()
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadPost()
-  }, [])
+    if (params?.slug) loadPost()
+  }, [params])
 
   const loadPost = async () => {
     const { data } = await supabase.from('blog_posts').select('*').eq('slug', params.slug).single()
@@ -86,4 +88,3 @@ export default function BlogPostPage({ params }) {
     </div>
   )
 }
-

@@ -30,16 +30,13 @@ export default function BlogPage() {
   const generatePost = async () => {
   setGenerating(true)
   try {
-    const res = await fetch('/api/blog-generate')
-    const data = await res.json()
-    console.log('Blog generate result:', data)
-    if (data.success) loadPosts()
-    else alert(JSON.stringify(data))
+    window.open('/api/blog-generate', '_blank')
+    setTimeout(() => { loadPosts(); setGenerating(false) }, 5000)
   } catch (err) {
-    alert(err.message)
+    setGenerating(false)
   }
-  setGenerating(false)
 }
+
 
 
   return (

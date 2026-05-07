@@ -68,8 +68,10 @@ Respond ONLY in JSON: {"title":"...","slug":"...","content":"...","summary":"...
     blog.pubmed_ids = articles.map(a => a.pubmedId)
     blog.lang = 'tr'
 
-    const { data, error } = await supabase.from('blog_posts').insert(blog).select().single()
-    if (error) throw error
+    blog.slug = blog.slug + '-' + Date.now()
+const { data, error } = await supabase.from('blog_posts').insert(blog).select().single()
+if (error) throw error
+
 
     return Response.json({ success: true, post: data })
   } catch (err) {

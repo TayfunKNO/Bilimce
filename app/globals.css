@@ -4,14 +4,16 @@
 
 * {
   box-sizing: border-box;
-  body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
   padding: 0;
   margin: 0;
   font-family: 'Space Grotesk', sans-serif;
+}
+
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 :root {
@@ -47,7 +49,6 @@ html.light, html.light body {
   background: #30363d;
   border-radius: 3px;
 }
-
 html.light ::-webkit-scrollbar-track {
   background: #f6f8fa;
 }
@@ -59,7 +60,6 @@ html.light ::-webkit-scrollbar-thumb {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease forwards;
 }
@@ -68,7 +68,6 @@ html.light ::-webkit-scrollbar-thumb {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
-
 .animate-pulse-slow {
   animation: pulse-slow 2s ease infinite;
 }

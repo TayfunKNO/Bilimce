@@ -28,14 +28,19 @@ export default function BlogPage() {
   }
 
   const generatePost = async () => {
-    setGenerating(true)
-    try {
-      const res = await fetch('/api/blog-generate')
-      const data = await res.json()
-      if (data.success) loadPosts()
-    } catch {}
-    setGenerating(false)
+  setGenerating(true)
+  try {
+    const res = await fetch('/api/blog-generate')
+    const data = await res.json()
+    console.log('Blog generate result:', data)
+    if (data.success) loadPosts()
+    else alert(JSON.stringify(data))
+  } catch (err) {
+    alert(err.message)
   }
+  setGenerating(false)
+}
+
 
   return (
     <div className="min-h-screen bg-[#0d1117]">

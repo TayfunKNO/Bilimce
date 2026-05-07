@@ -1479,7 +1479,7 @@ export default function Home() {
             <div className="flex justify-center gap-6 flex-wrap">
               <a href="/blog" className="hover:text-white transition">📝 Blog</a>
 
-              <a href="/blog" className="hover:text-white transition">📝 Blog</a>
+              
 
               <a href="/about" className="hover:text-white transition">{t.about}</a>
               <a href="/privacy" className="hover:text-white transition">{t.privacy}</a>

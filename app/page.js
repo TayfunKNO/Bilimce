@@ -1146,8 +1146,9 @@ export default function Home() {
            <>
               <a href="/blog" className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>📝 Blog</a>
               <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
-              </>
+          
           </div>
+          </>
         </div>
       </header>
 

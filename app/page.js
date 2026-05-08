@@ -1142,15 +1142,15 @@ export default function Home() {
                   </div>
                 )}
              </div>
-          ) : (
+         ) : (
             <>
               <a href="/blog" className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>📝 Blog</a>
               <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
             </>
           )}
+          </div>
         </div>
       </header>
-
       {collectionPopup && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4" onClick={() => setCollectionPopup(null)}>
           <div className="bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>

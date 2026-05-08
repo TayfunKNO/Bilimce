@@ -1141,14 +1141,13 @@ export default function Home() {
                     <button onClick={async () => { await supabase.auth.signOut(); setUser(null); setFavorites({}); setReadingList({}); setNotifCount(0); setShowMenu(false); window.location.href = '/auth' }} className="w-full text-left px-4 py-3 text-xs text-red-400/60 hover:text-red-400 hover:bg-white/5 transition">{t.logout}</button>
                   </div>
                 )}
-              </div>
-            ) : (
-           <>
+             </div>
+          ) : (
+            <>
               <a href="/blog" className={`px-3 py-1.5 ${dark ? 'bg-white/5 border-white/10 text-white/60 hover:text-white' : 'bg-black/5 border-black/10 text-black/60 hover:text-black'} border rounded-xl text-xs transition`}>📝 Blog</a>
               <a href="/auth" className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-xs font-semibold text-white hover:opacity-90 transition shadow-lg shadow-blue-500/20">{t.login}</a>
-          
-          </>
-        
+            </>
+          )}
         </div>
       </header>
 

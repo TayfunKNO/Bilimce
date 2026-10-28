@@ -27,16 +27,19 @@ export async function POST(request) {
     let ai_summary = null
     if (abstract && abstract.length > 200) {
       try {
-        const GEMINI_KEY = 'AIzaSyCcGlFkV4ixx3xnWCRp3MaWJ4mo1s9ICU8'
-        const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{
-                parts: [{
-                  text: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun, detaylı ve anlaşılır yaz.
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 800,
+            messages: [{
+              role: 'user',
+              content: `Aşağıdaki bilimsel makale özetini Türkçe olarak 3 bölümde özetle. Her bölüm 2-3 cümle olsun, detaylı ve anlaşılır yaz.
 
 Format (tam olarak bu şekilde):
 🎯 ANA AMAÇ: [Araştırmanın amacı ve kapsamı]
@@ -49,16 +52,13 @@ Makale özeti:
 ${abstract.slice(0, 4000)}
 
 Sadece 3 bölümü yaz.`
-                }]
-              }],
-              generationConfig: { maxOutputTokens: 800, temperature: 0.3 }
-            })
-          }
-        )
-        const geminiData = await geminiRes.json()
-        ai_summary = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || null
+            }]
+          })
+        })
+        const data = await response.json()
+        ai_summary = data.content?.[0]?.text || null
       } catch (e) {
-        console.error('Gemini error:', e)
+        console.error('Anthropic error:', e)
         ai_summary = null
       }
     }
